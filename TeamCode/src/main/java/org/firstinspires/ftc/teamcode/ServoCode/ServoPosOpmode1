@@ -1,0 +1,29 @@
+package org.firstinspires.ftc.teamcode.ServoCode;
+
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
+import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+
+@Disabled
+public class ServoPosOpmode extends OpMode {
+    ServoPosCode bench = new ServoPosCode();
+
+    @Override
+    public void init() {
+        bench.init(hardwareMap);
+    }
+    @Override
+    public void loop() {
+        if (gamepad1.a) {
+            bench.setServoPos(-1.0);
+        } else {
+            bench.setServoPos(1.0);
+        }
+
+        /*if (gamepad1.b) {
+            bench.setServoCon(1.0);
+        }
+        else {
+            bench.setServoCon(0);
+        }*/
+    }
+}
