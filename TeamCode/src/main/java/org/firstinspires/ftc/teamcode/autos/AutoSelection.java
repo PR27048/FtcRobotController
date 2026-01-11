@@ -26,12 +26,11 @@ public class AutoSelection extends LinearOpMode {
     boolean lastDown = false;
 
     boolean lastGuide = false;
-    boolean confirmed = false;
 
     @Override
     public void runOpMode() {
 
-        // ================= PRE-START MENU =================
+//pre menu
         while (!isStarted() && !isStopRequested()) {
 
             // Navigate options
@@ -50,21 +49,22 @@ public class AutoSelection extends LinearOpMode {
             }
 
             // Confirm selection with Logitech center button
-            if (gamepad1.guide && !lastGuide) {
+          /*  if (gamepad1.guide && !lastGuide) {
                 confirmed = true;
-            }
+            }*/
 
             telemetry.addLine("Select Auto");
             telemetry.addData("Selected Auto", selectedMode);
-            telemetry.addData("Confirmed", confirmed);
+            //telemetry.addData("Confirmed", confirmed);
             telemetry.addLine("D-Pad right:BLUE_FAR-C1, left:BLUE_NEAR-A5, up:RED_FAR-D1, down:RED_NEAR-E5");
             telemetry.addLine("Center (Logitech) Button: Confirm");
             telemetry.addLine("Press START when ready");
             telemetry.update();
 
-            // Save last states
             lastLeft = gamepad1.dpad_left;
             lastRight = gamepad1.dpad_right;
+            lastUp = gamepad1.dpad_up;
+            lastDown = gamepad1.dpad_down;
             lastGuide = gamepad1.guide;
 
             sleep(50);
@@ -74,7 +74,6 @@ public class AutoSelection extends LinearOpMode {
 
         if (isStopRequested()) return;
 
-        // ================= RUN SELECTED AUTO =================
         switch (selectedMode) {
             case BLUE_NEAR:
                 runBlueClose();
@@ -96,7 +95,7 @@ public class AutoSelection extends LinearOpMode {
 
     // ================= AUTO ROUTINES =================
     private void runBlueClose() {
-        telemetry.addLine("Running BLUE CLOSE Auto");
+        telemetry.addLine("Running BLUE NEAR Auto");
         telemetry.update();
 
         sleep(2000);
@@ -110,14 +109,14 @@ public class AutoSelection extends LinearOpMode {
     }
 
     private void runRedFar() {
-        telemetry.addLine("Running BLUE FAR Auto");
+        telemetry.addLine("Running RED FAR Auto");
         telemetry.update();
 
         sleep(2000);
     }
 
     private void runRedClose() {
-        telemetry.addLine("Running BLUE FAR Auto");
+        telemetry.addLine("Running RED NEAR Auto");
         telemetry.update();
 
         sleep(2000);
