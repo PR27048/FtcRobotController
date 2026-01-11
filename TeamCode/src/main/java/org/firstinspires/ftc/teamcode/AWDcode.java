@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 public class AWDcode {
     private DcMotor FrontLeft, FrontRight, BackLeft, BackRight, Intake, Turret;
-    private CRServo ServoCon, ServoConFront, IntakeServo;
+    private CRServo ServoCon, ServoConFront, IntakeServo, ServoConTurret;
 
     public void init(HardwareMap hwMap) {
         FrontLeft = hwMap.get(DcMotor.class, "front_left");
@@ -16,6 +16,7 @@ public class AWDcode {
         BackRight = hwMap.get(DcMotor.class, "back_right");
         Intake = hwMap.get(DcMotor.class, "intake");
         Turret = hwMap.get(DcMotor.class, "turret");
+        ServoConTurret = hwMap.get(CRServo.class, "servo_con_turret");
 
         IntakeServo = hwMap.get(CRServo.class, "intakeservo");
         ServoCon = hwMap.get(CRServo.class, "servo_con_back_transfer");
@@ -38,7 +39,7 @@ public class AWDcode {
     public void drive(double forward, double strafe, double rotate) {
         double FrontLeftPower = forward - strafe - rotate;
         double FrontRightPower = forward + strafe + rotate;
-        double BackLeftPower = forward + strafe - rotate;
+        double BackLeftPower = - forward - strafe + rotate;
         double BackRightPower = forward - strafe + rotate;
 
         double maxPower = 1.0;
@@ -53,6 +54,17 @@ public class AWDcode {
         FrontRight.setPower(maxSpeed * FrontRightPower / maxPower);
         BackLeft.setPower(maxSpeed * BackLeftPower / maxPower);
         BackRight.setPower(maxSpeed * BackRightPower / maxPower);
+    }
+
+    public void aimTurret(double clockwise, double counterclockwise) {
+        double ServoConTurretPower = clockwise - counterclockwise;
+
+        double MaxTurretAimingPower = 1.0;
+        double MaxTurretAimingSpeed = 1.0;
+
+        MaxTurretAimingPower = Math.max(MaxTurretAimingPower, Math.abs(ServoConTurretPower));
+
+        ServoConTurret.setPower((MaxTurretAimingSpeed * ServoConTurretPower / MaxTurretAimingPower));
     }
 
     public void SetIntakePower(double IntakePower) {

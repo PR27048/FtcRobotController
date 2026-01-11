@@ -8,19 +8,23 @@ public class AutoSelection extends LinearOpMode {
 
     // Define your auto modes
     enum AutoMode {
-        BLUE_CLOSE,
+        BLUE_NEAR,
         BLUE_FAR,
 
-        RED_CLOSE,
+        RED_NEAR,
 
         RED_FAR
     }
 
-    AutoMode selectedMode = AutoMode.BLUE_CLOSE;
+    AutoMode selectedMode = AutoMode.BLUE_NEAR;
 
     // Button state tracking (prevents rapid toggling)
     boolean lastLeft = false;
     boolean lastRight = false;
+    boolean lastUp = false;
+
+    boolean lastDown = false;
+
     boolean lastGuide = false;
     boolean confirmed = false;
 
@@ -36,7 +40,13 @@ public class AutoSelection extends LinearOpMode {
             }
 
             if (gamepad1.dpad_left && !lastLeft) {
-                selectedMode = AutoMode.BLUE_CLOSE;
+                selectedMode = AutoMode.BLUE_NEAR;
+            }
+            if (gamepad1.dpad_up && !lastUp) {
+                selectedMode = AutoMode.RED_FAR;
+            }
+            if (gamepad1.dpad_down && !lastDown) {
+                selectedMode = AutoMode.RED_NEAR;
             }
 
             // Confirm selection with Logitech center button
@@ -44,10 +54,10 @@ public class AutoSelection extends LinearOpMode {
                 confirmed = true;
             }
 
-            telemetry.addLine("=== AUTO SELECTOR ===");
+            telemetry.addLine("Select Auto");
             telemetry.addData("Selected Auto", selectedMode);
             telemetry.addData("Confirmed", confirmed);
-            telemetry.addLine("D-Pad Left/Right: Change Auto");
+            telemetry.addLine("D-Pad right:BLUE_FAR-C1, left:BLUE_NEAR-A5, up:RED_FAR-D1, down:RED_NEAR-E5");
             telemetry.addLine("Center (Logitech) Button: Confirm");
             telemetry.addLine("Press START when ready");
             telemetry.update();
@@ -66,12 +76,20 @@ public class AutoSelection extends LinearOpMode {
 
         // ================= RUN SELECTED AUTO =================
         switch (selectedMode) {
-            case BLUE_CLOSE:
+            case BLUE_NEAR:
                 runBlueClose();
                 break;
 
             case BLUE_FAR:
                 runBlueFar();
+                break;
+
+            case RED_FAR:
+                runRedFar();
+                break;
+
+            case RED_NEAR:
+                runRedClose();
                 break;
         }
     }
@@ -85,6 +103,20 @@ public class AutoSelection extends LinearOpMode {
     }
 
     private void runBlueFar() {
+        telemetry.addLine("Running BLUE FAR Auto");
+        telemetry.update();
+
+        sleep(2000);
+    }
+
+    private void runRedFar() {
+        telemetry.addLine("Running BLUE FAR Auto");
+        telemetry.update();
+
+        sleep(2000);
+    }
+
+    private void runRedClose() {
         telemetry.addLine("Running BLUE FAR Auto");
         telemetry.update();
 

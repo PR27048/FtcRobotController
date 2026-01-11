@@ -8,7 +8,7 @@ public class FullBotCode extends OpMode {
     AWDcode drive = new AWDcode();
     double forward, strafe, rotate;
    // double Intake = 0.6;
-   double Turret = -0.8;
+   double Turret = -0.85;
 
 
     @Override
@@ -30,7 +30,7 @@ public class FullBotCode extends OpMode {
         }
 
         if (gamepad1.right_bumper) {
-            Turret = -0.8;
+            Turret = -0.85;
         }
 
         drive.SetTurretPower(Turret);
@@ -59,7 +59,18 @@ public class FullBotCode extends OpMode {
             stop();
         }
 
+        double rightStick = gamepad2.right_stick_x;
+        double clockwise = 0;
+        double counterclockwise = 0;
 
+        if (rightStick > 0.05) {
+            clockwise += rightStick;
+        }
+        if (rightStick < -0.05) {
+            counterclockwise -= rightStick;
+        }
+
+        drive.aimTurret(clockwise, counterclockwise);
     }
     @Override
     public void stop() {
