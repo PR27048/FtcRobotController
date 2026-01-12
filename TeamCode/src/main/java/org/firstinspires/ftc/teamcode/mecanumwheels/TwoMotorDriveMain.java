@@ -1,9 +1,10 @@
 package org.firstinspires.ftc.teamcode.mecanumwheels;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-
+@Disabled
 @TeleOp
 public class TwoMotorDriveMain extends OpMode {
     TwoMotorDrive driveObj = new TwoMotorDrive();

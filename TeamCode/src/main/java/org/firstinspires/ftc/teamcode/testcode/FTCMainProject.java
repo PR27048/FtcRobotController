@@ -1,11 +1,12 @@
 package org.firstinspires.ftc.teamcode.testcode;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.teamcode.mecanumwheels.RobotOrientationDrive;
-
+@Disabled
 @TeleOp
 public class FTCMainProject extends OpMode {
 
