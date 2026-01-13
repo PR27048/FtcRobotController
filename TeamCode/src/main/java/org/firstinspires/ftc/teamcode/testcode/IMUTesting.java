@@ -12,11 +12,12 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 @TeleOp
 public class IMUTesting extends OpMode {
 
-    private IMU imu;
-    double heading;
+    //private IMU imu;
+    //}double heading;
 
     @Override
     public void init() {
+        /*
         imu = HardwareMap.get(IMU.class, "imu");
 
         RevHubOrientationOnRobot revOrientation = new RevHubOrientationOnRobot(
@@ -24,11 +25,13 @@ public class IMUTesting extends OpMode {
                 RevHubOrientationOnRobot.UsbFacingDirection.FORWARD);
 
         imu.initialize(new IMU.Parameters(revOrientation));
+        */
+
     }
 
     @Override
     public void loop () {
-
+/*
         heading = this.getHeading(AngleUnit.DEGREES);
        // telemetry.addData("Heading",this.getHeading(AngleUnit.RADIANS));
         telemetry.addData("Heading",this.getHeading(AngleUnit.DEGREES));
@@ -49,5 +52,7 @@ public class IMUTesting extends OpMode {
         //return imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
         return imu.getRobotYawPitchRollAngles().getYaw(angleUnit);
 
+    }
+    */
     }
 }

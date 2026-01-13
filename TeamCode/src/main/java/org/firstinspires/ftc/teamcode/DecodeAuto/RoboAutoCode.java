@@ -3,13 +3,14 @@ package org.firstinspires.ftc.teamcode.DecodeAuto;
 import static com.qualcomm.robotcore.hardware.DcMotor.ZeroPowerBehavior.BRAKE;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.HardwareMap;
+
 
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
-import org.firstinspires.ftc.teamcode.mecanumwheels.RobotOrientationDrive;
 
+@Disabled
 @Autonomous
 public class RoboAutoCode extends OpMode {
 
@@ -17,7 +18,7 @@ public class RoboAutoCode extends OpMode {
 
 
 
-    final double DRIVE_POWER = 0.5;
+    final double DRIVE_POWER = 0.25;
 
     final double WHEEL_DIAMETER_MM = 104; //mecanum wheel
     final double ENCODER_TICKS_PER_REV = 537.6;
@@ -36,17 +37,17 @@ public class RoboAutoCode extends OpMode {
 
 
     double forward, strafe, rotate;
-    public HardwareMap hwMap;
+    //public HardwareMap hwMap;
 
 
 
     @Override
     public void init() {
         //Initialize the hardware variables
-        frontLeftMotor = hwMap.get(DcMotor.class, "front_left_motor");
-        frontRightMotor = hwMap.get(DcMotor.class, "front_right_motor");
-        backLeftMotor = hwMap.get(DcMotor.class, "back_left_motor");
-        backRightMotor = hwMap.get(DcMotor.class, "back_right_motor");
+        frontLeftMotor = hardwareMap.get(DcMotor.class, "front_left");
+        frontRightMotor = hardwareMap.get(DcMotor.class, "front_right");
+        backLeftMotor = hardwareMap.get(DcMotor.class, "back_left");
+        backRightMotor = hardwareMap.get(DcMotor.class, "back_right");
 
         frontLeftMotor.setDirection(DcMotor.Direction.REVERSE);
         backLeftMotor.setDirection(DcMotor.Direction.REVERSE);
@@ -87,7 +88,7 @@ public class RoboAutoCode extends OpMode {
     @Override
     public void loop() {
 
-        autoDrive(DRIVE_POWER,80,DistanceUnit.INCH);
+        autoDrive(DRIVE_POWER,5,DistanceUnit.INCH);
 
         frontLeftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         frontRightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
