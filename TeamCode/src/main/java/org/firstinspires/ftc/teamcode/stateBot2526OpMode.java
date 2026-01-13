@@ -33,10 +33,12 @@ public class stateBot2526OpMode extends OpMode {
 
         if (gamepad2.left_bumper) {
             TurretPower = 0.85;
+            telemetry.addData("long range", TurretPower);
         }
 
         if (gamepad2.right_bumper) {
             TurretPower = 0.75;
+            telemetry.addData("mid range", TurretPower);
         }
 
         drive.SetTurretPower(TurretPower);
