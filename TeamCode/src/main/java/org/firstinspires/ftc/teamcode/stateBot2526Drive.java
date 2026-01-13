@@ -26,12 +26,12 @@ public class stateBot2526Drive {
         FrontRight.setDirection(DcMotor.Direction.REVERSE);
         BackRight.setDirection(DcMotor.Direction.REVERSE);
         Turret.setDirection(DcMotor.Direction.REVERSE);
-        FrontLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        FrontRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        BackLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        BackRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        Intake.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        Turret.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        FrontLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        FrontRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        BackLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        BackRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        Intake.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        Turret.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         FrontLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         FrontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -80,10 +80,12 @@ public class stateBot2526Drive {
     }
 
     public void SetServoConPower(double power) {
+
         ServoCon.setPower(power);
     }
 
     public void SetServoConFrontPower(double frontPower) {
+
         ServoConFront.setPower(frontPower);
     }
 

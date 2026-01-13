@@ -1,6 +1,6 @@
 package org.firstinspires.ftc.teamcode;
 
-import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import  com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.stateBot2526Drive;
@@ -9,8 +9,8 @@ import org.firstinspires.ftc.teamcode.stateBot2526Drive;
 public class stateBot2526OpMode extends OpMode {
     stateBot2526Drive drive = new stateBot2526Drive();
     double forward, strafe, rotate;
-    double Intake = 0.7;
-    double Turret = 0.75;
+    double IntakePower = 0.8;
+    double TurretPower = 0.75;
 
 
     @Override
@@ -27,17 +27,17 @@ public class stateBot2526OpMode extends OpMode {
         rotate = gamepad1.right_stick_x;
 
         drive.drive(forward, strafe, rotate);
-        drive.SetIntakePower(Intake);
+        drive.SetIntakePower(IntakePower);
 
-        if (gamepad1.left_bumper) {
-            Turret = 0.85;
+        if (gamepad2.left_bumper) {
+            TurretPower = 0.85;
         }
 
-        if (gamepad1.right_bumper) {
-            Turret = 0.75;
+        if (gamepad2.right_bumper) {
+            TurretPower = 0.75;
         }
 
-        drive.SetTurretPower(Turret);
+        drive.SetTurretPower(TurretPower);
 
         double rightStick = gamepad2.right_stick_x;
         double clockwise = 0;
@@ -52,11 +52,21 @@ public class stateBot2526OpMode extends OpMode {
 
         drive.aimTurret(clockwise, counterclockwise);
 
-        if (gamepad1.right_trigger > 0.1) {
+        if (gamepad2.right_trigger > 0.1) {
             drive.SetServoConPower(-0.8);
         }
         else {
             drive.SetServoConPower(0.8);
+        }
+
+        if (gamepad1.left_trigger > 0.1) {
+            drive.SetIntakePower(0.0);
+            drive.SetServoConIntakePower(0.0);
+        }
+
+        if (gamepad1.right_trigger > 0.1) {
+            drive.SetIntakePower(0.8);
+            drive.SetServoConIntakePower(0.8);
         }
 
         drive.SetServoConFrontPower(-0.8);
