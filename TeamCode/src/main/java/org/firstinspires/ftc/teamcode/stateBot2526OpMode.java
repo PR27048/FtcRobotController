@@ -28,6 +28,8 @@ public class stateBot2526OpMode extends OpMode {
 
         drive.drive(forward, strafe, rotate);
         drive.SetIntakePower(IntakePower);
+        drive.SetServoConIntakePower(-0.8);
+        drive.SetServoConFrontPower(-0.8);
 
         if (gamepad2.left_bumper) {
             TurretPower = 0.85;
@@ -53,10 +55,10 @@ public class stateBot2526OpMode extends OpMode {
         drive.aimTurret(clockwise, counterclockwise);
 
         if (gamepad2.right_trigger > 0.1) {
-            drive.SetServoConPower(-0.8);
+            drive.SetServoConBackPower(-0.8);
         }
         else {
-            drive.SetServoConPower(0.8);
+            drive.SetServoConBackPower(0.8);
         }
 
         if (gamepad1.left_trigger > 0.1) {
@@ -66,17 +68,16 @@ public class stateBot2526OpMode extends OpMode {
 
         if (gamepad1.right_trigger > 0.1) {
             drive.SetIntakePower(0.8);
-            drive.SetServoConIntakePower(0.8);
+            drive.SetServoConIntakePower(-0.8);
         }
 
-        drive.SetServoConFrontPower(-0.8);
-        drive.SetServoConIntakePower(-1.0);
     }
     @Override
     public void stop() {
         drive.SetIntakePower(0.0);
         drive.SetTurretPower(0.0);
         drive.SetServoConFrontPower(0.0);
+        drive.SetServoConBackPower(0.0);
         drive.SetServoConIntakePower(0.0);
     }
 

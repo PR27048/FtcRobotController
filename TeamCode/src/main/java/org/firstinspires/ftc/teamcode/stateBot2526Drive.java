@@ -8,7 +8,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 public class stateBot2526Drive {
     private DcMotor FrontLeft, FrontRight, BackLeft, BackRight, Intake, Turret;
-    private CRServo ServoCon, ServoConFront, ServoConIntake, ServoConTurret;
+    private CRServo ServoConBack, ServoConFront, ServoConIntake, ServoConTurret;
 
     public void init(HardwareMap hwMap) {
         FrontLeft = hwMap.get(DcMotor.class, "front_left");
@@ -18,7 +18,7 @@ public class stateBot2526Drive {
         Intake = hwMap.get(DcMotor.class, "intake");
         Turret = hwMap.get(DcMotor.class, "turret");
 
-        ServoCon = hwMap.get(CRServo.class, "servo_con_back_transfer");
+        ServoConBack = hwMap.get(CRServo.class, "servo_con_back_transfer");
         ServoConFront = hwMap.get(CRServo.class, "servo_con_front_transfer");
         ServoConIntake = hwMap.get(CRServo.class, "intakeservo");
         ServoConTurret = hwMap.get(CRServo.class, "servo_con_turret");
@@ -59,7 +59,7 @@ public class stateBot2526Drive {
     }
 
     public void aimTurret(double clockwise, double counterclockwise) {
-        double ServoConTurretPower = clockwise - counterclockwise;
+        double ServoConTurretPower = - clockwise + counterclockwise;
 
         double MaxTurretAimingPower = 1.0;
         double MaxTurretAimingSpeed = 1.0;
@@ -79,9 +79,9 @@ public class stateBot2526Drive {
         Turret.setPower(TurretPower);
     }
 
-    public void SetServoConPower(double power) {
+    public void SetServoConBackPower(double power) {
 
-        ServoCon.setPower(power);
+        ServoConBack.setPower(power);
     }
 
     public void SetServoConFrontPower(double frontPower) {
