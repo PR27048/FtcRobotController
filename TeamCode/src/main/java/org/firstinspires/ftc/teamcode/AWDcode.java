@@ -75,7 +75,7 @@ public class AWDcode {
 
     public void SetTurretPower(/*double TurretPower*/) {
 
-        Turret.setPower(-0.64);
+        Turret.setPower(0.67);
     }
 
     public void setServoConPower(double power) {
