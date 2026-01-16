@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.DecodeAuto;
+package org.firstinspires.ftc.teamcode.Decode202526;
 
 import static com.qualcomm.robotcore.hardware.DcMotor.ZeroPowerBehavior.BRAKE;
 
@@ -12,7 +12,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
 @Disabled
 @Autonomous
-public class RoboAutoCode extends OpMode {
+public class RoboAutoOpMode extends OpMode {
 
     private DcMotor frontLeftMotor, frontRightMotor, backLeftMotor, backRightMotor;
 
