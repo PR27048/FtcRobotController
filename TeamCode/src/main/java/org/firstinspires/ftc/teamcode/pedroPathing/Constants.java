@@ -39,15 +39,15 @@ public class Constants {
     //In the tuning OpMode, under localization, select and start the forward tuner. Then, push the robot forward 48 inches (exactly 2 field tiles). This distance is configurable if needed. Once you push the robot forward, two numbers will be displayed on telemetry:
     //The distance the robot thinks it has traveled
     //The multiplier; this is the number you want.
-    public double fwdMultiplier = 1; //defaulting to 1
+    public static double fwdMultiplier = 1; //defaulting to 1
 
     //The lateral tuner is very similar to the forward tuner, except it is sideways. In the tuning OpMode, under localization, select and start the lateral tuner. Push the robot left 48 inches (exactly 2 field tiles). As with the forward tuner, this distance is configurable.
     //Lastly, add the multiplier to DriveEncoderConstants by adding the following line.
-    public double latMultiplier = 1; //defaulting to 1
+    public static double latMultiplier = 1; //defaulting to 1
 
     //The turn tuner is again, similar to both the forward tuner and lateral tuner, except it is rotational. Place the robot so it aligns to a fixed reference point (eg. edge of a field tile). In the tuning OpMode, under localization, select and start the turn tuner. Rotate the robot counterclockwise one full rotation. As with the previous tuners, this amount is configurable.
     //Lastly, add the multiplier to DriveEncoderConstants by adding the following line.
-    public double turnMultiplier = 1; //defaulting to 1
+    public static double turnMultiplier = 1; //defaulting to 1
 
     public static DriveEncoderConstants localizerConstants = new DriveEncoderConstants()
             .robotWidth(18) //Width: the distance between the left and right wheels
