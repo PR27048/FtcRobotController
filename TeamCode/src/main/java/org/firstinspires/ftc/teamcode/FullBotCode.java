@@ -67,7 +67,11 @@ public class FullBotCode extends OpMode {
         else {
             stop();
         }
-
+        if (gamepad2.dpad_up) {
+            drive.setHoodAngle(0);
+        } else if(gamepad2.dpad_down) {
+            drive.setHoodAngle(0.6);
+        }
         double rightStick = gamepad2.right_stick_x;
         double clockwise = 0;
         double counterclockwise = 0;

@@ -4,12 +4,13 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.CRServo;
 //import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.Servo;
 
 
 public class AWDcode {
     private DcMotor FrontLeft, FrontRight, BackLeft, BackRight, Intake, Turret;
     private CRServo ServoCon, ServoConFront, IntakeServo, ServoConTurret;
-
+    private Servo HoodServo;
     public void init(HardwareMap hwMap) {
         FrontLeft = hwMap.get(DcMotor.class, "front_left");
         FrontRight = hwMap.get(DcMotor.class, "front_right");
@@ -18,7 +19,7 @@ public class AWDcode {
         Intake = hwMap.get(DcMotor.class, "intake");
         Turret = hwMap.get(DcMotor.class, "turret");
         ServoConTurret = hwMap.get(CRServo.class, "servo_con_turret");
-
+        HoodServo = hwMap.get(Servo.class, "HoodServo");
         IntakeServo = hwMap.get(CRServo.class, "intakeservo");
         ServoCon = hwMap.get(CRServo.class, "servo_con_back_transfer");
         ServoConFront = hwMap.get(CRServo.class, "servo_con_front_transfer");
@@ -81,6 +82,10 @@ public class AWDcode {
     public void setServoConPower(double power) {
         ServoCon.setPower(power);
         //ServoCon.setPower(1.0);
+    }
+
+    public void setHoodAngle(double angle) {
+        HoodServo.setPosition(angle);
     }
 
     public void setIntakeServoPower(double pow) {
