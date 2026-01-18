@@ -19,7 +19,7 @@ public class AWDcode {
         Intake = hwMap.get(DcMotor.class, "intake");
         Turret = hwMap.get(DcMotor.class, "turret");
         ServoConTurret = hwMap.get(CRServo.class, "servo_con_turret");
-        HoodServo = hwMap.get(Servo.class, "HoodServo");
+        HoodServo = hwMap.get(Servo.class, "hoodservo");
         IntakeServo = hwMap.get(CRServo.class, "intakeservo");
         ServoCon = hwMap.get(CRServo.class, "servo_con_back_transfer");
         ServoConFront = hwMap.get(CRServo.class, "servo_con_front_transfer");
