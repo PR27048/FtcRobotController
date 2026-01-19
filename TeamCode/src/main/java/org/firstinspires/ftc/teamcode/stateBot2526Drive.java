@@ -8,7 +8,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 public class stateBot2526Drive {
     private DcMotor FrontLeft, FrontRight, BackLeft, BackRight, Intake, Turret;
-    private CRServo ServoConBack, ServoConFront, ServoConIntake, ServoConTurret;
+    private CRServo ServoConBack, ServoConFront, ServoConIntake, ServoConTurret, ServoConHood;
 
     public void init(HardwareMap hwMap) {
         FrontLeft = hwMap.get(DcMotor.class, "front_left");
@@ -22,6 +22,7 @@ public class stateBot2526Drive {
         ServoConFront = hwMap.get(CRServo.class, "servo_con_front_transfer");
         ServoConIntake = hwMap.get(CRServo.class, "intakeservo");
         ServoConTurret = hwMap.get(CRServo.class, "servo_con_turret");
+        ServoConHood = hwMap.get(CRServo.class, "servo_con_hood");
 
         FrontRight.setDirection(DcMotor.Direction.REVERSE);
         BackRight.setDirection(DcMotor.Direction.REVERSE);
@@ -67,6 +68,17 @@ public class stateBot2526Drive {
         MaxTurretAimingPower = Math.max(MaxTurretAimingPower, Math.abs(ServoConTurretPower));
 
         ServoConTurret.setPower((MaxTurretAimingSpeed * ServoConTurretPower / MaxTurretAimingPower));
+    }
+
+    public void hoodServo(double up, double down) {
+        double ServoConHoodPower = up - down;
+
+        double MaxHoodPower = 1.0;
+        double MaxHoodSpeed = 1.0;
+
+        MaxHoodPower = Math.max(MaxHoodPower, Math.abs(ServoConHoodPower));
+
+        ServoConHood.setPower((MaxHoodSpeed * ServoConHoodPower / MaxHoodPower));
     }
 
     public void SetIntakePower(double IntakePower) {
