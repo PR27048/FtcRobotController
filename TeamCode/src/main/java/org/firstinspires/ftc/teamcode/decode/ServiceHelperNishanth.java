@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 public class ServiceHelperNishanth {
 
     private DcMotor FrontLeft, FrontRight, BackLeft, BackRight,Intake, Turret;
-    private CRServo ServoConBack, ServoConFront, ServoConIntake, ServoConTurret;
+    private CRServo ServoConBack, ServoConFront, ServoConIntake, ServoConTurret, ServoConHood;
 
     public void init(HardwareMap hwMap) {
 
