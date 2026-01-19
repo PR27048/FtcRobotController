@@ -16,15 +16,14 @@ import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 
 import java.util.List;
 
-@TeleOp(name = "AprilTag Tracking")
+@TeleOp
 public class AprilTagTracking extends OpMode {
 
     private AprilTagProcessor aprilTagProcessor;
     private VisionPortal visionPortal;
     private CRServo turretServo;
 
-    // ===== TUNING CONSTANTS =====
-    private static final double DEAD_ZONE_DEG = 2.0;
+    private static final double DEAD_ZONE_DEG = 2.0; //accepted range
     private static final double SERVO_POWER = 0.09;
 
     @Override
@@ -41,11 +40,12 @@ public class AprilTagTracking extends OpMode {
 
         visionPortal = new VisionPortal.Builder()
                 .setCamera(hardwareMap.get(WebcamName.class, "Webcam 1"))
-                .setCameraResolution(new Size(320, 240)) //width 640 height 480
+                .setCameraResolution(new Size(640, 480)) //width 640 height 480
                 .addProcessor(aprilTagProcessor)
                 .build();
 
         telemetry.addLine("AprilTag Tracking Initialized");
+
     }
 
     @Override
@@ -58,7 +58,6 @@ public class AprilTagTracking extends OpMode {
             return;
         }
 
-        // Track the first detected tag
         AprilTagDetection tag = detections.get(0);
 
         trackTag(tag);
@@ -69,9 +68,11 @@ public class AprilTagTracking extends OpMode {
         double bearing = tag.ftcPose.bearing;
 
         if (bearing > DEAD_ZONE_DEG) {
+            //change servopower through equation based on bearing value
             turretServo.setPower(SERVO_POWER);
         }
         else if (bearing < -DEAD_ZONE_DEG) {
+            //change servopower through equation based on bearing value
             turretServo.setPower(-SERVO_POWER);
         }
         else {
