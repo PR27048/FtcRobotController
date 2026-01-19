@@ -56,6 +56,19 @@ public class stateBot2526OpMode extends OpMode {
 
         drive.aimTurret(clockwise, counterclockwise);
 
+        double leftStick = gamepad2.left_stick_y;
+        double up = 0;
+        double down = 0;
+
+        if (leftStick > 0.05) {
+            up = leftStick;
+        }
+        if (leftStick < 0.05) {
+            down = -leftStick;
+        }
+
+        drive.hoodServo(up,down);
+
         if (gamepad2.right_trigger > 0.1) {
             drive.SetServoConBackPower(-0.8);
         }
