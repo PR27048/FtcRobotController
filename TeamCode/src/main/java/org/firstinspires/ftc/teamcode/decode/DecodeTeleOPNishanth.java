@@ -60,6 +60,19 @@ public class DecodeTeleOPNishanth extends OpMode {
 
         serviceHelper.aimTurret(clockwise, counterclockwise);
 
+        double leftStick = gamepad2.left_stick_y;
+        double up = 0;
+        double down = 0;
+
+        if (leftStick > 0.05) {
+            up = leftStick;
+        }
+        if (leftStick < 0.05) {
+            down = -leftStick;
+        }
+
+        serviceHelper.hoodServo(up,down);
+
         if (gamepad2.right_trigger > 0.1) {
             serviceHelper.SetServoConBackPower(-0.8);
         }
