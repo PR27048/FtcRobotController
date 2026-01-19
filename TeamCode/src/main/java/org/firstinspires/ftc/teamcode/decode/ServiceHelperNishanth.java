@@ -76,6 +76,17 @@ public class ServiceHelperNishanth {
         ServoConTurret.setPower((MaxTurretAimingSpeed * ServoConTurretPower / MaxTurretAimingPower));
     }
 
+    public void hoodServo(double up, double down) {
+        double ServoConHoodPower = up - down;
+
+        double MaxHoodPower = 1.0;
+        double MaxHoodSpeed = 1.0;
+
+        MaxHoodPower = Math.max(MaxHoodPower, Math.abs(ServoConHoodPower));
+
+        ServoConHood.setPower((MaxHoodSpeed * ServoConHoodPower / MaxHoodPower));
+    }
+
     public void SetIntakePower(double IntakePower) {
 
         Intake.setPower(IntakePower);
