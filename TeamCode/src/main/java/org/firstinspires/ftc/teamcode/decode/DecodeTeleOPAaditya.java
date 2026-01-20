@@ -49,18 +49,21 @@ public class DecodeTeleOPAaditya extends OpMode {
         if (gamepad1.left_trigger > 0.1) {
             serviceHelper.SetIntakePower(1.0);
             serviceHelper.SetServoConFrontPower(-1.0);
-            serviceHelper.setServoConPower(1.0);
+            serviceHelper.setFeederPower(0.7);
             serviceHelper.SetServoConFrontPower(-1.0);
             serviceHelper.setIntakeServoPower(-1.0);
+            serviceHelper.SetTurretPower();
 
         }
 
         else if (gamepad1.right_trigger > 0.1) {
             serviceHelper.SetIntakePower(1.0);
             serviceHelper.SetServoConFrontPower(-1.0);
-            serviceHelper.setServoConPower(-1.0);
+            serviceHelper.setFeederPower(-0.7);
             serviceHelper.SetServoConFrontPower(-1.0);
             serviceHelper.setIntakeServoPower(-1.0);
+            serviceHelper.SetTurretPowerAccel();
+
 
         }
 
@@ -93,6 +96,7 @@ public class DecodeTeleOPAaditya extends OpMode {
         //drive.SetTurretPower(0.0);
         serviceHelper.SetServoConFrontPower(0.0);
         serviceHelper.setServoConPower(0.0);
+        serviceHelper.setFeederPower(0.0);
         serviceHelper.SetServoConFrontPower(0.0);
         serviceHelper.setIntakeServoPower(0.0);
 

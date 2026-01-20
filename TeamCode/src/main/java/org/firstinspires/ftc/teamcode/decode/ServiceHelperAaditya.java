@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 public class ServiceHelperAaditya {
 
-    private DcMotor FrontLeft, FrontRight, BackLeft, BackRight, Intake, Turret;
+    private DcMotor FrontLeft, FrontRight, BackLeft, BackRight, Intake, Turret, MotorFeeder;
     private CRServo ServoCon, ServoConFront, IntakeServo, ServoConTurret;
     private Servo HoodServo;
     public void init(HardwareMap hwMap) {
@@ -15,6 +15,8 @@ public class ServiceHelperAaditya {
         FrontRight = hwMap.get(DcMotor.class, "front_right");
         BackLeft = hwMap.get(DcMotor.class, "back_left");
         BackRight = hwMap.get(DcMotor.class, "back_right");
+        MotorFeeder = hwMap.get(DcMotor.class, "motorizedtransfer");
+
         Intake = hwMap.get(DcMotor.class, "intake");
         Turret = hwMap.get(DcMotor.class, "turret");
         ServoConTurret = hwMap.get(CRServo.class, "servo_con_turret");
@@ -31,6 +33,8 @@ public class ServiceHelperAaditya {
         BackRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         Intake.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         Turret.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        MotorFeeder.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
 
         FrontLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         FrontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -75,9 +79,15 @@ public class ServiceHelperAaditya {
 
     public void SetTurretPower(/*double TurretPower*/) {
 
-        Turret.setPower(0.67);
+        Turret.setPower(0.6);
     }
+    public void SetTurretPowerAccel(/*double TurretPower*/) {
 
+        Turret.setPower(0.63);
+    }
+    public void setFeederPower(double feederPower) {
+        MotorFeeder.setPower(feederPower);
+    }
     public void setServoConPower(double power) {
         ServoCon.setPower(power);
         //ServoCon.setPower(1.0);
