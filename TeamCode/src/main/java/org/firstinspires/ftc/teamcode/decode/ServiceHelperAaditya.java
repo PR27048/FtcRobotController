@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.decode;
 
+//import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry;
+
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -52,8 +54,8 @@ public class ServiceHelperAaditya {
                 BackLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
                 BackRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
                 Turret.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-                //Intake.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-                //MotorFeeder.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                Intake.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                MotorFeeder.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
                 break;
             }
         }
@@ -62,14 +64,14 @@ public class ServiceHelperAaditya {
         BackLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         BackRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
     }
-    public void drive(double forward, double strafe, double rotate) {
+    public void drive(double forward, double strafe, double rotate, double speed) {
         double FrontLeftPower = forward - strafe - rotate;
         double FrontRightPower = forward + strafe + rotate;
         double BackLeftPower = - forward - strafe + rotate;
         double BackRightPower = forward - strafe + rotate;
 
-        double maxPower = 1.0;
-        double maxSpeed = 1.0;
+        double maxPower = speed;
+        double maxSpeed = speed;
 
         maxPower = Math.max(maxPower, Math.abs(FrontLeftPower));
         maxPower = Math.max(maxPower, Math.abs(FrontRightPower));
@@ -100,11 +102,11 @@ public class ServiceHelperAaditya {
 
     public void SetTurretPower(/*double TurretPower*/) {
 
-        Turret.setPower(0.6);
+        Turret.setPower(0.53);
     }
     public void SetTurretPowerAccel(/*double TurretPower*/) {
 
-        Turret.setPower(0.63);
+        Turret.setPower(0.54);
     }
     public void setFeederPower(double feederPower) {
         MotorFeeder.setPower(feederPower);
@@ -134,10 +136,12 @@ public class ServiceHelperAaditya {
         final double TRACK_WIDTH_MM = 404;
         double targetPosition = (distanceUnit.toInches(distance) * TICKS_PER_MM);
 
+        drive(distance, 1, 1, speed);
+
         FrontLeft.setTargetPosition((int) targetPosition);
-        FrontRight.setTargetPosition((int) targetPosition);
+        FrontRight.setTargetPosition((int) -targetPosition);
         BackLeft.setTargetPosition((int) targetPosition);
-        BackRight.setTargetPosition((int) targetPosition);
+        BackRight.setTargetPosition((int) -targetPosition);
 
         FrontLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         FrontRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -147,6 +151,8 @@ public class ServiceHelperAaditya {
         if(Math.abs(targetPosition - FrontLeft.getCurrentPosition()) > (TOLERANCE_MM * TICKS_PER_MM)){
             driveTimer.reset();
         }
+//telemetry.addLine("in drive to position");
+  //      telemetry.addData("targetPosition", targetPosition);
 
         return (driveTimer.seconds() > holdSeconds);
 

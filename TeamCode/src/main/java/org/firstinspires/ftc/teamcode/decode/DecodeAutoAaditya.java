@@ -85,13 +85,13 @@ public class DecodeAutoAaditya extends OpMode {
          * Here we allow the driver to select which alliance we are on using the gamepad.
          */
         if (gamepad1.b) {
-            alliance = Alliance.BLUE;
-        } else if (gamepad1.x) {
             alliance = Alliance.RED;
+        } else if (gamepad1.x) {
+            alliance = Alliance.BLUE;
         }
 
-        telemetry.addData("Press X", "for RED");
-        telemetry.addData("Press B", "for BLUE");
+        telemetry.addData("Press X", "for BLUE");
+        telemetry.addData("Press B", "for RED");
         telemetry.addData("Selected Alliance", alliance);
     }
 
@@ -100,7 +100,19 @@ public class DecodeAutoAaditya extends OpMode {
         switch (autonomousState) {
             case LAUNCH:
                 launch(true);
-                autonomousState = AutonomousState.WAIT_FOR_LAUNCH;
+                autonomousState = AutonomousState.DRIVING_AWAY_FROM_GOAL;
+                break;
+
+            case DRIVING_AWAY_FROM_GOAL:
+                /*
+                 * This is another function that returns a boolean. This time we return "true" if
+                 * the robot has been within a tolerance of the target position for "holdSeconds."
+                 * Once the function returns "true" we reset the encoders again and move on.
+                 */
+                if(serviceHelper.driveToPosition(DRIVE_SPEED, 2.5, DistanceUnit.INCH, 1)){
+                    telemetry.addLine("in driving away");
+                    autonomousState = AutonomousState.WAIT_FOR_LAUNCH;
+                }
                 break;
 
             case WAIT_FOR_LAUNCH:
@@ -110,21 +122,13 @@ public class DecodeAutoAaditya extends OpMode {
                     if(shotsToFire > 0) {
                         autonomousState = AutonomousState.LAUNCH;
                     } else {
-                        autonomousState = AutonomousState.DRIVING_AWAY_FROM_GOAL;
+                        autonomousState = AutonomousState.ROTATING;
                     }
                 }
+                telemetry.addData("shotsToFire", shotsToFire);
+                telemetry.addData("autonomousState in wait launch", autonomousState);
                 break;
-            case DRIVING_AWAY_FROM_GOAL:
-                /*
-                 * This is another function that returns a boolean. This time we return "true" if
-                 * the robot has been within a tolerance of the target position for "holdSeconds."
-                 * Once the function returns "true" we reset the encoders again and move on.
-                 */
-                 if(serviceHelper.driveToPosition(DRIVE_SPEED, -4, DistanceUnit.INCH, 1)){
 
-                    autonomousState = AutonomousState.ROTATING;
-                }
-                break;
             case ROTATING:
                 if(alliance == Alliance.RED){
                     robotRotationAngle = 45;
@@ -171,13 +175,12 @@ public class DecodeAutoAaditya extends OpMode {
                 }
                 break;
             case PREPARE:
-                serviceHelper.SetTurretPower();
-                serviceHelper.SetIntakePower(0);
+                serviceHelper.SetIntakePower(1.0);
                 serviceHelper.SetServoConFrontPower(-1.0);
-                serviceHelper.setFeederPower(0.7);
+                serviceHelper.setFeederPower(-0.7);
                 serviceHelper.SetServoConFrontPower(-1.0);
                 serviceHelper.setIntakeServoPower(-1.0);
-                serviceHelper.SetTurretPower();
+                serviceHelper.SetTurretPowerAccel();
                 launchState = LaunchState.LAUNCH;
                 feederTimer.reset();
 

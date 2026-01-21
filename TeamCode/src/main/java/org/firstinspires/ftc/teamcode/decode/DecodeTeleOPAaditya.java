@@ -7,7 +7,8 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 public class DecodeTeleOPAaditya extends OpMode {
 
     ServiceHelperAaditya serviceHelper = new ServiceHelperAaditya();
-    double forward, strafe, rotate;
+    double forward, strafe, rotate,speed;
+
     // double Intake = 1.0;
     double Turret = -0.75;
 
@@ -22,8 +23,8 @@ public class DecodeTeleOPAaditya extends OpMode {
         forward = gamepad1.left_stick_y;
         strafe = gamepad1.left_stick_x;
         rotate = gamepad1.right_stick_x;
-
-        serviceHelper.drive(forward, strafe, rotate);
+        speed = 1.0;
+        serviceHelper.drive(forward, strafe, rotate, speed);
         //drive.SetIntakePower(Intake);
 
 
