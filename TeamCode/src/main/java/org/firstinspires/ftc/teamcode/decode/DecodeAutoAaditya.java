@@ -109,7 +109,7 @@ public class DecodeAutoAaditya extends OpMode {
                  * the robot has been within a tolerance of the target position for "holdSeconds."
                  * Once the function returns "true" we reset the encoders again and move on.
                  */
-                if(serviceHelper.driveToPosition(DRIVE_SPEED, 2.5, DistanceUnit.INCH, 1)){
+                if(serviceHelper.driveToPosition(DRIVE_SPEED, 4, DistanceUnit.INCH, 1)){
                     telemetry.addLine("in driving away");
                     autonomousState = AutonomousState.WAIT_FOR_LAUNCH;
                 }
@@ -142,7 +142,7 @@ public class DecodeAutoAaditya extends OpMode {
 
                 break;
             case DRIVING_OFF_LINE:
-                if(serviceHelper.driveToPosition(DRIVE_SPEED, -26, DistanceUnit.INCH, 1)){
+                if(serviceHelper.driveToPosition(DRIVE_SPEED, -4, DistanceUnit.INCH, 1)){
                     autonomousState = AutonomousState.COMPLETE;
                 }
                 break;

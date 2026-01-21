@@ -3,10 +3,13 @@ package org.firstinspires.ftc.teamcode.decode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
+import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
+
 @TeleOp
 public class DecodeTeleOPAaditya extends OpMode {
 
     ServiceHelperAaditya serviceHelper = new ServiceHelperAaditya();
+    AprilTagTrackerMERGE tagTracker = new AprilTagTrackerMERGE();
     double forward, strafe, rotate,speed;
 
     // double Intake = 1.0;
@@ -15,6 +18,7 @@ public class DecodeTeleOPAaditya extends OpMode {
     @Override
     public void init() {
         serviceHelper.init(hardwareMap, "FALSE");
+        tagTracker.init(hardwareMap);
     }
 
     @Override
@@ -25,6 +29,8 @@ public class DecodeTeleOPAaditya extends OpMode {
         rotate = gamepad1.right_stick_x;
         speed = 1.0;
         serviceHelper.drive(forward, strafe, rotate, speed);
+
+
         //drive.SetIntakePower(Intake);
 
 
@@ -85,6 +91,10 @@ public class DecodeTeleOPAaditya extends OpMode {
         }
 
         serviceHelper.aimTurret(clockwise, counterclockwise);
+
+        if (gamepad2.a) {
+            tagTracker.update();
+        }
     }
 
     @Override
@@ -96,6 +106,9 @@ public class DecodeTeleOPAaditya extends OpMode {
         serviceHelper.setFeederPower(0.0);
         serviceHelper.SetServoConFrontPower(0.0);
         serviceHelper.setIntakeServoPower(0.0);
+
+
+        tagTracker.stop();
 
 
     }

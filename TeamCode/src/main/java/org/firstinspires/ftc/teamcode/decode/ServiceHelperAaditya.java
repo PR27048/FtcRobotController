@@ -53,9 +53,9 @@ public class ServiceHelperAaditya {
                 FrontRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
                 BackLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
                 BackRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-                Turret.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-                Intake.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-                MotorFeeder.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                Turret.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+                Intake.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+                MotorFeeder.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
                 break;
             }
         }
@@ -134,7 +134,7 @@ public class ServiceHelperAaditya {
         final double TICKS_PER_MM = (ENCODER_TICKS_PER_REV / (WHEEL_DIAMETER_MM * Math.PI));
         final double TOLERANCE_MM = 10;
         final double TRACK_WIDTH_MM = 404;
-        double targetPosition = (distanceUnit.toInches(distance) * TICKS_PER_MM);
+        double targetPosition = (distanceUnit.toMm(distance) * TICKS_PER_MM);
 
         drive(distance, 1, 1, speed);
 
