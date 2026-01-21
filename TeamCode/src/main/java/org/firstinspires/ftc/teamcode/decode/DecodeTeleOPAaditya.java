@@ -11,13 +11,9 @@ public class DecodeTeleOPAaditya extends OpMode {
     // double Intake = 1.0;
     double Turret = -0.75;
 
-
-
     @Override
     public void init() {
-        serviceHelper.init(hardwareMap);
-
-
+        serviceHelper.init(hardwareMap, "FALSE");
     }
 
     @Override

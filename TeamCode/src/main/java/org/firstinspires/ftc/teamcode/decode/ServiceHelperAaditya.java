@@ -4,13 +4,18 @@ import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.util.ElapsedTime;
+
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
 public class ServiceHelperAaditya {
 
     private DcMotor FrontLeft, FrontRight, BackLeft, BackRight, Intake, Turret, MotorFeeder;
     private CRServo ServoCon, ServoConFront, IntakeServo, ServoConTurret;
     private Servo HoodServo;
-    public void init(HardwareMap hwMap) {
+    private ElapsedTime driveTimer = new ElapsedTime();
+
+    public void init(HardwareMap hwMap, String autoState ) {
         FrontLeft = hwMap.get(DcMotor.class, "front_left");
         FrontRight = hwMap.get(DcMotor.class, "front_right");
         BackLeft = hwMap.get(DcMotor.class, "back_left");
@@ -27,15 +32,31 @@ public class ServiceHelperAaditya {
 
         FrontRight.setDirection(DcMotor.Direction.REVERSE);
         BackRight.setDirection(DcMotor.Direction.REVERSE);
-        FrontLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        FrontRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        BackLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        BackRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        Intake.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        Turret.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        MotorFeeder.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
-
+        switch (autoState) {
+            case "TRUE":
+            {
+                FrontLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+                FrontRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+                BackLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+                BackRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+                Intake.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+                Turret.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+                MotorFeeder.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+                break;
+            }
+            case "FALSE":
+            {
+                FrontLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                FrontRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                BackLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                BackRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                Turret.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                //Intake.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                //MotorFeeder.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                break;
+            }
+        }
         FrontLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         FrontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         BackLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -103,5 +124,31 @@ public class ServiceHelperAaditya {
 
     public void SetServoConFrontPower(double frontPower) {
         ServoConFront.setPower(frontPower);
+    }
+
+    public boolean driveToPosition(double speed, double distance, DistanceUnit distanceUnit, double holdSeconds) {
+        final double WHEEL_DIAMETER_MM = 96;
+        final double ENCODER_TICKS_PER_REV = 537.7;
+        final double TICKS_PER_MM = (ENCODER_TICKS_PER_REV / (WHEEL_DIAMETER_MM * Math.PI));
+        final double TOLERANCE_MM = 10;
+        final double TRACK_WIDTH_MM = 404;
+        double targetPosition = (distanceUnit.toInches(distance) * TICKS_PER_MM);
+
+        FrontLeft.setTargetPosition((int) targetPosition);
+        FrontRight.setTargetPosition((int) targetPosition);
+        BackLeft.setTargetPosition((int) targetPosition);
+        BackRight.setTargetPosition((int) targetPosition);
+
+        FrontLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        FrontRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        BackLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        BackRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        if(Math.abs(targetPosition - FrontLeft.getCurrentPosition()) > (TOLERANCE_MM * TICKS_PER_MM)){
+            driveTimer.reset();
+        }
+
+        return (driveTimer.seconds() > holdSeconds);
+
     }
 }
