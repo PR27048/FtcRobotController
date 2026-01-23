@@ -36,7 +36,7 @@ public class ServiceHelperAaditya {
         BackRight.setDirection(DcMotor.Direction.REVERSE);
 
         switch (autoState) {
-            case "TRUE":
+            case "FALSE":
             {
                 FrontLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
                 FrontRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -47,7 +47,7 @@ public class ServiceHelperAaditya {
                 MotorFeeder.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
                 break;
             }
-            case "FALSE":
+            case "TRUE":
             {
                 FrontLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
                 FrontRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -102,7 +102,7 @@ public class ServiceHelperAaditya {
 
     public void SetTurretPower(/*double TurretPower*/) {
 
-        Turret.setPower(0.53);
+        Turret.setPower(0.51);
     }
     public void SetTurretPowerAccel(/*double TurretPower*/) {
 
@@ -136,7 +136,7 @@ public class ServiceHelperAaditya {
         final double TRACK_WIDTH_MM = 404;
         double targetPosition = (distanceUnit.toMm(distance) * TICKS_PER_MM);
 
-        drive(distance, 1, 1, speed);
+        drive(distance, 1, 0, speed);
 
         FrontLeft.setTargetPosition((int) targetPosition);
         FrontRight.setTargetPosition((int) -targetPosition);

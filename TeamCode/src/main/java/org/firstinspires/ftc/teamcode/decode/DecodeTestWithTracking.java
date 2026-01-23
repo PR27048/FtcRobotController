@@ -1,23 +1,29 @@
 package org.firstinspires.ftc.teamcode.decode;
 
-import android.annotation.SuppressLint;
-import android.util.Size;
-
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.CRServo;
-
+import android.annotation.SuppressLint;
+import android.util.Size;
+import org.firstinspires.ftc.vision.VisionPortal;
+import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
+import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
-
 import java.util.List;
 
 @TeleOp
-public class AprilTagTracking extends OpMode {
+public class DecodeTestWithTracking extends OpMode {
+
+    ServiceHelperAaditya serviceHelper = new ServiceHelperAaditya();
+    double forward, strafe, rotate,speed;
+
+    // double Intake = 1.0;
+    double Turret = -0.75;
 
     private AprilTagProcessor aprilTagProcessor; //used to be private
     private VisionPortal visionPortal;
@@ -33,6 +39,8 @@ public class AprilTagTracking extends OpMode {
     @Override
     public void init() {
         turretServo = hardwareMap.get(CRServo.class, "servo_con_turret");
+
+        serviceHelper.init(hardwareMap, "FALSE");
 
         aprilTagProcessor = new AprilTagProcessor.Builder()
                 .setDrawTagID(true)
@@ -54,6 +62,12 @@ public class AprilTagTracking extends OpMode {
 
     @Override
     public void loop() {
+
+        forward = gamepad1.left_stick_y;
+        strafe = gamepad1.left_stick_x;
+        rotate = gamepad1.right_stick_x;
+        speed = 1.0;
+        serviceHelper.drive(forward, strafe, rotate, speed);
         List<AprilTagDetection> detections = aprilTagProcessor.getDetections();
 
         if (detections.isEmpty()) {
@@ -107,13 +121,86 @@ public class AprilTagTracking extends OpMode {
         telemetry.addLine(String.format("Range: %.1f in", tag.ftcPose.range));
         telemetry.addLine(String.format("Bearing: %.1f deg", tag.ftcPose.bearing));
         telemetry.addLine(String.format("Yaw: %.1f deg", tag.ftcPose.yaw));
+
+        //drive.SetIntakePower(Intake);
+
+
+
+      /*  if (gamepad1.left_bumper) {
+            Turret = -0.75;
+            drive.SetTurretPower(Turret);
+
+        }
+
+        if (gamepad1.right_bumper) {
+            Turret = -0.9;
+            drive.SetTurretPower(Turret);
+
+        }*/
+
+
+        serviceHelper.SetTurretPower();
+
+        if (gamepad1.left_trigger > 0.1) {
+            serviceHelper.SetIntakePower(1.0);
+            serviceHelper.SetServoConFrontPower(-1.0);
+            serviceHelper.setFeederPower(0.7);
+            serviceHelper.SetServoConFrontPower(-1.0);
+            serviceHelper.setIntakeServoPower(-1.0);
+            serviceHelper.SetTurretPower();
+
+        }
+
+        else if (gamepad1.right_trigger > 0.1) {
+            serviceHelper.SetIntakePower(1.0);
+            serviceHelper.SetServoConFrontPower(-1.0);
+            serviceHelper.setFeederPower(-0.7);
+            serviceHelper.SetServoConFrontPower(-1.0);
+            serviceHelper.setIntakeServoPower(-1.0);
+            serviceHelper.SetTurretPowerAccel();
+
+
+        }
+
+        // NO TRIGGERS → everything OFF
+        else {
+            stop();
+        }
+        if (gamepad2.dpad_up) {
+            serviceHelper.setHoodAngle(0);
+        } else if(gamepad2.dpad_down) {
+            serviceHelper.setHoodAngle(0.6);
+        }
+        double rightStick = gamepad2.right_stick_x;
+        double clockwise = 0;
+        double counterclockwise = 0;
+
+        if (rightStick > 0.05) {
+            clockwise -= rightStick;
+        }
+        if (rightStick < -0.05) {
+            counterclockwise = rightStick;
+        }
+
+        serviceHelper.aimTurret(clockwise, counterclockwise);
+
+
     }
 
     @Override
     public void stop() {
+        serviceHelper.SetIntakePower(0.0);
+        //drive.SetTurretPower(0.0);
+        serviceHelper.SetServoConFrontPower(0.0);
+        serviceHelper.setServoConPower(0.0);
+        serviceHelper.setFeederPower(0.0);
+        serviceHelper.SetServoConFrontPower(0.0);
+        serviceHelper.setIntakeServoPower(0.0);
         turretServo.setPower(0);
         if (visionPortal != null) {
             visionPortal.close();
         }
+
+
     }
 }

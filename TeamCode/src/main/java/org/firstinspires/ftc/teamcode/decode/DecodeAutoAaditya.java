@@ -12,7 +12,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
 @Autonomous
 public class DecodeAutoAaditya extends OpMode {
-
+    AprilTagTrackerMERGE tagTracker = new AprilTagTrackerMERGE();
     /// ///////////////////////
     final double FEED_TIME = 0.20;
    // final double LAUNCHER_TARGET_VELOCITY = 1125;
@@ -71,6 +71,7 @@ public class DecodeAutoAaditya extends OpMode {
 
         //initialize hardware (drivetrain
         serviceHelper.init(hardwareMap, "TRUE");
+        tagTracker.init(hardwareMap);
 
         // Tell the driver that initialization is complete.
         telemetry.addData("Status", "Initialized");
@@ -109,7 +110,8 @@ public class DecodeAutoAaditya extends OpMode {
                  * the robot has been within a tolerance of the target position for "holdSeconds."
                  * Once the function returns "true" we reset the encoders again and move on.
                  */
-                if(serviceHelper.driveToPosition(DRIVE_SPEED, 4, DistanceUnit.INCH, 1)){
+
+                if(serviceHelper.driveToPosition(DRIVE_SPEED, 2, DistanceUnit.MM, 1)){
                     telemetry.addLine("in driving away");
                     autonomousState = AutonomousState.WAIT_FOR_LAUNCH;
                 }
@@ -120,7 +122,7 @@ public class DecodeAutoAaditya extends OpMode {
                 if(launch(false)) {
                     shotsToFire -= 1;
                     if(shotsToFire > 0) {
-                        autonomousState = AutonomousState.LAUNCH;
+                        autonomousState = AutonomousState.WAIT_FOR_LAUNCH;
                     } else {
                         autonomousState = AutonomousState.ROTATING;
                     }
@@ -138,7 +140,7 @@ public class DecodeAutoAaditya extends OpMode {
 
               //  if(rotate(ROTATE_SPEED, robotRotationAngle, AngleUnit.DEGREES,1)){}
 
-                    autonomousState = AutonomousState.DRIVING_OFF_LINE;
+                   // autonomousState = AutonomousState.DRIVING_OFF_LINE;
 
                 break;
             case DRIVING_OFF_LINE:
@@ -186,14 +188,15 @@ public class DecodeAutoAaditya extends OpMode {
 
                 break;
             case LAUNCH:
-                if (feederTimer.seconds() > FEED_TIME) {
+                if(shotsToFire < 0) {
                     serviceHelper.SetIntakePower(0.0);
-                    //drive.SetTurretPower(0.0);
                     serviceHelper.SetServoConFrontPower(0.0);
                     serviceHelper.setServoConPower(0.0);
                     serviceHelper.setFeederPower(0.0);
                     serviceHelper.SetServoConFrontPower(0.0);
                     serviceHelper.setIntakeServoPower(0.0);
+                }
+                if (feederTimer.seconds() > FEED_TIME) {
 
                     if(shotTimer.seconds() > TIME_BETWEEN_SHOTS){
                         launchState = LaunchState.IDLE;
