@@ -27,7 +27,7 @@ public class AprilTagTracking extends OpMode {
     //private static final double SERVO_POWER = 0.09;
 
     private static final double DEAD_ZONE_DEG = 1.5;
-    private static final double KP = 0.015;
+    private static final double KP = 0.015; //HAVE TO TUNE THIS VALUE
     private static final double MAX_POWER = 0.25;
 
     @Override
