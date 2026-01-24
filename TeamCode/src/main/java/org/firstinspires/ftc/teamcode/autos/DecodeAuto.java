@@ -4,7 +4,6 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
 @Autonomous(name = "DecodeAuto", group = "Auto")
@@ -46,6 +45,25 @@ public class DecodeAuto extends LinearOpMode {
         BackLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         BackRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
+    public void drive(double forward, double strafe, double rotate) {
+        double FrontLeftPower = forward - strafe - rotate;
+        double FrontRightPower = forward + strafe + rotate;
+        double BackLeftPower = - forward - strafe + rotate;
+        double BackRightPower = forward - strafe + rotate;
+
+        double maxPower = 1.0;
+        double maxSpeed = 1.0;
+
+        maxPower = Math.max(maxPower, Math.abs(FrontLeftPower));
+        maxPower = Math.max(maxPower, Math.abs(FrontRightPower));
+        maxPower = Math.max(maxPower, Math.abs(BackLeftPower));
+        maxPower = Math.max(maxPower, Math.abs(BackRightPower));
+
+        FrontLeft.setPower(maxSpeed * FrontLeftPower / maxPower);
+        FrontRight.setPower(maxSpeed * FrontRightPower / maxPower);
+        BackLeft.setPower(maxSpeed * BackLeftPower / maxPower);
+        BackRight.setPower(maxSpeed * BackRightPower / maxPower);
+    }
 
     // Define your auto modes
     enum AutoMode {
@@ -67,12 +85,12 @@ public class DecodeAuto extends LinearOpMode {
     boolean lastDown = false;
 
     boolean lastGuide = false;
-    private void setDrivePower(double power) {
+    /*private void setDrivePower(double power) {
         FrontLeft.setPower(power);
         FrontRight.setPower(power);
         BackLeft.setPower(power);
         BackRight.setPower(power);
-    }
+    }*/
 
     private void TurretPower() {
         Turret.setPower(0.6);
@@ -85,12 +103,12 @@ public class DecodeAuto extends LinearOpMode {
         ServoConFront.setPower(-1.0);
         IntakeServo.setPower(-1.0);
     }
-    private void TurnRobot(double power) {
+    /*private void TurnRobot(double power) {
         FrontLeft.setPower(power);
         FrontRight.setPower(-power);
         BackLeft.setPower(power);
         BackRight.setPower(-power);
-    }
+    }*/
     @Override
     public void runOpMode() {
         initHardware();
@@ -167,12 +185,12 @@ public class DecodeAuto extends LinearOpMode {
 
         TurretPower();
         // Drive
-        setDrivePower(0.6);
+        drive(0.6,0,0);
 
         sleep(2000); // 2 seconds
 
         // Stop
-        setDrivePower(0);
+        drive(0,0,0);
         sleep(6000);
         Launch();
     }
@@ -185,16 +203,17 @@ public class DecodeAuto extends LinearOpMode {
 
         TurretPower(); // start turret
         // Drive
-        setDrivePower(0.6); // drive
-
+        TurretPower(); // start turret
+        // Drive
+        drive(0.6,0,0);
         sleep(5000); // 5 seconds
 
         // Stop
-        setDrivePower(0); // stop drive
+        drive(0,0,0);
 
-        TurnRobot(0.2); // facegoal
+        drive(0,0,-0.3); // facegoal
         sleep(600);
-        TurnRobot(0); //stop
+        drive(0,0,-0.3); //stop
         sleep(2000);
         Launch(); //shoot
     }
@@ -207,16 +226,15 @@ public class DecodeAuto extends LinearOpMode {
 
         TurretPower(); // start turret
         // Drive
-        setDrivePower(0.6); // drive
-
+        drive(0.6,0,0);
         sleep(5000); // 5 seconds
 
         // Stop
-        setDrivePower(0); // stop drive
+        drive(0,0,0);
 
-        TurnRobot(-0.2); // facegoal
+        drive(0,0,0.3); // facegoal
         sleep(600);
-        TurnRobot(0); //stop
+        drive(0,0,0.3); //stop
         sleep(2000);
         Launch(); //shoot
     }
@@ -227,15 +245,14 @@ public class DecodeAuto extends LinearOpMode {
         sleep(2000);
 
         TurretPower();
+        // Drive
+        drive(0.6,0,0);
 
-        // Drive forward
-        setDrivePower(0.6);
-        sleep(2000);
+        sleep(2000); // 2 seconds
 
         // Stop
-        setDrivePower(0);
+        drive(0,0,0);
         sleep(6000);
-
         Launch();
     }
 }
