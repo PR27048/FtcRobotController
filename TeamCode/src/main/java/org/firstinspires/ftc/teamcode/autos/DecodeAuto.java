@@ -35,6 +35,16 @@ public class DecodeAuto extends LinearOpMode {
 
         FrontLeft.setDirection(DcMotor.Direction.REVERSE);
         BackLeft.setDirection(DcMotor.Direction.REVERSE);
+
+        FrontLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        FrontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        BackLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        BackRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+        FrontLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        FrontRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        BackLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        BackRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 
     // Define your auto modes
@@ -64,8 +74,8 @@ public class DecodeAuto extends LinearOpMode {
         BackRight.setPower(power);
     }
 
-    private void TurretPower(double power) {
-        Turret.setPower(power);
+    private void TurretPower() {
+        Turret.setPower(0.6);
     }
 
     private void Launch() {
@@ -76,10 +86,10 @@ public class DecodeAuto extends LinearOpMode {
         IntakeServo.setPower(-1.0);
     }
     private void TurnRobot(double power) {
-        FrontLeft.setPower(-power);
-        FrontRight.setPower(power);
-        BackLeft.setPower(-power);
-        BackRight.setPower(power);
+        FrontLeft.setPower(power);
+        FrontRight.setPower(-power);
+        BackLeft.setPower(power);
+        BackRight.setPower(-power);
     }
     @Override
     public void runOpMode() {
@@ -155,9 +165,9 @@ public class DecodeAuto extends LinearOpMode {
 
         sleep(2000);
 
-        TurretPower(0.6);
+        TurretPower();
         // Drive
-        setDrivePower(0.3);
+        setDrivePower(0.6);
 
         sleep(2000); // 2 seconds
 
@@ -173,9 +183,9 @@ public class DecodeAuto extends LinearOpMode {
 
         sleep(2000);
 
-        TurretPower(0.6); // start turret
+        TurretPower(); // start turret
         // Drive
-        setDrivePower(0.3); // drive
+        setDrivePower(0.6); // drive
 
         sleep(5000); // 5 seconds
 
@@ -195,9 +205,9 @@ public class DecodeAuto extends LinearOpMode {
 
         sleep(2000);
 
-        TurretPower(0.6); // start turret
+        TurretPower(); // start turret
         // Drive
-        setDrivePower(0.3); // drive
+        setDrivePower(0.6); // drive
 
         sleep(5000); // 5 seconds
 
@@ -216,10 +226,10 @@ public class DecodeAuto extends LinearOpMode {
         telemetry.update();
         sleep(2000);
 
-        TurretPower(0.6);
+        TurretPower();
 
         // Drive forward
-        setDrivePower(0.3);
+        setDrivePower(0.6);
         sleep(2000);
 
         // Stop
