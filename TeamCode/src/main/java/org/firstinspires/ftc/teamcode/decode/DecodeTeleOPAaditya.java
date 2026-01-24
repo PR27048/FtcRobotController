@@ -76,9 +76,10 @@ public class DecodeTeleOPAaditya extends OpMode {
             stop();
         }
         if (gamepad2.dpad_up) {
-            serviceHelper.setHoodAngle(0);
-        } else if(gamepad2.dpad_down) {
-            serviceHelper.setHoodAngle(0.6);
+            serviceHelper.setHoodAngle(0.15);
+        }
+        if (gamepad2.dpad_down) {
+            serviceHelper.setHoodAngle(-0.15);
         }
         double rightStick = gamepad2.right_stick_x;
         double clockwise = 0;

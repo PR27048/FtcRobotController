@@ -102,11 +102,11 @@ public class ServiceHelperAaditya {
 
     public void SetTurretPower(/*double TurretPower*/) {
 
-        Turret.setPower(0.56);
+        Turret.setPower(0.64);
     }
     public void SetTurretPowerAccel(/*double TurretPower*/) {
 
-        Turret.setPower(0.58);
+        Turret.setPower(0.67);
     }
     public void setFeederPower(double feederPower) {
         MotorFeeder.setPower(feederPower);
