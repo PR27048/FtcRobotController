@@ -93,34 +93,34 @@ public class DecodeAuto extends OpMode {
 
         // Drive
        serviceHelper.drive(-0.3,0,0);
-
-        try { Thread.sleep(2000); } catch (Exception e) {}
+       try { Thread.sleep(2000); } catch (Exception e) {}
 
         // Stop
-        drive(0,0,0);
-        sleep(6000);
-        Launch();
-        sleep(6000);
-        drive(-0.3,0,0); //go back more
-        sleep(1000);
-        drive(0,0,0.2); //rotate
-        sleep(700);
-        drive(0,0.2,0); // align to artifact spike
-        sleep(1500);
-        Intake();
-        drive(0.4,0,0); // pick them up
-        sleep(1500);
-        drive(-0.4,0,0); // go back
-        sleep(1500);
-        drive(0,-0.2,0); // align back to goal
-        sleep(500);
-        drive(0,0,-0.2); // turn to goal
-        sleep(700);
-        drive(0.3,0,0); // get in range of goal
-        sleep(1300);
-        drive(0,0,0);
-        Launch();                          // fire the next 3 artifacts
-        sleep(5000);
+        serviceHelper.drive(0,0,0);
+        try { Thread.sleep(6000); } catch (Exception e) {}
+
+        serviceHelper.AutoLaunch();
+        try { Thread.sleep(6000); } catch (Exception e) {}
+        serviceHelper.drive(-0.3,0,0); //go back more
+        try { Thread.sleep(1000); } catch (Exception e) {}
+        serviceHelper.drive(0,0,0.2); //rotate
+        try { Thread.sleep(700); } catch (Exception e) {}
+        serviceHelper.drive(0,0.2,0); // align to artifact spike
+        try { Thread.sleep(1500); } catch (Exception e) {}
+        serviceHelper.AutoIntake();
+        serviceHelper.drive(0.4,0,0); // pick them up
+        try { Thread.sleep(1500); } catch (Exception e) {}
+        serviceHelper.drive(-0.4,0,0); // go back
+        try { Thread.sleep(1500); } catch (Exception e) {}
+        serviceHelper.drive(0,-0.2,0); // align back to goal
+        try { Thread.sleep(500); } catch (Exception e) {}
+        serviceHelper.drive(0,0,-0.2); // turn to goal
+        try { Thread.sleep(700); } catch (Exception e) {}
+        serviceHelper.drive(0.3,0,0); // get in range of goal
+        try { Thread.sleep(1300); } catch (Exception e) {}
+        serviceHelper.drive(0,0,0);
+        serviceHelper.AutoLaunch();                          // fire the next 3 artifacts
+        try { Thread.sleep(5000); } catch (Exception e) {}
     }
 
 }
