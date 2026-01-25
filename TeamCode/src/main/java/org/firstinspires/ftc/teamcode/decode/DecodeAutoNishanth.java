@@ -10,8 +10,8 @@ public class DecodeAutoNishanth extends OpMode {
 
     ServiceHelperNishanth serviceHelper = new ServiceHelperNishanth();
 
-   // double IntakePower = 0.8;
-    double TurretPower = 0.55;
+    double IntakePower = 0.8;
+    double TurretPower = 0.475;
 
     @Override
     public void init() {
@@ -21,7 +21,7 @@ public class DecodeAutoNishanth extends OpMode {
 
     @Override
     public void start() {
-     //   serviceHelper.SetIntakePower(IntakePower);
+        serviceHelper.SetIntakePower(IntakePower);
         serviceHelper.SetServoConIntakePower(-0.8);
         serviceHelper.SetTurretPower(TurretPower);
         serviceHelper.SetServoConFrontPower(-0.8);
@@ -33,7 +33,7 @@ public class DecodeAutoNishanth extends OpMode {
         try { Thread.sleep(6000); } catch (Exception e) {}
         serviceHelper.SetBackFeederPower(-0.7);
 
-        try { Thread.sleep(6500); } catch (Exception e) {}
+        try { Thread.sleep(5000); } catch (Exception e) {}
         serviceHelper.SetServoConFrontPower(0.0);
         serviceHelper.SetBackFeederPower(0.0);
     }
