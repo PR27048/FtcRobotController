@@ -23,6 +23,11 @@ public class DecodeTeleOPNishanth extends OpMode {
     }
 
     @Override
+    public void start() {
+        serviceHelper.SetIntakePower(IntakePower);
+    }
+
+    @Override
     public void loop() {
 
         forward = gamepad1.left_stick_y;
@@ -31,7 +36,6 @@ public class DecodeTeleOPNishanth extends OpMode {
 
         serviceHelper.drive(forward, strafe, rotate);
 
-        serviceHelper.SetIntakePower(IntakePower);
         serviceHelper.SetServoConIntakePower(-0.8);
         serviceHelper.SetServoConFrontPower(-0.8);
 
@@ -85,7 +89,7 @@ public class DecodeTeleOPNishanth extends OpMode {
             serviceHelper.SetServoConIntakePower(0.0);
         }
 
-        if (gamepad1.right_trigger > 0.1) {
+        else if (gamepad1.right_trigger > 0.1) {
             serviceHelper.SetIntakePower(0.8);
             serviceHelper.SetServoConIntakePower(-0.8);
         }
