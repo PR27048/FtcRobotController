@@ -209,15 +209,15 @@ public class DecodeAuto extends LinearOpMode {
         sleep(1500);
         Intake();
         drive(0.4,0,0); // pick them up
-        sleep(2000);
+        sleep(1500);
         drive(-0.4,0,0); // go back
-        sleep(2000);
+        sleep(1500);
         drive(0,-0.2,0); // align back to goal
         sleep(500);
         drive(0,0,-0.2); // turn to goal
         sleep(700);
         drive(0.3,0,0); // get in range of goal
-        sleep(1000);
+        sleep(1300);
         drive(0,0,0);
         Launch();                          // fire the next 3 artifacts
         sleep(5000);
