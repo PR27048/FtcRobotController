@@ -42,7 +42,7 @@ public class DecodeTeleOPAaditya extends OpMode {
 
         if (gamepad1.right_bumper) {
             Turret = -0.9;
-            drive.SetTurretPower(Turret);
+            drive.SetTurretP    ower(Turret);
 
         }*/
 

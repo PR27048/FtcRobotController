@@ -93,12 +93,19 @@ public class DecodeAuto extends LinearOpMode {
     }*/
 
     private void TurretPower() {
-        Turret.setPower(0.6);
+        Turret.setPower(0.5);
     }
 
     private void Launch() {
         Intake.setPower(1.0);
-        ServoConTurret.setPower(-1.0);
+        //ServoConTurret.setPower(-1.0);
+        MotorFeeder.setPower(-0.7);
+        ServoConFront.setPower(-1.0);
+        IntakeServo.setPower(-1.0);
+    }
+    private void Intake() {
+        Intake.setPower(1.0);
+        //ServoConTurret.setPower(-1.0);
         MotorFeeder.setPower(0.7);
         ServoConFront.setPower(-1.0);
         IntakeServo.setPower(-1.0);
@@ -181,18 +188,45 @@ public class DecodeAuto extends LinearOpMode {
         telemetry.addLine("Running BLUE NEAR Auto");
         telemetry.update();
 
-        sleep(2000);
+        //sleep(2000);
 
         TurretPower();
         // Drive
-        drive(0.6,0,0);
+        drive(-0.3,0,0);
 
-        sleep(2000); // 2 seconds
+        sleep(1000); // 1 second
 
         // Stop
         drive(0,0,0);
         sleep(6000);
         Launch();
+        sleep(6000);
+        drive(-0.3,0,0); //go back more
+        sleep(1000);
+        drive(0,0,0.2); //rotate
+        sleep(700);
+        drive(0,0.2,0); // align to artifact spike
+        sleep(1500);
+        Intake();
+        drive(0.4,0,0); // pick them up
+        sleep(2000);
+        drive(-0.4,0,0); // go back
+        sleep(2000);
+        drive(0,-0.2,0); // align back to goal
+        sleep(500);
+        drive(0,0,-0.2); // turn to goal
+        sleep(700);
+        drive(0.3,0,0); // get in range of goal
+        sleep(1000);
+        drive(0,0,0);
+        Launch();                          // fire the next 3 artifacts
+        sleep(5000);
+
+
+
+
+
+
     }
 
     private void runBlueFar() {
@@ -242,17 +276,17 @@ public class DecodeAuto extends LinearOpMode {
     private void runRedClose() {
         telemetry.addLine("Running RED NEAR Auto");
         telemetry.update();
-        sleep(2000);
+        //sleep(2000);
 
         TurretPower();
         // Drive
-        drive(0.6,0,0);
+        drive(-0.3,0,0);
 
-        sleep(2000); // 2 seconds
+        sleep(1000); // 2 seconds
 
         // Stop
         drive(0,0,0);
-        sleep(6000);
         Launch();
+        sleep(6000);
     }
 }
