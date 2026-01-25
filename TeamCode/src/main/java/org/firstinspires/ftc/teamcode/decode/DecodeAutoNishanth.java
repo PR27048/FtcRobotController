@@ -11,7 +11,7 @@ public class DecodeAutoNishanth extends OpMode {
     ServiceHelperNishanth serviceHelper = new ServiceHelperNishanth();
 
    // double IntakePower = 0.8;
-    double TurretPower = 0.9;
+    double TurretPower = 0.55;
 
     @Override
     public void init() {
