@@ -3,20 +3,20 @@ package org.firstinspires.ftc.teamcode.decode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
+import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
+
 @TeleOp
 public class DecodeTeleOPAaditya extends OpMode {
 
     ServiceHelperAaditya serviceHelper = new ServiceHelperAaditya();
-    double forward, strafe, rotate;
+    double forward, strafe, rotate,speed;
+
     // double Intake = 1.0;
     double Turret = -0.75;
 
-
-
     @Override
     public void init() {
-        serviceHelper.init(hardwareMap);
-
+        serviceHelper.init(hardwareMap, "FALSE");
 
     }
 
@@ -26,9 +26,12 @@ public class DecodeTeleOPAaditya extends OpMode {
         forward = gamepad1.left_stick_y;
         strafe = gamepad1.left_stick_x;
         rotate = gamepad1.right_stick_x;
+        speed = 1.0;
+        serviceHelper.drive(forward, strafe, rotate, speed);
 
-        serviceHelper.drive(forward, strafe, rotate);
+
         //drive.SetIntakePower(Intake);
+
 
 
       /*  if (gamepad1.left_bumper) {
@@ -39,7 +42,7 @@ public class DecodeTeleOPAaditya extends OpMode {
 
         if (gamepad1.right_bumper) {
             Turret = -0.9;
-            drive.SetTurretPower(Turret);
+            drive.SetTurretP    ower(Turret);
 
         }*/
 
@@ -49,18 +52,21 @@ public class DecodeTeleOPAaditya extends OpMode {
         if (gamepad1.left_trigger > 0.1) {
             serviceHelper.SetIntakePower(1.0);
             serviceHelper.SetServoConFrontPower(-1.0);
-            serviceHelper.setServoConPower(1.0);
+            serviceHelper.setFeederPower(0.7);
             serviceHelper.SetServoConFrontPower(-1.0);
             serviceHelper.setIntakeServoPower(-1.0);
+            serviceHelper.SetTurretPower();
 
         }
 
         else if (gamepad1.right_trigger > 0.1) {
             serviceHelper.SetIntakePower(1.0);
             serviceHelper.SetServoConFrontPower(-1.0);
-            serviceHelper.setServoConPower(-1.0);
+            serviceHelper.setFeederPower(-0.7);
             serviceHelper.SetServoConFrontPower(-1.0);
             serviceHelper.setIntakeServoPower(-1.0);
+            serviceHelper.SetTurretPowerAccel();
+
 
         }
 
@@ -69,9 +75,10 @@ public class DecodeTeleOPAaditya extends OpMode {
             stop();
         }
         if (gamepad2.dpad_up) {
-            serviceHelper.setHoodAngle(0);
-        } else if(gamepad2.dpad_down) {
-            serviceHelper.setHoodAngle(0.6);
+            serviceHelper.setHoodAngle(0.15);
+        }
+        if (gamepad2.dpad_down) {
+            serviceHelper.setHoodAngle(-0.15);
         }
         double rightStick = gamepad2.right_stick_x;
         double clockwise = 0;
@@ -85,6 +92,7 @@ public class DecodeTeleOPAaditya extends OpMode {
         }
 
         serviceHelper.aimTurret(clockwise, counterclockwise);
+
     }
 
     @Override
@@ -93,6 +101,7 @@ public class DecodeTeleOPAaditya extends OpMode {
         //drive.SetTurretPower(0.0);
         serviceHelper.SetServoConFrontPower(0.0);
         serviceHelper.setServoConPower(0.0);
+        serviceHelper.setFeederPower(0.0);
         serviceHelper.SetServoConFrontPower(0.0);
         serviceHelper.setIntakeServoPower(0.0);
 
