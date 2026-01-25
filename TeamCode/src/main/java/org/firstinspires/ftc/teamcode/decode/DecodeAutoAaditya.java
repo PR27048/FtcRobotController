@@ -5,13 +5,11 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
-
 @Autonomous(name = "DecodeAuto", group = "Auto")
 public class DecodeAutoAaditya extends LinearOpMode {
     // Motors
     private DcMotor FrontLeft, FrontRight, BackLeft, BackRight;
     private DcMotor Intake, Turret, MotorFeeder;
-
     // Servos
     private CRServo ServoCon, ServoConFront, IntakeServo, ServoConTurret;
     private Servo HoodServo;
