@@ -63,10 +63,10 @@ public class DecodeTeleOp extends OpMode{
         double counterclockwise = 0;
 
         if (rightStick > 0.05) {
-            clockwise -= rightStick;
+            clockwise = rightStick;
         }
         if (rightStick < -0.05) {
-            counterclockwise = rightStick;
+            counterclockwise = -rightStick;
         }
 
         serviceHelper.aimTurret(clockwise, counterclockwise);
