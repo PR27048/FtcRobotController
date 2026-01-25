@@ -26,7 +26,7 @@ public class DecodeAutoAaditya extends LinearOpMode {
 
         ServoConTurret = hardwareMap.get(CRServo.class, "servo_con_turret");
         IntakeServo = hardwareMap.get(CRServo.class, "intakeservo");
-        ServoCon = hardwareMap.get(CRServo.class, "servo_con_back_transfer");
+      //  ServoCon = hardwareMap.get(CRServo.class, "servo_con_back_transfer");
         ServoConFront = hardwareMap.get(CRServo.class, "servo_con_front_transfer");
         HoodServo = hardwareMap.get(Servo.class, "hoodservo");
 
