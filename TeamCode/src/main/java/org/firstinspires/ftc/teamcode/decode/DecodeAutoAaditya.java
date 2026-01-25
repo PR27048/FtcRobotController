@@ -264,7 +264,7 @@ public class DecodeAutoAaditya extends LinearOpMode {
         // Stop
         drive(0,0,0);
 
-        drive(0,0,0.3); // facegoal
+        drive(0,0,0.3); //
         sleep(600);
         drive(0,0,0.3); //stop
         sleep(2000);

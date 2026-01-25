@@ -27,7 +27,6 @@ public class ServiceHelper {
         //initialize servos
         IntakeServo =hwMap.get(CRServo .class,"intakeservo");
         ServoConFront =hwMap.get(CRServo .class,"servo_con_front_transfer");
-
         ServoConTurret =hwMap.get(CRServo .class,"servo_con_turret");
         HoodServo =hwMap.get(Servo .class,"hoodservo");
 
