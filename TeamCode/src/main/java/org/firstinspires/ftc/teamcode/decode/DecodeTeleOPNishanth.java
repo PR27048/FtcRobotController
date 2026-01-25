@@ -10,7 +10,7 @@ public class DecodeTeleOPNishanth extends OpMode {
 
     double forward, strafe, rotate;
     double IntakePower = 0.8;
-    double TurretPower = 0.75;
+    double TurretPower = 0.55;
 
     double rightStick;
     double clockwise = 0;
@@ -40,7 +40,7 @@ public class DecodeTeleOPNishanth extends OpMode {
         serviceHelper.SetServoConFrontPower(-0.8);
 
         if (gamepad2.left_bumper) {
-            TurretPower = 0.85;
+            TurretPower = 0.625;
             telemetry.addData("long range", TurretPower);
         }
 
@@ -78,10 +78,10 @@ public class DecodeTeleOPNishanth extends OpMode {
         serviceHelper.hoodServo(up,down);
 
         if (gamepad2.right_trigger > 0.1) {
-            serviceHelper.SetServoConBackPower(-0.8);
+            serviceHelper.SetBackFeederPower(-0.8);
         }
         else {
-            serviceHelper.SetServoConBackPower(0.8);
+            serviceHelper.SetBackFeederPower(0.8);
         }
 
         if (gamepad1.left_trigger > 0.1) {
@@ -101,7 +101,7 @@ public class DecodeTeleOPNishanth extends OpMode {
         serviceHelper.SetIntakePower(0.0);
         serviceHelper.SetTurretPower(0.0);
         serviceHelper.SetServoConFrontPower(0.0);
-        serviceHelper.SetServoConBackPower(0.0);
+        serviceHelper.SetBackFeederPower(0.0);
         serviceHelper.SetServoConIntakePower(0.0);
 
     }

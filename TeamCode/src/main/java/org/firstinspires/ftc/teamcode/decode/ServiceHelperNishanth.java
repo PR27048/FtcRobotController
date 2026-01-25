@@ -6,8 +6,8 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 public class ServiceHelperNishanth {
 
-    private DcMotor FrontLeft, FrontRight, BackLeft, BackRight,Intake, Turret;
-    private CRServo ServoConBack, ServoConFront, ServoConIntake, ServoConTurret, ServoConHood;
+    private DcMotor FrontLeft, FrontRight, BackLeft, BackRight,Intake, Turret, BackFeeder;
+    private CRServo ServoConFront, ServoConIntake, ServoConTurret, ServoConHood;
 
     public void init(HardwareMap hwMap) {
 
@@ -18,12 +18,12 @@ public class ServiceHelperNishanth {
 
         Intake = hwMap.get(DcMotor.class, "intake");
         Turret = hwMap.get(DcMotor.class, "turret");
+        BackFeeder = hwMap.get(DcMotor.class, "motorizedtransfer");
 
-        ServoConBack = hwMap.get(CRServo.class, "servo_con_back_transfer");
         ServoConFront = hwMap.get(CRServo.class, "servo_con_front_transfer");
         ServoConIntake = hwMap.get(CRServo.class, "intakeservo");
         ServoConTurret = hwMap.get(CRServo.class, "servo_con_turret");
-        ServoConHood = hwMap.get(CRServo.class, "servo_con_hood");
+        ServoConHood = hwMap.get(CRServo.class, "hoodservo");
 
         FrontRight.setDirection(DcMotor.Direction.REVERSE);
         BackRight.setDirection(DcMotor.Direction.REVERSE);
@@ -97,9 +97,9 @@ public class ServiceHelperNishanth {
         Turret.setPower(TurretPower);
     }
 
-    public void SetServoConBackPower(double power) {
+    public void SetBackFeederPower(double power) {
 
-        ServoConBack.setPower(power);
+        BackFeeder.setPower(power);
     }
 
     public void SetServoConFrontPower(double frontPower) {
@@ -109,6 +109,10 @@ public class ServiceHelperNishanth {
 
     public void SetServoConIntakePower(double intakeServoPower) {
         ServoConIntake.setPower(intakeServoPower);
+    }
+
+    public void SetServoConHoodPower(double hoodServoPower) {
+        ServoConHood.setPower(hoodServoPower);
     }
 
 
