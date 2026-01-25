@@ -110,4 +110,18 @@ public class ServiceHelper {
         ServoConTurret.setPower((MaxTurretAimingSpeed * ServoConTurretPower / MaxTurretAimingPower));
     }
 
+    public void AutoLaunch() {
+        Intake.setPower(1.0);
+        //ServoConTurret.setPower(-1.0);
+        MotorFeeder.setPower(-0.7);
+        ServoConFront.setPower(-1.0);
+        IntakeServo.setPower(-1.0);
+    }
+    public void AutoIntake() {
+        Intake.setPower(1.0);
+        //ServoConTurret.setPower(-1.0);
+        MotorFeeder.setPower(0.7);
+        ServoConFront.setPower(-1.0);
+        IntakeServo.setPower(-1.0);
+    }
 }
