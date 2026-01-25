@@ -3,11 +3,18 @@ package org.firstinspires.ftc.teamcode.decode;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.Servo;
 
 public class ServiceHelperNishanth {
 
-    private DcMotor FrontLeft, FrontRight, BackLeft, BackRight,Intake, Turret, BackFeeder;
-    private CRServo ServoConFront, ServoConIntake, ServoConTurret, ServoConHood;
+    private DcMotor FrontLeft, FrontRight, BackLeft, BackRight, Intake, Turret, BackFeeder;
+    private CRServo ServoConFront, ServoConIntake, ServoConTurret;
+    private Servo ServoConHood;
+
+    private double hoodPosition = 0.5;
+    private static final double HOOD_MIN = 0.0;
+    private static final double HOOD_MAX = 1.0;
+    private static final double HOOD_STEP = 0.01;
 
     public void init(HardwareMap hwMap) {
 
@@ -23,7 +30,7 @@ public class ServiceHelperNishanth {
         ServoConFront = hwMap.get(CRServo.class, "servo_con_front_transfer");
         ServoConIntake = hwMap.get(CRServo.class, "intakeservo");
         ServoConTurret = hwMap.get(CRServo.class, "servo_con_turret");
-        ServoConHood = hwMap.get(CRServo.class, "hoodservo");
+        ServoConHood = hwMap.get(Servo.class, "hoodservo");
 
         FrontRight.setDirection(DcMotor.Direction.REVERSE);
         BackRight.setDirection(DcMotor.Direction.REVERSE);
@@ -41,8 +48,7 @@ public class ServiceHelperNishanth {
         BackLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         BackRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-
-
+        ServoConHood.setPosition(hoodPosition);
     }
 
     public void drive(double forward, double strafe, double rotate) {
@@ -66,7 +72,7 @@ public class ServiceHelperNishanth {
     }
 
     public void aimTurret(double clockwise, double counterclockwise) {
-        double ServoConTurretPower = - clockwise + counterclockwise;
+        double ServoConTurretPower = -clockwise + counterclockwise;
 
         double MaxTurretAimingPower = 1.0;
         double MaxTurretAimingSpeed = 1.0;
@@ -77,33 +83,25 @@ public class ServiceHelperNishanth {
     }
 
     public void hoodServo(double up, double down) {
-        double ServoConHoodPower = up - down;
 
-        double MaxHoodPower = 1.0;
-        double MaxHoodSpeed = 1.0;
-
-        MaxHoodPower = Math.max(MaxHoodPower, Math.abs(ServoConHoodPower));
-
-        ServoConHood.setPower((MaxHoodSpeed * ServoConHoodPower / MaxHoodPower));
+        hoodPosition += (up - down) * HOOD_STEP;
+        hoodPosition = Math.max(HOOD_MIN, Math.min(HOOD_MAX, hoodPosition));
+        ServoConHood.setPosition(hoodPosition);
     }
 
     public void SetIntakePower(double IntakePower) {
-
         Intake.setPower(IntakePower);
     }
 
     public void SetTurretPower(double TurretPower) {
-
         Turret.setPower(TurretPower);
     }
 
     public void SetBackFeederPower(double power) {
-
         BackFeeder.setPower(power);
     }
 
     public void SetServoConFrontPower(double frontPower) {
-
         ServoConFront.setPower(frontPower);
     }
 
@@ -112,9 +110,5 @@ public class ServiceHelperNishanth {
     }
 
     public void SetServoConHoodPower(double hoodServoPower) {
-        ServoConHood.setPower(hoodServoPower);
     }
-
-
-
 }
