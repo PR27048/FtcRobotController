@@ -142,7 +142,7 @@ public class DecodeAuto extends OpMode {
         //sleep(2000);
 
         // Drive
-        serviceHelper.drive(-0.3,0,0);
+        serviceHelper.drive(0.3,0,0);
         try { Thread.sleep(1000); } catch (Exception e) {}
 
         // Stop
@@ -151,36 +151,36 @@ public class DecodeAuto extends OpMode {
         serviceHelper.AutoLaunch();
 
         try { Thread.sleep(6000); } catch (Exception e) {}
-        serviceHelper.drive(-0.3,0,0); //go back more
+        serviceHelper.drive(0.3,0,0); //go back more
 
         try { Thread.sleep(1000); } catch (Exception e) {}
-        serviceHelper.drive(0,0,-0.2); //rotate
+        serviceHelper.drive(0,0,0.2); //rotate
 
         try { Thread.sleep(700); } catch (Exception e) {}
-        serviceHelper.drive(0,-0.2,0); // align to artifact spike
+        serviceHelper.drive(0,0.2,0); // align to artifact spike
 
         try { Thread.sleep(1500); } catch (Exception e) {}
         serviceHelper.AutoIntake();
-        serviceHelper.drive(0.4,0,0); // pick them up
+        serviceHelper.drive(-0.4,0,0); // pick them up
 
         try { Thread.sleep(1500); } catch (Exception e) {}
-        serviceHelper.drive(-0.4,0,0); // go back
+        serviceHelper.drive(0.4,0,0); // go back
 
         try { Thread.sleep(1500); } catch (Exception e) {}
-        serviceHelper.drive(0,0.2,0); // align back to goal
+        serviceHelper.drive(0,-0.2,0); // align back to goal
 
         try { Thread.sleep(500); } catch (Exception e) {}
-        serviceHelper.drive(0,0,0.3); // turn to goal
+        serviceHelper.drive(0,0,-0.3); // turn to goal
 
         try { Thread.sleep(700); } catch (Exception e) {}
-        serviceHelper.drive(0.3,0,0); // get in range of goal
+        serviceHelper.drive(-0.3,0,0); // get in range of goal
 
         try { Thread.sleep(1300); } catch (Exception e) {}
         serviceHelper.drive(0,0,0);
         serviceHelper.AutoLaunch();                         // fire the next 3 artifacts
 
         try { Thread.sleep(5000); } catch (Exception e) {}
-        serviceHelper.drive(0,0.1,0); // move away from launch line
+        serviceHelper.drive(0,-0.1,0); // move away from launch line
         try { Thread.sleep(500); } catch (Exception e) {}
     }
 
