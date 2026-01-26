@@ -204,7 +204,7 @@ public class DecodeAutoAaditya extends LinearOpMode {
         sleep(6000);
         drive(-0.3,0,0); //go back more
         sleep(1000);
-        drive(0,0,0.2); //rotate
+        drive(0,0,-0.2); //rotate
         sleep(700);
         drive(0,0.2,0); // align to artifact spike
         sleep(1500);
