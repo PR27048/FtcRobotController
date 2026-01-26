@@ -13,13 +13,6 @@ public class DecodeTeleOp extends OpMode{
     @Override
     public void init() {
         serviceHelper.init(hardwareMap);
-
-    }
-
-    @Override
-    public void start() {
-        //
-
     }
 
     @Override
@@ -30,28 +23,26 @@ public class DecodeTeleOp extends OpMode{
         serviceHelper.drive(forward, strafe, rotate);
         serviceHelper.SetTurretPower(0.47);
 
-        if (gamepad1.right_trigger > 0.1) { // shoot
-             serviceHelper.SetIntakePower(1.0);
-             serviceHelper.SetServoConFrontPower(-1.0);
-             serviceHelper.setFeederPower(-0.7);
-            // serviceHelper.SetServoConFrontPower(-1.0);
-             serviceHelper.setIntakeServoPower(-1.0);
-             serviceHelper.SetTurretPower(0.52);
-
-         }
-         else {
-             stop();
-         }
-
-        if (gamepad2.right_trigger > 0.1) {  //intake + store
+        if (gamepad1.left_trigger > 0.1) {
             serviceHelper.SetIntakePower(1.0);
             serviceHelper.SetServoConFrontPower(-1.0);
             serviceHelper.setFeederPower(0.7);
-           // serviceHelper.SetServoConFrontPower(-1.0);
+            serviceHelper.SetServoConFrontPower(-1.0);
             serviceHelper.setIntakeServoPower(-1.0);
             serviceHelper.SetTurretPower(0.47);
         }
-
+        else if (gamepad1.right_trigger > 0.1) {
+            serviceHelper.SetIntakePower(1.0);
+            serviceHelper.SetServoConFrontPower(-1.0);
+            serviceHelper.setFeederPower(-0.7);
+            serviceHelper.SetServoConFrontPower(-1.0);
+            serviceHelper.setIntakeServoPower(-1.0);
+            serviceHelper.SetTurretPower(0.52);
+        }
+        // NO TRIGGERS → everything OFF
+        else {
+            stop();
+        }
         if (gamepad2.dpad_up) {
             serviceHelper.setHoodAngle(0.15);
         }
@@ -63,14 +54,14 @@ public class DecodeTeleOp extends OpMode{
         double counterclockwise = 0;
 
         if (rightStick > 0.05) {
-            clockwise = rightStick;
+            clockwise -= rightStick;
         }
         if (rightStick < -0.05) {
-            counterclockwise = -rightStick;
+            counterclockwise = rightStick;
         }
-
         serviceHelper.aimTurret(clockwise, counterclockwise);
     }
+
     @Override
     public void stop() {
         serviceHelper.SetIntakePower(0.0);

@@ -212,7 +212,7 @@ public class DecodeAutoAaditya extends LinearOpMode {
         sleep(1500);
         drive(0,-0.2,0); // align back to goal
         sleep(500);
-        drive(0,0,-0.2); // turn to goal
+        drive(0,0,-0.3); // turn to goal
         sleep(700);
         drive(0.3,0,0); // get in range of goal
         sleep(1300);
@@ -280,11 +280,33 @@ public class DecodeAutoAaditya extends LinearOpMode {
         // Drive
         drive(-0.3,0,0);
 
-        sleep(1000); // 2 seconds
+        sleep(1000); // 1 second
 
         // Stop
         drive(0,0,0);
+        sleep(6000);
         Launch();
         sleep(6000);
+        drive(-0.3,0,0); //go back more
+        sleep(1000);
+        drive(0,0,-0.2); //rotate
+        sleep(700);
+        drive(0,-0.2,0); // align to artifact spike
+        sleep(1500);
+        Intake();
+        drive(0.4,0,0); // pick them up
+        sleep(1500);
+        drive(-0.4,0,0); // go back
+        sleep(1500);
+        drive(0,0.2,0); // align back to goal
+        sleep(500);
+        drive(0,0,0.3); // turn to goal
+        sleep(700);
+        drive(0.3,0,0); // get in range of goal
+        sleep(1300);
+        drive(0,0,0);
+        Launch();                          // fire the next 3 artifacts
+        sleep(5000);
+
     }
 }

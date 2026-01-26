@@ -98,7 +98,6 @@ public class DecodeTeleOPAaditya extends OpMode {
     @Override
     public void stop() {
         serviceHelper.SetIntakePower(0.0);
-        //drive.SetTurretPower(0.0);
         serviceHelper.SetServoConFrontPower(0.0);
         serviceHelper.setServoConPower(0.0);
         serviceHelper.setFeederPower(0.0);

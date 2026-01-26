@@ -81,6 +81,8 @@ public class DecodeAuto extends OpMode {
                 runRedClose();
                 break;
         }
+
+        selMode = AutoMode.NONE;
     }
     private void runBlueClose() {
         telemetry.addLine("Running BLUE NEAR Auto");
@@ -126,8 +128,11 @@ public class DecodeAuto extends OpMode {
         try { Thread.sleep(1300); } catch (Exception e) {}
         serviceHelper.drive(0,0,0);
         serviceHelper.AutoLaunch();                         // fire the next 3 artifacts
-
         try { Thread.sleep(5000); } catch (Exception e) {}
+
+        serviceHelper.drive(0,-0.1,0); // move away from launch line
+        try { Thread.sleep(500); } catch (Exception e) {}
+
     }
 
     private void runRedClose() {
@@ -176,6 +181,8 @@ public class DecodeAuto extends OpMode {
         serviceHelper.AutoLaunch();                         // fire the next 3 artifacts
 
         try { Thread.sleep(5000); } catch (Exception e) {}
+        serviceHelper.drive(0,0.1,0); // move away from launch line
+        try { Thread.sleep(500); } catch (Exception e) {}
     }
 
 }
