@@ -70,11 +70,11 @@ public class DecodeAuto extends OpMode {
                 break;
 
             case BLUE_FAR:
-               // runBlueFar();
+               runBlueFar();
                 break;
 
             case RED_FAR:
-//                runRedFar();
+              runRedFar();
                 break;
 
             case RED_NEAR:
@@ -183,6 +183,17 @@ public class DecodeAuto extends OpMode {
         serviceHelper.drive(0,-0.1,0); // move away from launch line
         try { Thread.sleep(500); } catch (Exception e) {}
     }
+    private void runBlueFar() {
+        telemetry.addLine("Running BLUE FAR Auto");
+        telemetry.update();
+
+    }
+
+    private void runRedFar() {
+        telemetry.addLine("Running RED FAR Auto");
+        telemetry.update();
+
+    }
 
 
 
@@ -209,6 +220,8 @@ public class DecodeAuto extends OpMode {
     IntakeServo.setPower(-1.0); is serviceHelper.setIntakeServoPower(-1.0), serviceHelper.SetServoConIntakePower(-1.0); are same
     remove duplicate
     variable IntakeServo, or ServoConIntake
+
+    check lastLeft,...lastGuide values are required or not
      */
 
 }
