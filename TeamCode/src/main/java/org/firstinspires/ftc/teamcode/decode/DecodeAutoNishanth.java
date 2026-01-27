@@ -44,6 +44,7 @@ public class DecodeAutoNishanth extends OpMode {
         serviceHelper.SetIntakePower(IntakePower);
         serviceHelper.drive(-0.05, 0.0, 0.0);
         try { Thread.sleep(1000); } catch (Exception e) {}
+        serviceHelper.drive(0.0, 0.0, 0.0);
         try { Thread.sleep(6000); } catch (Exception e) {}
         serviceHelper.SetBackFeederPower(-0.8);
         try { Thread.sleep(500); } catch (Exception e) {}
@@ -58,6 +59,9 @@ public class DecodeAutoNishanth extends OpMode {
         serviceHelper.SetBackFeederPower(-0.8);
         try { Thread.sleep(5000); } catch (Exception e) {}
         serviceHelper.SetBackFeederPower(0.8);
+        serviceHelper.drive(-0.5, 0.0, 0.0);
+        try { Thread.sleep(500); } catch (Exception e) {}
+        serviceHelper.drive(0.0, 0.0, 0.0);
 
     }
 
