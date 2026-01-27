@@ -204,9 +204,11 @@ public class DecodeAuto extends OpMode {
      */
 
     /*
+    Discuss with Aaditya and Nishanth and should have one common name
     serviceHelper.SetBackFeederPower(0.8), MotorFeeder.setPower(),serviceHelper.setFeederPower are same
     IntakeServo.setPower(-1.0); is serviceHelper.setIntakeServoPower(-1.0), serviceHelper.SetServoConIntakePower(-1.0); are same
     remove duplicate
+    variable IntakeServo, or ServoConIntake
      */
 
 }
