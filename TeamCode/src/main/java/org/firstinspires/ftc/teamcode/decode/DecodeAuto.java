@@ -184,4 +184,29 @@ public class DecodeAuto extends OpMode {
         try { Thread.sleep(500); } catch (Exception e) {}
     }
 
+
+
+       /* Aaditya
+    serviceHelper.SetTurretPower(0.5);
+    drive
+    Intake.setPower(1.0); is serviceHelper.SetIntakePower(1.0)
+    MotorFeeder.setPower(-0.7); is serviceHelper.setFeederPower(-0.7)
+    ServoConFront.setPower(-1.0); is serviceHelper.SetServoConFrontPower(-1.0)
+    IntakeServo.setPower(-1.0); is serviceHelper.setIntakeServoPower(-1.0)
+    */
+
+    /* Nishanth
+    serviceHelper.SetTurretPower(TurretPower); TurretPower=0.5
+    serviceHelper.SetIntakePower(IntakePower); IntakePower=1.0
+    serviceHelper.SetBackFeederPower(0.8);
+    serviceHelper.SetServoConFrontPower(-0.8);
+    serviceHelper.SetServoConIntakePower(-1.0);
+     */
+
+    /*
+    serviceHelper.SetBackFeederPower(0.8), MotorFeeder.setPower(),serviceHelper.setFeederPower are same
+    IntakeServo.setPower(-1.0); is serviceHelper.setIntakeServoPower(-1.0), serviceHelper.SetServoConIntakePower(-1.0); are same
+    remove duplicate
+     */
+
 }
