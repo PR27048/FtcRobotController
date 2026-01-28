@@ -123,4 +123,13 @@ public class ServiceHelper {
         ServoConFront.setPower(-1.0);
         IntakeServo.setPower(-1.0);
     }
+
+    public void AutoEndStop() {
+        Turret.setPower(0);
+        ServoConFront.setPower(0);
+        MotorFeeder.setPower(0);
+        IntakeServo.setPower(0);
+        Intake.setPower(0);
+        drive(0.0, 0.0, 0.0);
+    }
 }
