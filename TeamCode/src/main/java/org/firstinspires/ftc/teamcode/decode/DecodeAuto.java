@@ -14,9 +14,6 @@ import org.firstinspires.ftc.teamcode.decode.ServiceHelper;
 public class DecodeAuto extends OpMode {
     ServiceHelper serviceHelper = new ServiceHelper();
 
-    double IntakePower = 1.0;
-    double TurretPower = 0.5;
-
     boolean lastLeft = false;
     boolean lastRight = false;
     boolean lastUp = false;
@@ -193,11 +190,11 @@ public class DecodeAuto extends OpMode {
         telemetry.update();
 
 
-        serviceHelper.setAutoTurret(TurretPower);
+        serviceHelper.setAutoTurret(0.5);
         serviceHelper.SetServoConFrontPower(-0.8);
         serviceHelper.setFeederPower(0.8);
         serviceHelper.setIntakeServoPower(-1.0);
-        serviceHelper.SetIntakePower(IntakePower);
+        serviceHelper.SetIntakePower(1.0);
         serviceHelper.drive(-0.1, 0.0, 0.0);
         try { Thread.sleep(1000); } catch (Exception e) {}
         serviceHelper.drive(0.0, 0.0, 0.0);
@@ -229,11 +226,11 @@ public class DecodeAuto extends OpMode {
         telemetry.update();
 
 
-        serviceHelper.setAutoTurret(0.6);
+        serviceHelper.setAutoTurret(0.5);
         serviceHelper.SetServoConFrontPower(-0.8);
         serviceHelper.setFeederPower(0.8);
         serviceHelper.setIntakeServoPower(-1.0);
-        serviceHelper.SetIntakePower(IntakePower);
+        serviceHelper.SetIntakePower(1.0);
         serviceHelper.drive(-0.1, 0.0, 0.0);
         try { Thread.sleep(1000); } catch (Exception e) {}
         serviceHelper.drive(0.0, 0.0, 0.0);
