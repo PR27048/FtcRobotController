@@ -5,7 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
-@Disabled
+
 @TeleOp
 public class DecodeTeleOPAaditya extends OpMode {
 
@@ -76,7 +76,7 @@ public class DecodeTeleOPAaditya extends OpMode {
             stop();
         }
         if (gamepad2.dpad_up) {
-            serviceHelper.setHoodAngle(0.15);
+            serviceHelper.setHoodAngle(0.45);
         }
         if (gamepad2.dpad_down) {
             serviceHelper.setHoodAngle(-0.15);
