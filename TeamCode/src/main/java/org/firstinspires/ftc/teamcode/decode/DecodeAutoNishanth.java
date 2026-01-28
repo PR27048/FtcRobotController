@@ -1,11 +1,12 @@
 package org.firstinspires.ftc.teamcode.decode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
 import org.firstinspires.ftc.teamcode.decode.ServiceHelperNishanth;
 
-@Autonomous
+@Disabled
 public class DecodeAutoNishanth extends OpMode {
 
     ServiceHelperNishanth serviceHelper = new ServiceHelperNishanth();
@@ -42,7 +43,7 @@ public class DecodeAutoNishanth extends OpMode {
         serviceHelper.SetBackFeederPower(0.8);
         serviceHelper.SetServoConIntakePower(-1.0);
         serviceHelper.SetIntakePower(IntakePower);
-        serviceHelper.drive(-0.05, 0.0, 0.0);
+        serviceHelper.drive(-0.1, 0.0, 0.0);
         try { Thread.sleep(1000); } catch (Exception e) {}
         serviceHelper.drive(0.0, 0.0, 0.0);
         try { Thread.sleep(6000); } catch (Exception e) {}

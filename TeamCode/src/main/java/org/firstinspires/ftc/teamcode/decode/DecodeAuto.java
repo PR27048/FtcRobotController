@@ -13,6 +13,10 @@ import org.firstinspires.ftc.teamcode.decode.ServiceHelper;
 @Autonomous(name = "DecodeAuto", group = "Auto")
 public class DecodeAuto extends OpMode {
     ServiceHelper serviceHelper = new ServiceHelper();
+
+    double IntakePower = 1.0;
+    double TurretPower = 0.5;
+
     boolean lastLeft = false;
     boolean lastRight = false;
     boolean lastUp = false;
@@ -188,40 +192,70 @@ public class DecodeAuto extends OpMode {
         telemetry.addLine("Running BLUE FAR Auto");
         telemetry.update();
 
-        /*
-        serviceHelper.SetTurretPower(TurretPower);  serviceHelper.SetTurretPower(0.5);
-        serviceHelper.SetServoConFrontPower(-0.8); ServoConFront.setPower(-0.8);
-        serviceHelper.SetBackFeederPower(0.8); MotorFeeder.setPower(0.8);
-        serviceHelper.SetServoConIntakePower(-1.0); IntakeServo.setPower(-1.0);
-        serviceHelper.SetIntakePower(IntakePower); Intake.setPower(1.0);
-        serviceHelper.drive(-0.05, 0.0, 0.0);
+
+        serviceHelper.SetTurretPower(TurretPower);
+        serviceHelper.SetServoConFrontPower(-0.8);
+        serviceHelper.setFeederPower(0.8);
+        serviceHelper.setIntakeServoPower(-1.0);
+        serviceHelper.SetIntakePower(IntakePower);
+        serviceHelper.drive(-0.1, 0.0, 0.0);
         try { Thread.sleep(1000); } catch (Exception e) {}
         serviceHelper.drive(0.0, 0.0, 0.0);
         try { Thread.sleep(6000); } catch (Exception e) {}
-        serviceHelper.SetBackFeederPower(-0.8); MotorFeeder.setPower(-0.8);
+        serviceHelper.setFeederPower(-0.8);
         try { Thread.sleep(500); } catch (Exception e) {}
-        serviceHelper.SetBackFeederPower(0.8); MotorFeeder.setPower(0.8);
+        serviceHelper.setFeederPower(0.8);
         serviceHelper.SetTurretPower(0.57);
         try { Thread.sleep(2000); } catch (Exception e) {}
-        serviceHelper.SetBackFeederPower(-0.8); MotorFeeder.setPower(-0.8);
+        serviceHelper.setFeederPower(-0.8);
         try { Thread.sleep(500); } catch (Exception e) {}
-        serviceHelper.SetBackFeederPower(0.8); MotorFeeder.setPower(0.8);
+        serviceHelper.setFeederPower(0.8);
         serviceHelper.SetTurretPower(0.555);
         try { Thread.sleep(2000); } catch (Exception e) {}
-        serviceHelper.SetBackFeederPower(-0.8); MotorFeeder.setPower(-0.8);
+        serviceHelper.setFeederPower(-0.8);
         try { Thread.sleep(5000); } catch (Exception e) {}
-        serviceHelper.SetBackFeederPower(0.8); MotorFeeder.setPower(0.8);
+        serviceHelper.setFeederPower(0.8);
         serviceHelper.drive(-0.5, 0.0, 0.0);
         try { Thread.sleep(500); } catch (Exception e) {}
         serviceHelper.drive(0.0, 0.0, 0.0);
+
         serviceHelper.AutoEndStop();
-         */
+
 
     }
 
     private void runRedFar() {
         telemetry.addLine("Running RED FAR Auto");
         telemetry.update();
+
+
+        serviceHelper.SetTurretPower(TurretPower);
+        serviceHelper.SetServoConFrontPower(-0.8);
+        serviceHelper.setFeederPower(0.8);
+        serviceHelper.setIntakeServoPower(-1.0);
+        serviceHelper.SetIntakePower(IntakePower);
+        serviceHelper.drive(-0.1, 0.0, 0.0);
+        try { Thread.sleep(1000); } catch (Exception e) {}
+        serviceHelper.drive(0.0, 0.0, 0.0);
+        try { Thread.sleep(6000); } catch (Exception e) {}
+        serviceHelper.setFeederPower(-0.8);
+        try { Thread.sleep(500); } catch (Exception e) {}
+        serviceHelper.setFeederPower(0.8);
+        serviceHelper.SetTurretPower(0.57);
+        try { Thread.sleep(2000); } catch (Exception e) {}
+        serviceHelper.setFeederPower(-0.8);
+        try { Thread.sleep(500); } catch (Exception e) {}
+        serviceHelper.setFeederPower(0.8);
+        serviceHelper.SetTurretPower(0.555);
+        try { Thread.sleep(2000); } catch (Exception e) {}
+        serviceHelper.setFeederPower(-0.8);
+        try { Thread.sleep(5000); } catch (Exception e) {}
+        serviceHelper.setFeederPower(0.8);
+        serviceHelper.drive(-0.5, 0.0, 0.0);
+        try { Thread.sleep(500); } catch (Exception e) {}
+        serviceHelper.drive(0.0, 0.0, 0.0);
+
+        serviceHelper.AutoEndStop();
 
     }
 
