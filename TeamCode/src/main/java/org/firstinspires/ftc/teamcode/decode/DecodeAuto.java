@@ -256,33 +256,4 @@ public class DecodeAuto extends OpMode {
 
     }
 
-
-
-       /* Aaditya
-    serviceHelper.SetTurretPower(0.5);
-    drive
-    Intake.setPower(1.0); is serviceHelper.SetIntakePower(1.0)
-    MotorFeeder.setPower(-0.7); is serviceHelper.setFeederPower(-0.7)
-    ServoConFront.setPower(-1.0); is serviceHelper.SetServoConFrontPower(-1.0)
-    IntakeServo.setPower(-1.0); is serviceHelper.setIntakeServoPower(-1.0)
-    */
-
-    /* Nishanth
-    serviceHelper.SetTurretPower(TurretPower); TurretPower=0.5
-    serviceHelper.SetIntakePower(IntakePower); IntakePower=1.0
-    serviceHelper.SetBackFeederPower(0.8);
-    serviceHelper.SetServoConFrontPower(-0.8);
-    serviceHelper.SetServoConIntakePower(-1.0);
-     */
-
-    /*
-    Discuss with Aaditya and Nishanth and should have one common name
-    serviceHelper.SetBackFeederPower(0.8), MotorFeeder.setPower(),serviceHelper.setFeederPower are same
-    IntakeServo.setPower(-1.0); is serviceHelper.setIntakeServoPower(-1.0), serviceHelper.SetServoConIntakePower(-1.0); are same
-    remove duplicate
-    variable IntakeServo, or ServoConIntake
-
-    check lastLeft,...lastGuide values are required or not
-     */
-
 }
