@@ -48,7 +48,7 @@ public class ServiceHelper {
         BackRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         Intake.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        MotorFeeder.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+       // MotorFeeder.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
      //   Turret.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
     }
 

@@ -196,7 +196,7 @@ public class DecodeAuto extends OpMode {
         serviceHelper.setIntakeServoPower(-1.0);
         serviceHelper.SetIntakePower(1.0);
         serviceHelper.drive(-0.1, 0.0, 0.0);
-        try { Thread.sleep(1000); } catch (Exception e) {}
+        try { Thread.sleep(1500); } catch (Exception e) {}
         serviceHelper.drive(0.0, 0.0, 0.0);
         try { Thread.sleep(6000); } catch (Exception e) {}
         serviceHelper.setFeederPower(-0.8);
@@ -207,7 +207,7 @@ public class DecodeAuto extends OpMode {
         serviceHelper.setFeederPower(-0.8);
         try { Thread.sleep(500); } catch (Exception e) {}
         serviceHelper.setFeederPower(0.8);
-        serviceHelper.setAutoTurret(0.555);
+        serviceHelper.setAutoTurret(0.55);
         try { Thread.sleep(2000); } catch (Exception e) {}
         serviceHelper.setFeederPower(-0.8);
         try { Thread.sleep(5000); } catch (Exception e) {}
