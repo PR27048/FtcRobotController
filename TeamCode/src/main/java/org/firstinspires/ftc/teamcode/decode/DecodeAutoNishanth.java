@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.decode.ServiceHelperNishanth;
 
+@Disabled
 @TeleOp
 public class DecodeAutoNishanth extends OpMode {
 
