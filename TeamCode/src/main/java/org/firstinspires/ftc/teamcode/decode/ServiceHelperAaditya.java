@@ -35,8 +35,8 @@ public class ServiceHelperAaditya {
         FrontRight.setDirection(DcMotor.Direction.REVERSE);
         BackRight.setDirection(DcMotor.Direction.REVERSE);
 
-        switch (autoState) {
-            case "FALSE":
+        //switch (autoState) {
+          /*  case "FALSE":
             {
                 FrontLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
                 FrontRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -48,16 +48,16 @@ public class ServiceHelperAaditya {
                 break;
             }
             case "TRUE":
-            {
+            {*/
                 FrontLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
                 FrontRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
                 BackLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
                 BackRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-                Turret.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-                Intake.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-                MotorFeeder.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-                break;
-            }
+                Turret.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                Intake.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                MotorFeeder.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+           //     break;
+            //}
         }
         FrontLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         FrontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
