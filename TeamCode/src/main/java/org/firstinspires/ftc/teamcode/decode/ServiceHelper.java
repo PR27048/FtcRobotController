@@ -86,10 +86,18 @@ public class ServiceHelper {
     public void SetServoConFrontPower(double frontPower) {
         ServoConFront.setPower(frontPower);
     }
-    public void SetTurretPower(double TurretPower) {
+    public void SetTurretPower() {
 
-        Turret.setPower(TurretPower);
+        Turret.setPower(0.47);
         // Turret.setPower(0.47); //0.64
+    }
+
+    public void setAutoTurret(double power) {
+        Turret.setPower(power);
+
+    }
+    public void TurretAccel() {
+        Turret.setPower(0.5);
     }
     public void setFeederPower(double feederPower) {
         MotorFeeder.setPower(feederPower);
@@ -130,6 +138,6 @@ public class ServiceHelper {
         MotorFeeder.setPower(0);
         IntakeServo.setPower(0);
         Intake.setPower(0);
-        drive(0.0, 0.0, 0.0);
+        //drive(0.0, 0.0, 0.0);
     }
 }

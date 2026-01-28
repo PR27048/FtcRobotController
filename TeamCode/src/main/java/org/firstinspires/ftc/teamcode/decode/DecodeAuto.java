@@ -91,10 +91,10 @@ public class DecodeAuto extends OpMode {
     private void runBlueClose() {
         telemetry.addLine("Running BLUE NEAR Auto");
         telemetry.update();
-        serviceHelper.SetTurretPower(0.5);
+        serviceHelper.setAutoTurret(0.5);
         //sleep(2000);
 
-        serviceHelper.SetTurretPower(0.5);
+        serviceHelper.setAutoTurret(0.5);
         // Drive
         serviceHelper.drive(0.3,0,0);
         try { Thread.sleep(1000); } catch (Exception e) {}
@@ -121,10 +121,10 @@ public class DecodeAuto extends OpMode {
         serviceHelper.drive(0.4,0,0); // go back
 
         try { Thread.sleep(1500); } catch (Exception e) {}
-        serviceHelper.drive(0,0.2,0); // align back to goal
+        serviceHelper.drive(0,0.2,0); // strafe back to goal
 
         try { Thread.sleep(500); } catch (Exception e) {}
-        serviceHelper.drive(0,0,0.2); // turn to goal
+        serviceHelper.drive(0,0,0.23); // turn to goal
 
         try { Thread.sleep(700); } catch (Exception e) {}
         serviceHelper.drive(-0.3,0,0); // get in range of goal
@@ -142,7 +142,7 @@ public class DecodeAuto extends OpMode {
     private void runRedClose() {
         telemetry.addLine("Running RED NEAR Auto");
         telemetry.update();
-        serviceHelper.SetTurretPower(0.5);
+        serviceHelper.TurretAccel();
         //sleep(2000);
 
         // Drive
@@ -171,10 +171,10 @@ public class DecodeAuto extends OpMode {
         serviceHelper.drive(0.4,0,0); // go back
 
         try { Thread.sleep(1500); } catch (Exception e) {}
-        serviceHelper.drive(0,-0.2,0); // align back to goal
+        serviceHelper.drive(0,-0.2,0); // strafe back to goal
 
         try { Thread.sleep(500); } catch (Exception e) {}
-        serviceHelper.drive(0,0,-0.3); // turn to goal
+        serviceHelper.drive(0,0,-0.23); // turn to goal
 
         try { Thread.sleep(700); } catch (Exception e) {}
         serviceHelper.drive(-0.3,0,0); // get in range of goal
@@ -193,7 +193,7 @@ public class DecodeAuto extends OpMode {
         telemetry.update();
 
 
-        serviceHelper.SetTurretPower(TurretPower);
+        serviceHelper.setAutoTurret(TurretPower);
         serviceHelper.SetServoConFrontPower(-0.8);
         serviceHelper.setFeederPower(0.8);
         serviceHelper.setIntakeServoPower(-1.0);
@@ -205,12 +205,12 @@ public class DecodeAuto extends OpMode {
         serviceHelper.setFeederPower(-0.8);
         try { Thread.sleep(500); } catch (Exception e) {}
         serviceHelper.setFeederPower(0.8);
-        serviceHelper.SetTurretPower(0.57);
+        serviceHelper.setAutoTurret(0.57);
         try { Thread.sleep(2000); } catch (Exception e) {}
         serviceHelper.setFeederPower(-0.8);
         try { Thread.sleep(500); } catch (Exception e) {}
         serviceHelper.setFeederPower(0.8);
-        serviceHelper.SetTurretPower(0.555);
+        serviceHelper.setAutoTurret(0.555);
         try { Thread.sleep(2000); } catch (Exception e) {}
         serviceHelper.setFeederPower(-0.8);
         try { Thread.sleep(5000); } catch (Exception e) {}
@@ -229,7 +229,7 @@ public class DecodeAuto extends OpMode {
         telemetry.update();
 
 
-        serviceHelper.SetTurretPower(TurretPower);
+        serviceHelper.setAutoTurret(0.6);
         serviceHelper.SetServoConFrontPower(-0.8);
         serviceHelper.setFeederPower(0.8);
         serviceHelper.setIntakeServoPower(-1.0);
@@ -241,12 +241,12 @@ public class DecodeAuto extends OpMode {
         serviceHelper.setFeederPower(-0.8);
         try { Thread.sleep(500); } catch (Exception e) {}
         serviceHelper.setFeederPower(0.8);
-        serviceHelper.SetTurretPower(0.57);
+        serviceHelper.setAutoTurret(0.57);
         try { Thread.sleep(2000); } catch (Exception e) {}
         serviceHelper.setFeederPower(-0.8);
         try { Thread.sleep(500); } catch (Exception e) {}
         serviceHelper.setFeederPower(0.8);
-        serviceHelper.SetTurretPower(0.555);
+        serviceHelper.setAutoTurret(0.555);
         try { Thread.sleep(2000); } catch (Exception e) {}
         serviceHelper.setFeederPower(-0.8);
         try { Thread.sleep(5000); } catch (Exception e) {}

@@ -21,7 +21,7 @@ public class DecodeTeleOp extends OpMode{
         strafe = gamepad1.left_stick_x;
         rotate = gamepad1.right_stick_x;
         serviceHelper.drive(forward, strafe, rotate);
-        serviceHelper.SetTurretPower(0.47);
+        serviceHelper.SetTurretPower();
 
         if (gamepad1.left_trigger > 0.1) {
             serviceHelper.SetIntakePower(1.0);
@@ -29,7 +29,7 @@ public class DecodeTeleOp extends OpMode{
             serviceHelper.setFeederPower(0.7);
             serviceHelper.SetServoConFrontPower(-1.0);
             serviceHelper.setIntakeServoPower(-1.0);
-            serviceHelper.SetTurretPower(0.47);
+            serviceHelper.SetTurretPower();
         }
         else if (gamepad1.right_trigger > 0.1) {
             serviceHelper.SetIntakePower(1.0);
@@ -37,7 +37,8 @@ public class DecodeTeleOp extends OpMode{
             serviceHelper.setFeederPower(-0.7);
             serviceHelper.SetServoConFrontPower(-1.0);
             serviceHelper.setIntakeServoPower(-1.0);
-            serviceHelper.SetTurretPower(0.52);
+            serviceHelper.SetTurretPower();
+            serviceHelper.TurretAccel();
         }
         // NO TRIGGERS → everything OFF
         else {
@@ -69,6 +70,6 @@ public class DecodeTeleOp extends OpMode{
         serviceHelper.setFeederPower(0.0);
         serviceHelper.SetServoConFrontPower(0.0);
         serviceHelper.setIntakeServoPower(0.0);
-        serviceHelper.SetTurretPower(0.0);
+        //serviceHelper.SetTurretPower;
     }
 }
