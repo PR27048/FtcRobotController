@@ -56,7 +56,7 @@ public class DecodeAutoNishanth extends OpMode {
         serviceHelper.SetBackFeederPower(-0.8);
         try { Thread.sleep(500); } catch (Exception e) {}
         serviceHelper.SetBackFeederPower(0.8);
-        serviceHelper.SetTurretPower(0.555);
+        serviceHelper.SetTurretPower(0.55);
         try { Thread.sleep(2000); } catch (Exception e) {}
         serviceHelper.SetBackFeederPower(-0.8);
         try { Thread.sleep(5000); } catch (Exception e) {}
