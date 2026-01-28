@@ -132,7 +132,7 @@ public class DecodeAuto extends OpMode {
 
         serviceHelper.drive(0,-0.1,0); // move away from launch line
         try { Thread.sleep(500); } catch (Exception e) {}
-
+        serviceHelper.AutoEndStop();
     }
 
     private void runRedClose() {
@@ -182,6 +182,7 @@ public class DecodeAuto extends OpMode {
         try { Thread.sleep(5000); } catch (Exception e) {}
         serviceHelper.drive(0,-0.1,0); // move away from launch line
         try { Thread.sleep(500); } catch (Exception e) {}
+        serviceHelper.AutoEndStop();
     }
     private void runBlueFar() {
         telemetry.addLine("Running BLUE FAR Auto");
