@@ -66,7 +66,7 @@ public class DecodeTeleOP extends OpMode {
             serviceHelper.setFeederPower(-0.7);
             serviceHelper.SetServoConFrontPower(-1.0);
             serviceHelper.setIntakeServoPower(-1.0);
-            serviceHelper.SetTurretPowerAccel();
+            //serviceHelper.SetTurretPowerAccel();
 
 
         }

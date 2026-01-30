@@ -35,8 +35,8 @@ public class ServiceHelperAaditya {
         FrontRight.setDirection(DcMotor.Direction.REVERSE);
         BackRight.setDirection(DcMotor.Direction.REVERSE);
 
-        //switch (autoState) {
-          /*  case "FALSE":
+       /* switch (autoState) {
+            case "FALSE":
             {
                 FrontLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
                 FrontRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -45,8 +45,8 @@ public class ServiceHelperAaditya {
                 Intake.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
                 Turret.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
                 MotorFeeder.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-                break;
-            }
+               // break;
+           /* }
             case "TRUE":
             {*/
                 FrontLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -56,9 +56,9 @@ public class ServiceHelperAaditya {
                 Turret.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
                 Intake.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
                 MotorFeeder.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-           //     break;
+             //   break;
             //}
-       // }
+         //}
         FrontLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         FrontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         BackLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -102,11 +102,11 @@ public class ServiceHelperAaditya {
 
     public void SetTurretPower(/*double TurretPower*/) {
 
-        Turret.setPower(0.47); //0.64
+        Turret.setPower(0.41); //0.64
     }
     public void SetTurretPowerAccel(/*double TurretPower*/) {
 
-        Turret.setPower(0.52); // 0.67
+        Turret.setPower(0.44); // 0.67
     }
     public void setFeederPower(double feederPower) {
         MotorFeeder.setPower(feederPower);

@@ -215,7 +215,7 @@ public class DecodeAutoAaditya extends LinearOpMode {
         sleep(1500);
         drive(0,-0.2,0); // align back to goal
         sleep(500);
-        drive(0,0,-0.3); // turn to goal
+        drive(0,0,-0.25); // turn to goal
         sleep(700);
         drive(0.3,0,0); // get in range of goal
         sleep(1300);
@@ -303,7 +303,7 @@ public class DecodeAutoAaditya extends LinearOpMode {
         sleep(1500);
         drive(0,0.2,0); // align back to goal
         sleep(500);
-        drive(0,0,0.3); // turn to goal
+        drive(0,0,0.25); // turn to goal
         sleep(700);
         drive(0.3,0,0); // get in range of goal
         sleep(1300);

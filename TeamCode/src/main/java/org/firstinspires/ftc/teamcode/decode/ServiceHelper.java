@@ -38,7 +38,8 @@ public class ServiceHelper {
         FrontRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         BackLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         BackRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        Turret.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        //Turret.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        Turret.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         Intake.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         MotorFeeder.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
@@ -88,7 +89,7 @@ public class ServiceHelper {
     }
     public void SetTurretPower() {
 
-        Turret.setPower(0.47);
+        Turret.setPower(0.42);
         // Turret.setPower(0.47); //0.64
     }
 
@@ -97,7 +98,7 @@ public class ServiceHelper {
 
     }
     public void TurretAccel() {
-        Turret.setPower(0.5);
+        Turret.setPower(0.44);
     }
     public void setFeederPower(double feederPower) {
         MotorFeeder.setPower(feederPower);
