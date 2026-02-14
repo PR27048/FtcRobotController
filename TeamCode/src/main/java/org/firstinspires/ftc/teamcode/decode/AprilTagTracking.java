@@ -94,7 +94,7 @@ public class AprilTagTracking extends OpMode {
             return;
         }
 
-        // HOOKES LAWWWWWWW
+        // hookes law
         double power = KP * bearing;
 
         // get power

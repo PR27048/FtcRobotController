@@ -2,13 +2,17 @@ package org.firstinspires.ftc.teamcode.decode;
 
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
 public class ServiceHelper {
-    private DcMotor FrontLeft, FrontRight, BackLeft, BackRight, Intake, Turret, MotorFeeder;
+    private DcMotor FrontLeft, FrontRight, BackLeft, BackRight, Intake,  MotorFeeder;
+    private DcMotorEx Turret;
     private CRServo ServoConFront, IntakeServo, ServoConTurret;
     private Servo HoodServo;
     private ElapsedTime driveTimer = new ElapsedTime();
@@ -16,13 +20,17 @@ public class ServiceHelper {
     public void init(HardwareMap hwMap) {
         FrontLeft =hwMap.get(DcMotor .class,"front_left");
         FrontRight =hwMap.get(DcMotor .class,"front_right");
-        BackLeft =hwMap.get(DcMotor .class,"back_left");
-        BackRight =hwMap.get(DcMotor .class,"back_right");
+        BackLeft =hwMap.get(DcMotor.class,"back_left");
+        BackRight =hwMap.get(DcMotor.class,"back_right");
 
         //intake and intake feeder and flywheel
-        Intake =hwMap.get(DcMotor .class,"intake");
-        MotorFeeder =hwMap.get(DcMotor .class,"motorizedtransfer");
-        Turret =hwMap.get(DcMotor .class,"turret");
+        Intake =hwMap.get(DcMotor.class,"intake");
+        MotorFeeder =hwMap.get(DcMotor.class,"motorizedtransfer");
+        Turret =hwMap.get(DcMotorEx.class,"turret");
+
+        //setting PF value for flywheel turret motor
+        PIDFCoefficients pidfCoefficients = new PIDFCoefficients(400, 0, 0, 14.6 );
+        Turret.setPIDFCoefficients(DcMotorEx.RunMode.RUN_USING_ENCODER, pidfCoefficients);
 
         //initialize servos
         IntakeServo =hwMap.get(CRServo .class,"intakeservo");
@@ -51,6 +59,10 @@ public class ServiceHelper {
         Intake.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
        // MotorFeeder.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
      //   Turret.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+    }
+
+    public void TurretEncoder() {
+        Turret.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 
 
@@ -90,6 +102,12 @@ public class ServiceHelper {
     public void SetTurretPower() {
 
         Turret.setPower(0.42);
+        // Turret.setPower(0.47); //0.64
+    }
+
+    public void SetTurretVelocity() {
+
+        Turret.setVelocity(1020);
         // Turret.setPower(0.47); //0.64
     }
 

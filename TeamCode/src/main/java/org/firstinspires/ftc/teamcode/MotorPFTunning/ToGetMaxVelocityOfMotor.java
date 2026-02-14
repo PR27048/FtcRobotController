@@ -14,7 +14,7 @@ Change the motorMaxPower to get velocity for that particular power
 velocity decrease as power of motor decrease
 https://www.youtube.com/watch?v=qB0TlN4KCI0
  */
-@Disabled
+
 @TeleOp
 
 public class ToGetMaxVelocityOfMotor extends OpMode {
@@ -27,13 +27,13 @@ public class ToGetMaxVelocityOfMotor extends OpMode {
 
     @Override
     public void init (){
-        motor = hardwareMap.get(DcMotorEx.class, "single_motor");
+        motor = hardwareMap.get(DcMotorEx.class, "turret");
         motor.setDirection(DcMotorEx.Direction.FORWARD);
         motor.setPower(motorZeroPower);
         motor.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.FLOAT);
         motor.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
         motor.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
-        motor.setZeroPowerBehavior(BRAKE);
+        //motor.setZeroPowerBehavior(BRAKE);
     }
 
     @Override

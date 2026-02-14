@@ -10,15 +10,15 @@ import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 /*
 https://www.youtube.com/watch?v=aPNCpZzCTKg
  */
-@Disabled
+
 @TeleOp
 
 public class MotorPFTuningMethod1 extends OpMode {
 
     public DcMotorEx FlyWheelMotor;
 
-    double highVelocity = 2460;
-    double lowVelocity = 2160;
+    double highVelocity = 1020;
+    double lowVelocity = 900;
 
     double curTargetVelocity = highVelocity;
 
@@ -31,7 +31,7 @@ public class MotorPFTuningMethod1 extends OpMode {
 
     @Override
     public void init() {
-        FlyWheelMotor = hardwareMap.get(DcMotorEx.class, "motor");
+        FlyWheelMotor = hardwareMap.get(DcMotorEx.class, "turret");
         FlyWheelMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         FlyWheelMotor.setDirection(DcMotor.Direction.REVERSE);
 

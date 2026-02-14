@@ -189,6 +189,7 @@ public class DecodeAuto extends OpMode {
     private void runBlueFar() {
         telemetry.addLine("Running BLUE FAR Auto");
         telemetry.update();
+        serviceHelper.TurretEncoder();
 
 
         serviceHelper.setAutoTurret(0.48);

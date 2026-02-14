@@ -3,6 +3,8 @@ package org.firstinspires.ftc.teamcode.decode;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 
@@ -18,6 +20,8 @@ public class DecodeTeleOP extends OpMode {
     @Override
     public void init() {
         serviceHelper.init(hardwareMap, "FALSE");
+
+
 
     }
 
@@ -47,8 +51,8 @@ public class DecodeTeleOP extends OpMode {
 
         }*/
 
-
-        serviceHelper.SetTurretPower();
+        serviceHelper.SetTurretVelocity();
+       //// serviceHelper.SetTurretPower();
 
         if (gamepad1.left_trigger > 0.1) {
             serviceHelper.SetIntakePower(1.0);
@@ -56,8 +60,8 @@ public class DecodeTeleOP extends OpMode {
             serviceHelper.setFeederPower(0.7);
             serviceHelper.SetServoConFrontPower(-1.0);
             serviceHelper.setIntakeServoPower(-1.0);
-            serviceHelper.SetTurretPower();
-
+            //serviceHelper.SetTurretPower();
+            serviceHelper.SetTurretVelocity();
         }
 
         else if (gamepad1.right_trigger > 0.1) {

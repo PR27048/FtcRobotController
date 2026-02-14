@@ -4,7 +4,9 @@ package org.firstinspires.ftc.teamcode.decode;
 
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -12,7 +14,9 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
 public class ServiceHelperAaditya {
 
-    private DcMotor FrontLeft, FrontRight, BackLeft, BackRight, Intake, Turret, MotorFeeder;
+    private DcMotor FrontLeft, FrontRight, BackLeft, BackRight, Intake, MotorFeeder;
+
+    private DcMotorEx Turret;
     private CRServo ServoCon, ServoConFront, IntakeServo, ServoConTurret;
     private Servo HoodServo;
     private ElapsedTime driveTimer = new ElapsedTime();
@@ -25,7 +29,12 @@ public class ServiceHelperAaditya {
         MotorFeeder = hwMap.get(DcMotor.class, "motorizedtransfer");
 
         Intake = hwMap.get(DcMotor.class, "intake");
-        Turret = hwMap.get(DcMotor.class, "turret");
+        Turret = hwMap.get(DcMotorEx.class, "turret");
+
+        //setting PF value for flywheel turret motor
+        PIDFCoefficients pidfCoefficients = new PIDFCoefficients(400, 0, 0, 14.6 );
+        Turret.setPIDFCoefficients(DcMotorEx.RunMode.RUN_USING_ENCODER, pidfCoefficients);
+
         ServoConTurret = hwMap.get(CRServo.class, "servo_con_turret");
         HoodServo = hwMap.get(Servo.class, "hoodservo");
         IntakeServo = hwMap.get(CRServo.class, "intakeservo");
@@ -128,6 +137,11 @@ public class ServiceHelperAaditya {
         ServoConFront.setPower(frontPower);
     }
 
+    public void SetTurretVelocity() {
+
+        Turret.setVelocity(1020);
+        // Turret.setPower(0.47); //0.64
+    }
     public boolean driveToPosition(double speed, double distance, DistanceUnit distanceUnit, double holdSeconds) {
         final double WHEEL_DIAMETER_MM = 96;
         final double ENCODER_TICKS_PER_REV = 537.7;
