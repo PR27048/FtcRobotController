@@ -58,16 +58,16 @@ public class ServiceHelperAaditya {
            /* }
             case "TRUE":
             {*/
-                FrontLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-                FrontRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-                BackLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-                BackRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-                Turret.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-                Intake.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-                MotorFeeder.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-             //   break;
-            //}
-         //}
+        FrontLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        FrontRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        BackLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        BackRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        Turret.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        Intake.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        MotorFeeder.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        //   break;
+        //}
+        //}
         FrontLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         FrontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         BackLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);

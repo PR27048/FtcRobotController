@@ -12,6 +12,7 @@ import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 public class DecodeTeleOP extends OpMode {
 
     ServiceHelperAaditya serviceHelper = new ServiceHelperAaditya();
+
     double forward, strafe, rotate,speed;
 
     // double Intake = 1.0;
@@ -50,7 +51,6 @@ public class DecodeTeleOP extends OpMode {
             drive.SetTurretP    ower(Turret);
 
         }*/
-
         serviceHelper.SetTurretVelocity();
        //// serviceHelper.SetTurretPower();
 
