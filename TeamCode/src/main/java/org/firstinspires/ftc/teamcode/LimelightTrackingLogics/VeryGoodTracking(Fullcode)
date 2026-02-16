@@ -3,7 +3,6 @@ package org.firstinspires.ftc.teamcode.decode;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.hardware.limelightvision.LLResult;
 
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
@@ -27,16 +26,13 @@ public class Limelightservicehelper {
     public static double KP = 0.009;
     public static double KD = 0.0017; //could be a little higher?
     private final double DEAD_ZONE_DEG = 1.5;
+    double lockedPosition = 0.5;
     double servoCenter = 0.5;
     double min = 0.4;
     double max = 0.6;
     private double lastTx = 0;
     double lastError = 0;
     long lastTime = System.nanoTime();
-    public double turretAngle = 0.0;
-    private double ServoTurns = 0.0;
-    private double lastServoPos;
-
 
     //private double lastTime = 0;
 
@@ -60,8 +56,6 @@ public class Limelightservicehelper {
 
 
         ServoConTurret = hwMap.get(Servo.class, "servo_con_turret");
-        lastServoPos = ServoConTurret.getPosition(); // initialize
-
         HoodServo = hwMap.get(Servo.class, "hoodservo");
         IntakeServo = hwMap.get(CRServo.class, "intakeservo");
         ServoCon = hwMap.get(CRServo.class, "servo_con_back_transfer");
@@ -128,39 +122,43 @@ public class Limelightservicehelper {
         LLResult result = limelight.getLatestResult();
 
         long now = System.nanoTime();
-        double dt = (now - lastTime) / 1e9;
-        if (dt <= 0) dt = 0.001;
+        double dt = (now - lastTime) / 1e9;   // seconds
         lastTime = now;
 
-        double currentServoPos = ServoConTurret.getPosition();
-        double delta = currentServoPos - lastServoPos;
+        // Prevent divide-by-zero or crazy derivative spike
+        if (dt <= 0) dt = 0.001;
 
-        // handle wrap-around
-        if (delta < -0.5) delta += 1.0;
-        else if (delta > 0.5) delta -= 1.0;
+        //no target detected then:
+        if (result == null || !result.isValid()) {
 
-        ServoTurns += delta;
-        turretAngle = ServoTurns * 360.0 / 4;
+            // Reset derivative so it doesn’t kick when target returns
+            lastError = 0;
 
-        lastServoPos = currentServoPos; // always update field
+            return;
+        }
+        // Tracking Logic
 
-        // Now do Limelight tracking logic
-        if (result != null && result.isValid()) {
-            double tx = result.getTx();
-            if (Math.abs(tx) < DEAD_ZONE_DEG) tx = 0;
-            double error = tx;
-            double derivative = (error - lastError) / dt;
-            lastError = error;
 
-            double output = (KP * error) + (KD * derivative);
-            double targetPosition = servoCenter - output;
-            targetPosition = Math.max(min, Math.min(max, targetPosition));
+        double tx = result.getTx();
 
-            ServoConTurret.setPosition(targetPosition);
-        } else {
-            lastError = 0; // reset derivative
+        if (Math.abs(tx) < DEAD_ZONE_DEG) {
+            tx = 0;
         }
 
+        double error = tx;
+
+        double derivative = (error - lastError) / dt;
+        lastError = error;
+
+        double output = (KP * error) + (KD * derivative);
+
+        double targetPosition = servoCenter - output;
+
+        // Clamp to safe servo range
+        targetPosition = Math.max(min, Math.min(max, targetPosition));
+
+
+        ServoConTurret.setPosition(targetPosition);
     }
 
 
@@ -206,9 +204,6 @@ public class Limelightservicehelper {
     public void SetServoConFrontPower(double frontPower) { ServoConFront.setPower(frontPower); }
     public void SetTurretVelocity() { Turret.setVelocity(1020); }
     public void SetTurretOFF() { Turret.setVelocity(0); }
-    public double getTurretAngle() {
-        return turretAngle;
-    }
 
 
     public double getTurretPosition() {

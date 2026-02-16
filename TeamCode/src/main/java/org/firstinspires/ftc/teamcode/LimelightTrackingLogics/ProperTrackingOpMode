@@ -37,13 +37,7 @@ public class DecodeTeleopWITHTRACKING extends OpMode {
 
         // --- Turret Tracking ---
         serviceHelper.trackWithLimelight();
-        telemetry.addData("Turret Angle: ", serviceHelper.getTurretAngle());
-        telemetry.addData("KP Tuning Constant: ", Limelightservicehelper.KP);
-        telemetry.addData("KD Tuning Constant: ", Limelightservicehelper.KD);
-
-        telemetry.addData("Turret Servo Position: ", serviceHelper.getTurretPosition());
-
-        telemetry.update();
+        telemetry.addData("Turret Angle: ", serviceHelper.turretAngle);
 
 
         // --- Adjust KP in TeleOp ---
@@ -66,7 +60,12 @@ public class DecodeTeleopWITHTRACKING extends OpMode {
         prevDpadRight = gamepad1.dpad_right;
 
         // --- Telemetry ---
+        telemetry.addData("KP Tuning Constant: ", Limelightservicehelper.KP);
+        telemetry.addData("KD Tuning Constant: ", Limelightservicehelper.KD);
 
+        telemetry.addData("Turret Servo Position: ", serviceHelper.getTurretPosition());
+
+        telemetry.update();
 
         // --- Intake / Feeder Control ---
         if (gamepad1.left_trigger > 0.1) {
@@ -78,6 +77,7 @@ public class DecodeTeleopWITHTRACKING extends OpMode {
 
         } else if (gamepad1.right_trigger > 0.1) {
             serviceHelper.SetTurretVelocity();
+            try { Thread.sleep(700); } catch (Exception e) {}
             serviceHelper.SetIntakePower(1.0);
             serviceHelper.SetServoConFrontPower(-1.0);
             serviceHelper.setFeederPower(-0.7);

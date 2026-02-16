@@ -1,0 +1,29 @@
+public void trackWithLimelight() {
+
+
+        LLResult result = limelight.getLatestResult();
+        if (result == null || !result.isValid()) return;
+
+        double tx = result.getTx();
+        if (Math.abs(tx) < DEAD_ZONE_DEG) tx = 0;
+
+        long now = System.nanoTime();
+        double dt = (now - lastTime) / 1e9;  // seconds
+        lastTime = now;
+
+        double error = tx;
+
+        double derivative = (error - lastError) / dt;
+        lastError = error;
+
+        double servoCenter = 0.5;
+        double min = 0.4;
+        double max = 0.6;
+
+        double output = (KP * error) + (KD * derivative);
+        double targetPosition = servoCenter - output;
+
+        targetPosition = Math.max(min, Math.min(max, targetPosition));
+
+        ServoConTurret.setPosition(targetPosition);
+    }
