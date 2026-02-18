@@ -16,12 +16,33 @@ public class DecodeTeleopWITHTRACKING extends OpMode {
     private boolean prevDpadLeft = false;
     private boolean prevDpadRight = false;
 
+    private boolean initprevup = false;
+    private boolean initprevdown = false;
+
+
     @Override
     public void init() {
         serviceHelper.init(hardwareMap, "FALSE");
-        telemetry.addLine("Initialized!");
-        telemetry.update();
 
+
+
+    }
+    public void init_loop() {
+        boolean upPressed = gamepad1.dpad_up && !initprevup;
+        boolean downPressed = gamepad1.dpad_down && !initprevdown;
+
+        serviceHelper.updatePipelineMenu(upPressed, downPressed);
+
+        initprevup = gamepad1.dpad_up;
+        initprevdown = gamepad1.dpad_down;
+
+        telemetry.addLine("\nSELECT BLUE/RED:");
+        telemetry.addLine("\nDPAD_UP = RED");
+        telemetry.addLine("\nDPAD_DOWN = BLUE");
+        telemetry.addData("CURRENT SELECTION:", serviceHelper.getCurrentPipeline());
+
+
+        telemetry.update();
 
     }
 
@@ -37,13 +58,7 @@ public class DecodeTeleopWITHTRACKING extends OpMode {
 
         // --- Turret Tracking ---
         serviceHelper.trackWithLimelight();
-        telemetry.addData("Turret Angle: ", serviceHelper.getTurretAngle());
-        telemetry.addData("KP Tuning Constant: ", Limelightservicehelper.KP);
-        telemetry.addData("KD Tuning Constant: ", Limelightservicehelper.KD);
-
-        telemetry.addData("Turret Servo Position: ", serviceHelper.getTurretPosition());
-
-        telemetry.update();
+       // telemetry.addData("Turret Angle: ", serviceHelper.turretAngle);
 
 
         // --- Adjust KP in TeleOp ---
@@ -66,7 +81,12 @@ public class DecodeTeleopWITHTRACKING extends OpMode {
         prevDpadRight = gamepad1.dpad_right;
 
         // --- Telemetry ---
+        telemetry.addData("KP Tuning Constant: ", Limelightservicehelper.KP);
+        telemetry.addData("KD Tuning Constant: ", Limelightservicehelper.KD);
 
+        telemetry.addData("Turret Servo Position: ", serviceHelper.getTurretPosition());
+
+        telemetry.update();
 
         // --- Intake / Feeder Control ---
         if (gamepad1.left_trigger > 0.1) {
@@ -74,24 +94,30 @@ public class DecodeTeleopWITHTRACKING extends OpMode {
             serviceHelper.SetServoConFrontPower(-1.0);
             serviceHelper.setFeederPower(0.7);
             serviceHelper.setIntakeServoPower(-1.0);
-            serviceHelper.SetTurretVelocity();
+            //serviceHelper.SetTurretVelocity();
 
         } else if (gamepad1.right_trigger > 0.1) {
             serviceHelper.SetTurretVelocity();
-            serviceHelper.SetIntakePower(1.0);
-            serviceHelper.SetServoConFrontPower(-1.0);
-            serviceHelper.setFeederPower(-0.7);
-            serviceHelper.setIntakeServoPower(-1.0);
+
+            if (serviceHelper.isTurretAtSpeed()) {
+                serviceHelper.SetIntakePower(1.0);
+                serviceHelper.SetServoConFrontPower(-1.0);
+                serviceHelper.setFeederPower(-0.7);
+                serviceHelper.setIntakeServoPower(-1.0);
+            }
 
         } else {
-            stop();
+            serviceHelper.SetIntakePower(0.0);
+            serviceHelper.SetServoConFrontPower(0.0);
+            serviceHelper.setFeederPower(0.0);
+            serviceHelper.setIntakeServoPower(0.0);
             serviceHelper.SetTurretOFF();
         }
 
-        if (gamepad2.a) {
+        /*if (gamepad2.a) {
             serviceHelper.ReverseTurret();
         }
-
+*/
         // --- Hood Control ---
         if (gamepad2.dpad_up) serviceHelper.setHoodAngle(0.45);
         if (gamepad2.dpad_down) serviceHelper.setHoodAngle(-0.15);
@@ -102,7 +128,7 @@ public class DecodeTeleopWITHTRACKING extends OpMode {
         if (rightStick > 0.05) clockwise -= rightStick;
         if (rightStick < -0.05) counterclockwise = rightStick;
 
-        serviceHelper.aimTurret(clockwise, counterclockwise);
+       // serviceHelper.aimTurret(clockwise, counterclockwise);
     }
 
     @Override
@@ -112,5 +138,6 @@ public class DecodeTeleopWITHTRACKING extends OpMode {
         serviceHelper.setServoConPower(0.0);
         serviceHelper.setFeederPower(0.0);
         serviceHelper.setIntakeServoPower(0.0);
+        serviceHelper.stopLimelight();
     }
 }

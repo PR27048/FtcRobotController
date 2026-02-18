@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.decode;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.hardware.limelightvision.LLResult;
 
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
@@ -11,7 +12,7 @@ import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-public class Limelightservicehelper {
+public class BaseHelper {
 
     private DcMotor FrontLeft, FrontRight, BackLeft, BackRight, Intake, MotorFeeder;
     private DcMotorEx Turret;
@@ -26,15 +27,16 @@ public class Limelightservicehelper {
     public static double KP = 0.009;
     public static double KD = 0.0017; //could be a little higher?
     private final double DEAD_ZONE_DEG = 1.5;
-    private double lostStartTime = -1;
-    private final double LOST_DELAY = 0.5;
-    double lockedPosition = 0.5;
     double servoCenter = 0.5;
     double min = 0.4;
     double max = 0.6;
     private double lastTx = 0;
     double lastError = 0;
     long lastTime = System.nanoTime();
+    public double turretAngle = 0.0;
+    private double ServoTurns = 0.0;
+    private double lastServoPos;
+
 
     //private double lastTime = 0;
 
@@ -58,6 +60,8 @@ public class Limelightservicehelper {
 
 
         ServoConTurret = hwMap.get(Servo.class, "servo_con_turret");
+        lastServoPos = ServoConTurret.getPosition(); // initialize
+
         HoodServo = hwMap.get(Servo.class, "hoodservo");
         IntakeServo = hwMap.get(CRServo.class, "intakeservo");
         ServoCon = hwMap.get(CRServo.class, "servo_con_back_transfer");
@@ -108,12 +112,12 @@ public class Limelightservicehelper {
     }
 
     // ================= MANUAL TURRET =================
-   /* public void aimTurret(double clockwise, double counterclockwise) {
+    public void aimTurret(double clockwise, double counterclockwise) {
         double current = ServoConTurret.getPosition();
         double adjustment = clockwise - counterclockwise;
         double newPos = Math.max(0.0, Math.min(1.0, current + adjustment * 0.01));
         ServoConTurret.setPosition(newPos);
-    }*/
+    }
 
     // ================= APRILTAG TRACKING =================
 
@@ -133,25 +137,11 @@ public class Limelightservicehelper {
         //no target detected then:
         if (result == null || !result.isValid()) {
 
-            if (lostStartTime < 0) {
-                lostStartTime = System.nanoTime() / 1e9;
-            }
-
-            double currentTime = System.nanoTime() / 1e9;
-            double lostDuration = currentTime - lostStartTime;
-
-            if (lostDuration > LOST_DELAY) {
-                // Smoothly return to center
-                double currentPos = ServoConTurret.getPosition();
-                double newPos = currentPos + (servoCenter - currentPos) * 0.05; //change 0.7 to servoCenter
-                ServoConTurret.setPosition(newPos);
-            }
+            // Reset derivative so it doesn’t kick when target returns
+            lastError = 0;
 
             return;
-        } else {
-            lostStartTime = -1; // Reset timer when target found
         }
-
         // Tracking Logic
 
 
@@ -164,9 +154,6 @@ public class Limelightservicehelper {
         double error = tx;
 
         double derivative = (error - lastError) / dt;
-        // Limit derivative spike
-        // derivative = Math.max(-50, Math.min(50, derivative)); //might remove
-
         lastError = error;
 
         double output = (KP * error) + (KD * derivative);
@@ -202,12 +189,7 @@ public class Limelightservicehelper {
     }
 
     public int getCurrentPipeline() {
-        if (currentPipeline == 0) {
-            return 0;
-        } else if (currentPipeline == 1) {
-            return 1;
-        }
-        return -1;
+        return currentPipeline;
     }
 
     public void stopLimelight() {
@@ -216,14 +198,9 @@ public class Limelightservicehelper {
 
     // ================= OTHER FUNCTIONS =================
     public void SetIntakePower(double IntakePower) { Intake.setPower(IntakePower); }
-    public double getTurretVelocity() {
-        return Turret.getVelocity();
-    }
+    public void SetTurretPower() {
 
-    public boolean isTurretAtSpeed() {
-        return Math.abs(getTurretVelocity() - 1020) < 50;
     }
-
     public void SetTurretPowerAccel() { Turret.setPower(0.44); }
     public void ReverseTurret() { Turret.setPower(-0.1); }
     public void setFeederPower(double feederPower) { MotorFeeder.setPower(feederPower); }
@@ -233,6 +210,9 @@ public class Limelightservicehelper {
     public void SetServoConFrontPower(double frontPower) { ServoConFront.setPower(frontPower); }
     public void SetTurretVelocity() { Turret.setVelocity(1020); }
     public void SetTurretOFF() { Turret.setVelocity(0); }
+    public double getTurretAngle() {
+        return turretAngle;
+    }
 
 
     public double getTurretPosition() {

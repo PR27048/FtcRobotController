@@ -13,6 +13,7 @@ import org.firstinspires.ftc.teamcode.decode.ServiceHelper;
 @Autonomous(name = "DecodeAuto", group = "Auto")
 public class DecodeAuto extends OpMode {
     ServiceHelper serviceHelper = new ServiceHelper();
+    Limelightservicehelper tracker = new Limelightservicehelper();
 
     boolean lastLeft = false;
     boolean lastRight = false;
@@ -88,7 +89,8 @@ public class DecodeAuto extends OpMode {
     private void runBlueClose() {
         telemetry.addLine("Running BLUE NEAR Auto");
         telemetry.update();
-        serviceHelper.setAutoTurret(0.48);
+        serviceHelper.SetTurretVelocity();
+        tracker.trackWithLimelight();
         //sleep(2000);
 
         //serviceHelper.setAutoTurret(0.5);
@@ -139,8 +141,8 @@ public class DecodeAuto extends OpMode {
     private void runRedClose() {
         telemetry.addLine("Running RED NEAR Auto");
         telemetry.update();
-        serviceHelper.setAutoTurret(0.48);
-        //sleep(2000);
+        serviceHelper.SetTurretVelocity();
+        tracker.trackWithLimelight();
 
         // Drive
         serviceHelper.drive(0.3,0,0);
@@ -190,7 +192,8 @@ public class DecodeAuto extends OpMode {
         telemetry.addLine("Running BLUE FAR Auto");
         telemetry.update();
         serviceHelper.TurretEncoder();
-
+        serviceHelper.SetTurretVelocity();
+        tracker.trackWithLimelight();
 
         serviceHelper.setAutoTurret(0.48);
         serviceHelper.SetServoConFrontPower(-0.8);
@@ -226,7 +229,8 @@ public class DecodeAuto extends OpMode {
     private void runRedFar() {
         telemetry.addLine("Running RED FAR Auto");
         telemetry.update();
-
+        serviceHelper.SetTurretVelocity();
+        tracker.trackWithLimelight();
 
         serviceHelper.setAutoTurret(0.);
         serviceHelper.SetServoConFrontPower(-0.8);
