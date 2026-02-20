@@ -17,8 +17,8 @@ public class ServiceHelperAaditya {
     private DcMotor FrontLeft, FrontRight, BackLeft, BackRight, Intake, MotorFeeder;
 
     private DcMotorEx Turret;
-    private CRServo ServoCon, ServoConFront, IntakeServo, ServoConTurret;
-    private Servo HoodServo;
+    private CRServo ServoCon, ServoConFront, IntakeServo;
+    private Servo HoodServo, ServoConTurret;
     private ElapsedTime driveTimer = new ElapsedTime();
 
     public void init(HardwareMap hwMap, String autoState ) {
@@ -35,7 +35,7 @@ public class ServiceHelperAaditya {
         PIDFCoefficients pidfCoefficients = new PIDFCoefficients(400, 0, 0, 14.6 );
         Turret.setPIDFCoefficients(DcMotorEx.RunMode.RUN_USING_ENCODER, pidfCoefficients);
 
-        ServoConTurret = hwMap.get(CRServo.class, "servo_con_turret");
+        ServoConTurret = hwMap.get(Servo.class, "servo_con_turret");
         HoodServo = hwMap.get(Servo.class, "hoodservo");
         IntakeServo = hwMap.get(CRServo.class, "intakeservo");
         ServoCon = hwMap.get(CRServo.class, "servo_con_back_transfer");
@@ -94,14 +94,10 @@ public class ServiceHelperAaditya {
     }
 
     public void aimTurret(double clockwise, double counterclockwise) {
-        double ServoConTurretPower = clockwise - counterclockwise;
-
-        double MaxTurretAimingPower = 1.0;
-        double MaxTurretAimingSpeed = 1.0;
-
-        MaxTurretAimingPower = Math.max(MaxTurretAimingPower, Math.abs(ServoConTurretPower));
-
-        ServoConTurret.setPower((MaxTurretAimingSpeed * ServoConTurretPower / MaxTurretAimingPower));
+        double current = ServoConTurret.getPosition();
+        double adjustment = clockwise - counterclockwise;
+        double newPos = Math.max(0.0, Math.min(1.0, current + adjustment * 0.01));
+        ServoConTurret.setPosition(newPos);
     }
 
     public void SetIntakePower(double IntakePower) {

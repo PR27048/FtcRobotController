@@ -108,12 +108,12 @@ public class Limelightservicehelper {
     }
 
     // ================= MANUAL TURRET =================
-   /* public void aimTurret(double clockwise, double counterclockwise) {
+    public void aimTurret(double clockwise, double counterclockwise) {
         double current = ServoConTurret.getPosition();
         double adjustment = clockwise - counterclockwise;
         double newPos = Math.max(0.0, Math.min(1.0, current + adjustment * 0.01));
         ServoConTurret.setPosition(newPos);
-    }*/
+    }
 
     // ================= APRILTAG TRACKING =================
 

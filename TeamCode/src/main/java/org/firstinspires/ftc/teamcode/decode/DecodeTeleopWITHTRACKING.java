@@ -128,7 +128,7 @@ public class DecodeTeleopWITHTRACKING extends OpMode {
         if (rightStick > 0.05) clockwise -= rightStick;
         if (rightStick < -0.05) counterclockwise = rightStick;
 
-       // serviceHelper.aimTurret(clockwise, counterclockwise);
+        serviceHelper.aimTurret(clockwise, counterclockwise);
     }
 
     @Override

@@ -86,15 +86,9 @@ public class DecodeTeleOP extends OpMode {
             serviceHelper.setHoodAngle(-0.15);
         }
         double rightStick = gamepad2.right_stick_x;
-        double clockwise = 0;
-        double counterclockwise = 0;
-
-        if (rightStick > 0.05) {
-            clockwise -= rightStick;
-        }
-        if (rightStick < -0.05) {
-            counterclockwise = rightStick;
-        }
+        double clockwise = 0, counterclockwise = 0;
+        if (rightStick > 0.05) clockwise -= rightStick;
+        if (rightStick < -0.05) counterclockwise = rightStick;
 
         serviceHelper.aimTurret(clockwise, counterclockwise);
 
