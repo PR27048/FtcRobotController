@@ -143,7 +143,8 @@ public class Limelightservicehelper {
             if (lostDuration > LOST_DELAY) {
                 // Smoothly return to center
                 double currentPos = ServoConTurret.getPosition();
-                double newPos = currentPos + (servoCenter - currentPos) * 0.05; //change 0.7 to servoCenter
+                double newPos = currentPos + (servoCenter - currentPos) * 0.05;
+                newPos = Math.max(min, Math.min(max, newPos));
                 ServoConTurret.setPosition(newPos);
             }
 
@@ -164,8 +165,8 @@ public class Limelightservicehelper {
         double error = tx;
 
         double derivative = (error - lastError) / dt;
-        // Limit derivative spike
-        // derivative = Math.max(-50, Math.min(50, derivative)); //might remove
+
+        // derivative = Math.max(-50, Math.min(50, derivative)); //CAN ADD IF WANTED BUT MUST TUNE LATER AGAIN
 
         lastError = error;
 

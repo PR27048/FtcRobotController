@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.goBildaPinpoint;
 
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -12,7 +13,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.UnnormalizedAngleUnit
 
 import java.util.Locale;
 
-
+@TeleOp(name = "TestGoBildaPinpointAndOdometry", group = "TeleOp")
 public class TestGoBildaPinpointAndOdometry extends LinearOpMode{
 
     GoBildaPinpointDriver odo;
@@ -23,8 +24,8 @@ public class TestGoBildaPinpointAndOdometry extends LinearOpMode{
 
         odo = hardwareMap.get(GoBildaPinpointDriver.class, "pinpoint");
 
-        odo.setOffsets(-88.9, -190.5, DistanceUnit.MM);
-        odo.setEncoderResolution(GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_4_BAR_POD);
+        odo.setOffsets(-120.65, -196.85, DistanceUnit.MM);
+        odo.setEncoderResolution(GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_SWINGARM_POD);
         odo.setEncoderDirections(GoBildaPinpointDriver.EncoderDirection.FORWARD,
                 GoBildaPinpointDriver.EncoderDirection.FORWARD);
         odo.resetPosAndIMU();
