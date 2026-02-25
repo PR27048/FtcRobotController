@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.decode;
 
+import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.gamepad2;
+
 import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.hardware.limelightvision.LLResult;
 
@@ -24,7 +26,7 @@ public class Limelightservicehelper {
 
     // ================= LIMELIGHT PD TUNING =================
     public static double KP = 0.009;
-    public static double KD = 0.0017; //could be a little higher?
+    public static double KD = 0.00177; //could be a little higher?
     private final double DEAD_ZONE_DEG = 1.5;
     private double lostStartTime = -1;
     private final double LOST_DELAY = 0.5;
@@ -53,7 +55,7 @@ public class Limelightservicehelper {
         Intake = hwMap.get(DcMotor.class, "intake");
         Turret = hwMap.get(DcMotorEx.class, "turret");
         PIDFCoefficients pidfCoefficients =
-                new PIDFCoefficients(400, 0, 0, 14.6);
+                new PIDFCoefficients(16, 0, 0, 15.14); //400p  14.6f   better: 15.14F
         Turret.setPIDFCoefficients(DcMotorEx.RunMode.RUN_USING_ENCODER, pidfCoefficients);
 
 
@@ -111,7 +113,7 @@ public class Limelightservicehelper {
     public void aimTurret(double clockwise, double counterclockwise) {
         double current = ServoConTurret.getPosition();
         double adjustment = clockwise - counterclockwise;
-        double newPos = Math.max(0.0, Math.min(1.0, current + adjustment * 0.01));
+        double newPos = Math.max(0.0, Math.min(1.0, current + adjustment * 0.6));
         ServoConTurret.setPosition(newPos);
     }
 
@@ -146,6 +148,7 @@ public class Limelightservicehelper {
                 double newPos = currentPos + (servoCenter - currentPos) * 0.05;
                 newPos = Math.max(min, Math.min(max, newPos));
                 ServoConTurret.setPosition(newPos);
+               // gamepad2.rumble(500);
             }
 
             return;
@@ -201,7 +204,9 @@ public class Limelightservicehelper {
             limelight.pipelineSwitch(currentPipeline);
         }
     }
-
+    public void setlimelightpipeline() {
+        limelight.pipelineSwitch(currentPipeline);
+    }
     public int getCurrentPipeline() {
         if (currentPipeline == 0) {
             return 0;
@@ -238,5 +243,8 @@ public class Limelightservicehelper {
 
     public double getTurretPosition() {
         return ServoConTurret.getPosition();
+    }
+    public double getHoodPosition() {
+        return HoodServo.getPosition();
     }
 }

@@ -487,6 +487,8 @@ class LateralVelocityTuner extends OpMode {
 
         follower.update();
         draw();
+        //telemetryM.debug("in loop end: " + end + "Distance : " + DISTANCE + "  follower.getPose().getY() : " + follower.getPose().getY());
+        //telemetryM.update(telemetry);
 
         if (!end) {
             if (Math.abs(follower.getPose().getY()) > (DISTANCE + 72)) {
@@ -1012,7 +1014,7 @@ class Line extends OpMode {
             }
         }
 
-        telemetryM.debug("Driving Forward?: " + forward);
+        telemetryM.debug("Driving Forward?: " + forward + "follower isBusy" + follower.isBusy());
         telemetryM.update(telemetry);
     }
 }

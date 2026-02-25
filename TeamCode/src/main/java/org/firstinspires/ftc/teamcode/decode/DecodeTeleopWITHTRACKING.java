@@ -31,18 +31,18 @@ public class DecodeTeleopWITHTRACKING extends OpMode {
         boolean upPressed = gamepad1.dpad_up && !initprevup;
         boolean downPressed = gamepad1.dpad_down && !initprevdown;
 
-        serviceHelper.updatePipelineMenu(upPressed, downPressed);
 
         initprevup = gamepad1.dpad_up;
         initprevdown = gamepad1.dpad_down;
 
         telemetry.addLine("\nSELECT BLUE/RED:");
-        telemetry.addLine("\nDPAD_UP = RED");
-        telemetry.addLine("\nDPAD_DOWN = BLUE");
+        telemetry.addLine("\nDPAD_UP = RED (0)");
+        telemetry.addLine("\nDPAD_DOWN = BLUE (1)");
         telemetry.addData("CURRENT SELECTION:", serviceHelper.getCurrentPipeline());
 
 
         telemetry.update();
+        serviceHelper.updatePipelineMenu(upPressed, downPressed);
 
     }
 
@@ -55,15 +55,15 @@ public class DecodeTeleopWITHTRACKING extends OpMode {
         rotate = gamepad1.right_stick_x;
         speed = 1.0;
         serviceHelper.drive(forward, strafe, rotate, speed);
-
+        serviceHelper.setlimelightpipeline();
         // --- Turret Tracking ---
         serviceHelper.trackWithLimelight();
        // telemetry.addData("Turret Angle: ", serviceHelper.turretAngle);
 
 
-        // --- Adjust KP in TeleOp ---
-        if (gamepad1.dpad_up && !prevDpadUp) {
-            Limelightservicehelper.KP += 0.0001;
+        // --- Adjust KP in TeleOp ---  //UNCOMMENT IF TUNING IS NEEDED
+        /*if (gamepad1.dpad_up && !prevDpadUp) {
+            Limelightservicehelper.KP += 0.0001;  //extra specific, change for wider tuning
         }
         if (gamepad1.dpad_down && !prevDpadDown) {
             Limelightservicehelper.KP -= 0.0001;
@@ -78,13 +78,13 @@ public class DecodeTeleopWITHTRACKING extends OpMode {
         prevDpadUp = gamepad1.dpad_up;
         prevDpadDown = gamepad1.dpad_down;
         prevDpadLeft = gamepad1.dpad_left;
-        prevDpadRight = gamepad1.dpad_right;
+        prevDpadRight = gamepad1.dpad_right;*/
 
         // --- Telemetry ---
-        telemetry.addData("KP Tuning Constant: ", Limelightservicehelper.KP);
-        telemetry.addData("KD Tuning Constant: ", Limelightservicehelper.KD);
+        //telemetry.addData("KP Tuning Constant: ", Limelightservicehelper.KP);
+        //telemetry.addData("KD Tuning Constant: ", Limelightservicehelper.KD);
 
-        telemetry.addData("Turret Servo Position: ", serviceHelper.getTurretPosition());
+       // telemetry.addData("Turret Servo Position: ", serviceHelper.getTurretPosition());
 
         telemetry.update();
 
@@ -102,7 +102,7 @@ public class DecodeTeleopWITHTRACKING extends OpMode {
             if (serviceHelper.isTurretAtSpeed()) {
                 serviceHelper.SetIntakePower(1.0);
                 serviceHelper.SetServoConFrontPower(-1.0);
-                serviceHelper.setFeederPower(-0.7);
+                serviceHelper.setFeederPower(-1.0);
                 serviceHelper.setIntakeServoPower(-1.0);
             }
 
@@ -113,8 +113,9 @@ public class DecodeTeleopWITHTRACKING extends OpMode {
             serviceHelper.setIntakeServoPower(0.0);
             serviceHelper.SetTurretOFF();
         }
+/*
 
-        /*if (gamepad2.a) {
+        if (gamepad2.a) {
             serviceHelper.ReverseTurret();
         }
 */
@@ -129,6 +130,7 @@ public class DecodeTeleopWITHTRACKING extends OpMode {
         if (rightStick < -0.05) counterclockwise = rightStick;
 
         serviceHelper.aimTurret(clockwise, counterclockwise);
+
     }
 
     @Override

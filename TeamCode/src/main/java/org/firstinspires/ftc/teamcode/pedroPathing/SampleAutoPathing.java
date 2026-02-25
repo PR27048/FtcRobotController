@@ -25,9 +25,9 @@ public class SampleAutoPathing extends OpMode {
 
     PathState pathState;
 
-    private final Pose startPos = new Pose(0,0, Math.toRadians(0)); //TODO update values
-    private final Pose shootPos = new Pose(0,0, Math.toRadians(0)); //TODO update values
-    private final Pose endPose = new Pose(0,0, Math.toRadians(0)); //TODO update values
+    private final Pose startPos = new Pose(20.386209877877445,122.39783853885227, Math.toRadians(138)); //TODO update values
+    private final Pose shootPos = new Pose(46.415043769588245,96.90020533880903, Math.toRadians(138)); //TODO update values
+    private final Pose endPose = new Pose(63.76759969739543,105.75355019993515, Math.toRadians(98)); //TODO update values
     private PathChain driveStartPosShootPos, driveShootPosEndPos;
 
     public void buildPaths(){

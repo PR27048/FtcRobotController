@@ -167,4 +167,8 @@ public class ServiceHelperAaditya {
         return (driveTimer.seconds() > holdSeconds);
 
     }
+
+    public void TestMotor(){
+        BackRight.setPower(1);
+    }
 }

@@ -32,6 +32,7 @@ public class DecodeAuto extends OpMode {
     @Override
     public void init() {
         serviceHelper.init(hardwareMap);
+        tracker.init(hardwareMap, "FALSE");
     }
 
     @Override
@@ -66,6 +67,7 @@ public class DecodeAuto extends OpMode {
 
     @Override
     public void loop(){
+        tracker.trackWithLimelight();
         switch (selMode) {
             case BLUE_NEAR:
                 runBlueClose();
@@ -90,7 +92,6 @@ public class DecodeAuto extends OpMode {
         telemetry.addLine("Running BLUE NEAR Auto");
         telemetry.update();
         serviceHelper.SetTurretVelocity();
-        tracker.trackWithLimelight();
         //sleep(2000);
 
         //serviceHelper.setAutoTurret(0.5);
@@ -124,7 +125,6 @@ public class DecodeAuto extends OpMode {
 
         try { Thread.sleep(500); } catch (Exception e) {}
         serviceHelper.drive(0,0,0.23); // turn to goal
-        serviceHelper.setAutoTurret(0.48);
         try { Thread.sleep(700); } catch (Exception e) {}
         serviceHelper.drive(-0.3,0,0); // get in range of goal
 
@@ -142,7 +142,7 @@ public class DecodeAuto extends OpMode {
         telemetry.addLine("Running RED NEAR Auto");
         telemetry.update();
         serviceHelper.SetTurretVelocity();
-        tracker.trackWithLimelight();
+
 
         // Drive
         serviceHelper.drive(0.3,0,0);
@@ -174,7 +174,6 @@ public class DecodeAuto extends OpMode {
 
         try { Thread.sleep(500); } catch (Exception e) {}
         serviceHelper.drive(0,0,-0.23); // turn to goal
-        serviceHelper.setAutoTurret(0.48);
 
         try { Thread.sleep(700); } catch (Exception e) {}
         serviceHelper.drive(-0.3,0,0); // get in range of goal
@@ -193,7 +192,6 @@ public class DecodeAuto extends OpMode {
         telemetry.update();
         serviceHelper.TurretEncoder();
         serviceHelper.SetTurretVelocity();
-        tracker.trackWithLimelight();
 
         serviceHelper.setAutoTurret(0.48);
         serviceHelper.SetServoConFrontPower(-0.8);
@@ -230,9 +228,8 @@ public class DecodeAuto extends OpMode {
         telemetry.addLine("Running RED FAR Auto");
         telemetry.update();
         serviceHelper.SetTurretVelocity();
-        tracker.trackWithLimelight();
 
-        serviceHelper.setAutoTurret(0.);
+        serviceHelper.setAutoTurret(0.6);
         serviceHelper.SetServoConFrontPower(-0.8);
         serviceHelper.setFeederPower(0.8);
         serviceHelper.setIntakeServoPower(-1.0);

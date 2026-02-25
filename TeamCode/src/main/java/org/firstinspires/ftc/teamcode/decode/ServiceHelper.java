@@ -13,8 +13,8 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 public class ServiceHelper {
     private DcMotor FrontLeft, FrontRight, BackLeft, BackRight, Intake,  MotorFeeder;
     private DcMotorEx Turret;
-    private CRServo ServoConFront, IntakeServo, ServoConTurret;
-    private Servo HoodServo;
+    private CRServo ServoConFront, IntakeServo;
+    private Servo HoodServo, ServoConTurret;
     private ElapsedTime driveTimer = new ElapsedTime();
 
     public void init(HardwareMap hwMap) {
@@ -35,7 +35,7 @@ public class ServiceHelper {
         //initialize servos
         IntakeServo =hwMap.get(CRServo .class,"intakeservo");
         ServoConFront =hwMap.get(CRServo .class,"servo_con_front_transfer");
-        ServoConTurret =hwMap.get(CRServo .class,"servo_con_turret");
+        ServoConTurret =hwMap.get(Servo .class,"servo_con_turret");
         HoodServo =hwMap.get(Servo .class,"hoodservo");
 
         //reverse wheel position
@@ -125,7 +125,7 @@ public class ServiceHelper {
     public void setHoodAngle(double angle) {
         HoodServo.setPosition(angle);
     }
-    public void aimTurret(double clockwise, double counterclockwise) {
+   /* public void aimTurret(double clockwise, double counterclockwise) {
         double ServoConTurretPower = clockwise - counterclockwise;
 
         double MaxTurretAimingPower = 1.0;
@@ -134,7 +134,7 @@ public class ServiceHelper {
         MaxTurretAimingPower = Math.max(MaxTurretAimingPower, Math.abs(ServoConTurretPower));
 
         ServoConTurret.setPower((MaxTurretAimingSpeed * ServoConTurretPower / MaxTurretAimingPower));
-    }
+    }*/
 
     public void AutoLaunch() {
         Intake.setPower(1.0);
@@ -159,4 +159,6 @@ public class ServiceHelper {
         Intake.setPower(0);
         //drive(0.0, 0.0, 0.0);
     }
+
+
 }

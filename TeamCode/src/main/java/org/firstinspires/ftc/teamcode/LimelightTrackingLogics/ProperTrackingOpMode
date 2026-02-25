@@ -16,12 +16,33 @@ public class DecodeTeleopWITHTRACKING extends OpMode {
     private boolean prevDpadLeft = false;
     private boolean prevDpadRight = false;
 
+    private boolean initprevup = false;
+    private boolean initprevdown = false;
+
+
     @Override
     public void init() {
         serviceHelper.init(hardwareMap, "FALSE");
-        telemetry.addLine("Initialized!");
-        telemetry.update();
 
+
+
+    }
+    public void init_loop() {
+        boolean upPressed = gamepad1.dpad_up && !initprevup;
+        boolean downPressed = gamepad1.dpad_down && !initprevdown;
+
+        serviceHelper.updatePipelineMenu(upPressed, downPressed);
+
+        initprevup = gamepad1.dpad_up;
+        initprevdown = gamepad1.dpad_down;
+
+        telemetry.addLine("\nSELECT BLUE/RED:");
+        telemetry.addLine("\nDPAD_UP = RED");
+        telemetry.addLine("\nDPAD_DOWN = BLUE");
+        telemetry.addData("CURRENT SELECTION:", serviceHelper.getCurrentPipeline());
+
+
+        telemetry.update();
 
     }
 
@@ -73,14 +94,17 @@ public class DecodeTeleopWITHTRACKING extends OpMode {
             serviceHelper.SetServoConFrontPower(-1.0);
             serviceHelper.setFeederPower(0.7);
             serviceHelper.setIntakeServoPower(-1.0);
-            serviceHelper.SetTurretVelocity();
+            //serviceHelper.SetTurretVelocity();
 
         } else if (gamepad1.right_trigger > 0.1) {
             serviceHelper.SetTurretVelocity();
-            serviceHelper.SetIntakePower(1.0);
-            serviceHelper.SetServoConFrontPower(-1.0);
-            serviceHelper.setFeederPower(-0.7);
-            serviceHelper.setIntakeServoPower(-1.0);
+
+            if (serviceHelper.isTurretAtSpeed()) {
+                serviceHelper.SetIntakePower(1.0);
+                serviceHelper.SetServoConFrontPower(-1.0);
+                serviceHelper.setFeederPower(-0.7);
+                serviceHelper.setIntakeServoPower(-1.0);
+            }
 
         } else {
             serviceHelper.SetIntakePower(0.0);
@@ -90,10 +114,10 @@ public class DecodeTeleopWITHTRACKING extends OpMode {
             serviceHelper.SetTurretOFF();
         }
 
-        if (gamepad2.a) {
+        /*if (gamepad2.a) {
             serviceHelper.ReverseTurret();
         }
-
+*/
         // --- Hood Control ---
         if (gamepad2.dpad_up) serviceHelper.setHoodAngle(0.45);
         if (gamepad2.dpad_down) serviceHelper.setHoodAngle(-0.15);

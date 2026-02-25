@@ -15,6 +15,10 @@ velocity decrease as power of motor decrease
 https://www.youtube.com/watch?v=qB0TlN4KCI0
  */
 
+
+//max velocity is 2120
+
+
 @TeleOp
 
 public class ToGetMaxVelocityOfMotor extends OpMode {
@@ -60,3 +64,5 @@ public class ToGetMaxVelocityOfMotor extends OpMode {
             maxVelocity = currentVelocity;
     }
 }
+
+
