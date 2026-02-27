@@ -55,7 +55,7 @@ public class Limelightservicehelper {
         Intake = hwMap.get(DcMotor.class, "intake");
         Turret = hwMap.get(DcMotorEx.class, "turret");
         PIDFCoefficients pidfCoefficients =
-                new PIDFCoefficients(16, 0, 0, 15.14); //400p  14.6f   better: 15.14F
+                new PIDFCoefficients(400, 0, 0, 14.6); //400p  14.6f   test: 15.14F
         Turret.setPIDFCoefficients(DcMotorEx.RunMode.RUN_USING_ENCODER, pidfCoefficients);
 
 

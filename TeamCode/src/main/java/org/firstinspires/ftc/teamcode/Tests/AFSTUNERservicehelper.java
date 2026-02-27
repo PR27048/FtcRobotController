@@ -37,8 +37,8 @@ public class AFSTUNERservicehelper {
 
     double lastError = 0;
     long lastTime = System.nanoTime();
-    double P = 16;  //PIDF P
-    double F = 15.14; // PIDF F
+    double P = 400;  //PIDF P
+    double F = 14.6; // PIDF F
 
     //private double lastTime = 0;
 
@@ -70,7 +70,8 @@ public class AFSTUNERservicehelper {
 
         limelight = hwMap.get(Limelight3A.class, "limelight");
 
-
+        limelight.pipelineSwitch(currentPipeline);
+        limelight.start();
 
         FrontRight.setDirection(DcMotor.Direction.REVERSE);
         BackRight.setDirection(DcMotor.Direction.REVERSE);
@@ -179,11 +180,14 @@ public class AFSTUNERservicehelper {
     public void LiftHood() {
         double position = HoodServo.getPosition();
         position += 0.1;
+        HoodServo.setPosition(position);
     }
 
     public void LowerHood() {
         double position = HoodServo.getPosition();
         position -= 0.1;
+        HoodServo.setPosition(position);
+
     }
     public boolean isTurretAtSpeed() {
         return Math.abs(getTurretVelocity() - Velocity) < 50;
