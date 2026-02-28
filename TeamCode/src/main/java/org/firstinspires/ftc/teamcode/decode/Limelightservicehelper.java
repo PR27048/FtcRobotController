@@ -113,7 +113,7 @@ public class Limelightservicehelper {
     public void aimTurret(double clockwise, double counterclockwise) {
         double current = ServoConTurret.getPosition();
         double adjustment = clockwise - counterclockwise;
-        double newPos = Math.max(0.0, Math.min(1.0, current + adjustment * 0.6));
+        double newPos = Math.max(0.0, Math.min(1.0, current + adjustment * 0.2));
         ServoConTurret.setPosition(newPos);
     }
 
