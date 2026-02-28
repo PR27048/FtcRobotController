@@ -8,14 +8,15 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.pedropathing.util.Timer;
 
-import org.firstinspires.ftc.teamcode.decode.ServiceHelperAaditya;
-
+// CHANGED: Import the service helper
+import org.firstinspires.ftc.teamcode.pedroPathing.Auto_ServiceHelper_WithPedroPath;
 
 @TeleOp
-public class Auto_Red_Near_With_PedroPathing_Changed extends OpMode {
-    Auto_ServiceHelper_WithPedroPath helper = new Auto_ServiceHelper_WithPedroPath();
+public class Auto_Red_Near_With_PedroPathing_Changed_Again extends OpMode {
+
     private Follower follower;
     private Timer pathTimer, OpModeTimer;
+    private Auto_ServiceHelper_WithPedroPath helper; // CHANGED: helper instance
 
     public enum PathState {
         DRIVE_STARTPOS_SHOOT_POS,
@@ -39,8 +40,9 @@ public class Auto_Red_Near_With_PedroPathing_Changed extends OpMode {
     }
 
     PathState pathState;
-    private boolean pathStarted = false; // CHANGED: track if the path has started
+    private boolean pathStarted = false;
 
+    // Poses
     private final Pose startPose = new Pose(123.287, 122.563, Math.toRadians(37));
     private final Pose shootPose = new Pose(91.801, 89.759, Math.toRadians(47));
     private final Pose firstRowIntakeSetUpPose = new Pose(92.121, 83.193, Math.toRadians(0));
@@ -53,7 +55,12 @@ public class Auto_Red_Near_With_PedroPathing_Changed extends OpMode {
     private final Pose thirdRowIntakeSetUpPose = new Pose(96.624, 35.917, Math.toRadians(0));
     private final Pose intakeThirdRowPose = new Pose(135.419, 35.756, Math.toRadians(0));
 
-    private PathChain driveStartPosShootPos, driveShootPosFirstRowIntakeSetUpPos, driveFirstRowIntakeSetUpPosIntakeFirstRowPos, driveIntakeFirstRowPosGateSetUpPos, driveGateSetUpPosOpenGatePos, driveOpenGatePosShootPos, driveShootPosSecondRowIntakeSetUp, driveSecondRowIntakeSetUpIntakeSecondRow, driveIntakeSecondRowAvoidGate, driveAvoidGateShootPos, driveShootPosThirdRowIntakeSetUp, driveThirdRowIntakeSetUpIntakeThirdRow, driveIntakeThirdRowShootPos, driveShootPosGateSetUp;
+    // Paths
+    private PathChain driveStartPosShootPos, driveShootPosFirstRowIntakeSetUpPos, driveFirstRowIntakeSetUpPosIntakeFirstRowPos,
+            driveIntakeFirstRowPosGateSetUpPos, driveGateSetUpPosOpenGatePos, driveOpenGatePosShootPos,
+            driveShootPosSecondRowIntakeSetUp, driveSecondRowIntakeSetUpIntakeSecondRow, driveIntakeSecondRowAvoidGate,
+            driveAvoidGateShootPos, driveShootPosThirdRowIntakeSetUp, driveThirdRowIntakeSetUpIntakeThirdRow,
+            driveIntakeThirdRowShootPos, driveShootPosGateSetUp;
 
     public void buildPaths() {
         driveStartPosShootPos = follower.pathBuilder()
@@ -117,22 +124,20 @@ public class Auto_Red_Near_With_PedroPathing_Changed extends OpMode {
     public void statePathUpdate() {
         switch (pathState) {
             case DRIVE_STARTPOS_SHOOT_POS:
-                if (!pathStarted) { // CHANGED: start path only once
+                if (!pathStarted) {
                     follower.followPath(driveStartPosShootPos, true);
                     pathStarted = true;
                 }
-                if (!follower.isBusy()) { // CHANGED: wait until done
+                if (!follower.isBusy()) {
                     setPathState(PathState.SHOOT_PRELOAD_1);
-                    pathStarted = false; // reset for next path
+                    pathStarted = false;
                     telemetry.addLine("done path 1");
                 }
                 break;
 
             case SHOOT_PRELOAD_1:
                 if (pathTimer.getElapsedTimeSeconds() > 4) {
-                    // TODO: flywheel logic
                     setPathState(PathState.DRIVE_SHOOT_POS_FIRSTROW_INTAKE_SETUP);
-                    pathStarted = false;
                 }
                 break;
 
@@ -198,9 +203,7 @@ public class Auto_Red_Near_With_PedroPathing_Changed extends OpMode {
 
             case SHOOT_PRELOAD_2:
                 if (pathTimer.getElapsedTimeSeconds() > 4) {
-                    // TODO: flywheel logic
                     setPathState(PathState.DRIVE_SHOOT_POS_SECOND_ROW_INTAKE_SETUP);
-                    pathStarted = false;
                 }
                 break;
 
@@ -254,9 +257,7 @@ public class Auto_Red_Near_With_PedroPathing_Changed extends OpMode {
 
             case SHOOT_PRELOAD_3:
                 if (pathTimer.getElapsedTimeSeconds() > 4) {
-                    // TODO: flywheel logic
                     setPathState(PathState.DRIVE_SHOOT_POS_THIRD_ROW_INTAKE_SETUP);
-                    pathStarted = false;
                 }
                 break;
 
@@ -298,9 +299,7 @@ public class Auto_Red_Near_With_PedroPathing_Changed extends OpMode {
 
             case SHOOT_PRELOAD_4:
                 if (pathTimer.getElapsedTimeSeconds() > 4) {
-                    // TODO: flywheel logic
                     setPathState(PathState.DRIVE_SHOOT_POS_GATE_SETUP);
-                    pathStarted = false;
                 }
                 break;
 
@@ -335,7 +334,9 @@ public class Auto_Red_Near_With_PedroPathing_Changed extends OpMode {
         buildPaths();
         follower.setPose(startPose);
 
-
+        // CHANGED: initialize service helper
+        helper = new Auto_ServiceHelper_WithPedroPath();
+        helper.init(hardwareMap, "AUTO");
     }
 
     @Override
@@ -348,6 +349,23 @@ public class Auto_Red_Near_With_PedroPathing_Changed extends OpMode {
     public void loop() {
         follower.update();
         statePathUpdate();
+
+        // CHANGED: run intake always
+        helper.AutoIntake();
+
+        // CHANGED: shooting logic only in SHOOT_PRELOAD states
+        switch (pathState) {
+            case SHOOT_PRELOAD_1:
+            case SHOOT_PRELOAD_2:
+            case SHOOT_PRELOAD_3:
+            case SHOOT_PRELOAD_4:
+                helper.AutoShoot(1020);
+                helper.AutoTrack();
+                break;
+            default:
+                helper.SetTurretOFF();
+                break;
+        }
 
         telemetry.addData("path state", pathState.toString());
         telemetry.addData("x", follower.getPose().getX());
