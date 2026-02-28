@@ -90,7 +90,9 @@ public class AFSTUNERservicehelper {
         BackRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         driveTimer.reset();
-        HoodServo.setPosition(0.0);
+        //starting hoodservo position, hood MUST be fully lowered with this servo position
+        HoodServo.setPosition(1.0);
+
     }
 
     // ================= DRIVE =================
@@ -180,13 +182,13 @@ public class AFSTUNERservicehelper {
     }
     public void LiftHood() {
         double position = HoodServo.getPosition();
-        position += 0.01;
+        position -= 0.01;
         HoodServo.setPosition(position);
     }
 
     public void LowerHood() {
         double position = HoodServo.getPosition();
-        position -= 0.01;
+        position += 0.01;
         HoodServo.setPosition(position);
 
     }
