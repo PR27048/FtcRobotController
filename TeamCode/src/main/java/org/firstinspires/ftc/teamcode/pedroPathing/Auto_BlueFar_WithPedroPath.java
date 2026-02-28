@@ -61,10 +61,10 @@ public class Auto_BlueFar_WithPedroPath extends OpMode {
                 .addPath(new BezierLine(StartC1,CollectFirstSpike))
                 .setLinearHeadingInterpolation(StartC1.getHeading(), CollectFirstSpike.getHeading())
                 .build();
-        /*Intake_FirstSpike = follower.pathBuilder()
+        Intake_FirstSpike = follower.pathBuilder()
                 .addPath(new BezierLine(CollectFirstSpike,IntakeFullFirstSpike))
                 .setLinearHeadingInterpolation(CollectFirstSpike.getHeading(), IntakeFullFirstSpike.getHeading())
-                .build();*/
+                .build();
 
     }
 
@@ -94,8 +94,8 @@ public class Auto_BlueFar_WithPedroPath extends OpMode {
             case DRIVE_INTAKEFIRSTSPIKE:
 
                 if(!follower.isBusy() && pathTimer.getElapsedTimeSeconds() > 5){
-                    follower.followPath(Drive_firstspike);
-                   // follower.followPath();
+                    follower.followPath(IntakeFullFirstSpike);
+                    follower.followPath();
                     setPathState(PathState.DRIVE_INTAKEFIRSTSPIKE);
                     telemetry.addLine("Done Preload Path and Shoot ");
                 }

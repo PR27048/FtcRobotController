@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.pedroPathing;
 
+import android.health.connect.datatypes.units.Velocity;
+
 import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.hardware.limelightvision.LLResult;
 
@@ -63,14 +65,14 @@ public class Auto_ServiceHelper_WithPedroPath {
     }
 
 
-    public void AutoShoot() {
+    public void AutoShoot(int Velocity) {
 
         Intake.setPower(1.0);
         IntakeServo.setPower(-1.0);
         MotorFeeder.setPower(-1.0);
         ServoConFront.setPower(-1.0);
 
-        Turret.setVelocity(1020);
+        Turret.setVelocity(Velocity);
 
     }
 
