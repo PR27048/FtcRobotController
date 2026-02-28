@@ -37,8 +37,8 @@ public class AFSTUNERservicehelper {
 
     double lastError = 0;
     long lastTime = System.nanoTime();
-    double P = 400;  //PIDF P
-    double F = 14.6; // PIDF F
+    double P = 400;  //PIDF P  400
+    double F = 15.047; // PIDF F  14.6
 
     //private double lastTime = 0;
 
@@ -90,6 +90,7 @@ public class AFSTUNERservicehelper {
         BackRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         driveTimer.reset();
+        HoodServo.setPosition(0.0);
     }
 
     // ================= DRIVE =================
@@ -155,7 +156,7 @@ public class AFSTUNERservicehelper {
 
         double cameraHeight = 14; // inches
         double tagHeight = 29.5;    // inches
-        double cameraAngle = 20;    // degrees
+        double cameraAngle = 23.5;    // degrees
 
         double angle = cameraAngle + ty;
 
@@ -179,13 +180,13 @@ public class AFSTUNERservicehelper {
     }
     public void LiftHood() {
         double position = HoodServo.getPosition();
-        position += 0.1;
+        position += 0.01;
         HoodServo.setPosition(position);
     }
 
     public void LowerHood() {
         double position = HoodServo.getPosition();
-        position -= 0.1;
+        position -= 0.01;
         HoodServo.setPosition(position);
 
     }
@@ -204,5 +205,6 @@ public class AFSTUNERservicehelper {
 
     public double getHoodPosition() {
         return HoodServo.getPosition();
+
     }
 }

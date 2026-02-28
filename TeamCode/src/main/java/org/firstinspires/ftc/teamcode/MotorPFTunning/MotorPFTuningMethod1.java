@@ -17,7 +17,7 @@ public class MotorPFTuningMethod1 extends OpMode {
 
     public DcMotorEx FlyWheelMotor;
 
-    double highVelocity = 1020;
+    double highVelocity = 2120;
     double lowVelocity = 900;
 
     double curTargetVelocity = highVelocity;

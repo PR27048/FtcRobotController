@@ -3,6 +3,8 @@ package org.firstinspires.ftc.teamcode.Tests;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
+import org.firstinspires.ftc.teamcode.decode.ServiceHelper;
+
 @TeleOp
 public class AllFieldShootingTuner extends OpMode {
     AFSTUNERservicehelper serviceHelper = new AFSTUNERservicehelper();
@@ -60,9 +62,12 @@ public class AllFieldShootingTuner extends OpMode {
 
         if (gamepad1.dpad_up && !prevDpadUp) {
             serviceHelper.Velocity += stepSizes[stepIndex];
+            serviceHelper.SetTurretVelocity();
         }
         if (gamepad1.dpad_down && !prevDpadDown) {
             serviceHelper.Velocity -= stepSizes[stepIndex];
+            serviceHelper.SetTurretVelocity();
+
         }
 
         if (gamepad1.dpad_right && !prevDpadRight) {
@@ -85,17 +90,18 @@ public class AllFieldShootingTuner extends OpMode {
        // telemetry.addData("\nTURRET P VALUE: ", serviceHelper.P);
         //telemetry.addData("\nTURRET F VALUE: ", serviceHelper.F);
         telemetry.addData("\nTURRET VELOCITY: ", serviceHelper.getTurretVelocity());
+        telemetry.addData("\nVELOCITY VARIABLE: ", serviceHelper.Velocity);
         telemetry.addData("\nDISTANCE FROM TAG(USE THIS): ","%.2f", serviceHelper.getDistance());
         telemetry.addData("\nSTEP SIZE: ", "%.4f", stepSizes[stepIndex]);
 
 
 
         telemetry.addLine("\nTUNING DIRECTIONS:");
-        telemetry.addLine("\nDPAD UP/DOWN  TO INCREMENT TURRET VELOCITY(ticks per second)");
+        telemetry.addLine("DPAD up/down for turret velocity");
         //telemetry.addLine("\nDPAD LEFT/RIGHT  TO INCREMENT F VALUE");
-        telemetry.addLine("\nCLICK B TO CHANGE STEPSIZE");
-        telemetry.addLine("\nLEFT/RIGHT TRIGGER FOR INTAKE AND OUTTAKE RESPECTIVELY");
-        telemetry.addLine("\nDPAD LEFT/RIGHT TO CHANGE HOOD ANGLE(or hand)");
+        telemetry.addLine("B to change stepsize");
+        telemetry.addLine("left/right trigger for intake and outtake respectively");
+        telemetry.addLine("DPAD left/right for hoodangle");
 
 
 
