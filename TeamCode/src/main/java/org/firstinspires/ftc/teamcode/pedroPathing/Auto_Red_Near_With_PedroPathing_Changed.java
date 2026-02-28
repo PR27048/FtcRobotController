@@ -8,6 +8,7 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.pedropathing.util.Timer;
 
+
 @TeleOp
 public class Auto_Red_Near_With_PedroPathing_Changed extends OpMode {
 
@@ -331,6 +332,8 @@ public class Auto_Red_Near_With_PedroPathing_Changed extends OpMode {
         follower = Constants.createFollower(hardwareMap);
         buildPaths();
         follower.setPose(startPose);
+
+
     }
 
     @Override
