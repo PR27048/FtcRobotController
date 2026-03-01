@@ -35,7 +35,7 @@ public class Auto_BlueFar_WithPedroPath extends OpMode {
 
     private final Pose IntakeFullFirstSpike = new Pose(10.015597920277298,35.681109185441954, Math.toRadians(180)); //robot start position - near blue goal post
 
-    private PathChain Intake_loadingzone, Intake_loadingzoneback,Intake_loadingzoneforward, Launch_Artifacts, Drive_firstspike;
+    private PathChain Intake_loadingzone, Intake_loadingzoneback,Intake_loadingzoneforward, Launch_Artifacts, Drive_firstspike,Intake_FirstSpike;
 
     public void buildPaths(){
         //Blue Near position

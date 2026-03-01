@@ -4,16 +4,21 @@ import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.BezierLine;
 import com.pedropathing.geometry.Pose;
 import com.pedropathing.paths.PathChain;
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.pedropathing.util.Timer;
+import com.qualcomm.robotcore.hardware.CRServo;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.decode.ServiceHelperAaditya;
 
 
-@TeleOp
+@Autonomous
 public class Auto_Red_Near_With_PedroPathing_Changed extends OpMode {
     Auto_ServiceHelper_WithPedroPath helper = new Auto_ServiceHelper_WithPedroPath();
+    private DcMotorEx Turret, MotorFeeder;
+    private CRServo ServoConFront;
     private Follower follower;
     private Timer pathTimer, OpModeTimer;
 
@@ -45,8 +50,8 @@ public class Auto_Red_Near_With_PedroPathing_Changed extends OpMode {
     private final Pose shootPose = new Pose(91.801, 89.759, Math.toRadians(47));
     private final Pose firstRowIntakeSetUpPose = new Pose(92.121, 83.193, Math.toRadians(0));
     private final Pose intakeFirstRowPose = new Pose(129.386, 83.132, Math.toRadians(0));
-    private final Pose gateSetUpPose = new Pose(119.209, 71.016, Math.toRadians(0));
-    private final Pose openGatePose = new Pose(128.309, 70.690, Math.toRadians(0));
+    private final Pose gateSetUpPose = new Pose(118.94475138121548, 74.7292817679558, Math.toRadians(0));
+    private final Pose openGatePose = new Pose(128.57458563535914, 74.40331491712706, Math.toRadians(0));
     private final Pose secondRowIntakeSetUpPose = new Pose(95.325, 59.790, Math.toRadians(0));
     private final Pose intakeSecondRowPose = new Pose(134.983, 58.685, Math.toRadians(0));
     private final Pose avoidGatePose = new Pose(119.011, 58.961, Math.toRadians(0));
@@ -329,13 +334,22 @@ public class Auto_Red_Near_With_PedroPathing_Changed extends OpMode {
     @Override
     public void init() {
         pathState = PathState.DRIVE_STARTPOS_SHOOT_POS;
+
         pathTimer = new Timer();
         OpModeTimer = new Timer();
+
+        Turret = hardwareMap.get(DcMotorEx.class, "turret");
+        MotorFeeder = hardwareMap.get(DcMotorEx.class, "motorizedtransfer");
+        ServoConFront = hardwareMap.get(CRServo.class, "servo_con_front_transfer");
+
+        helper.init(hardwareMap, "Auto");
+
         follower = Constants.createFollower(hardwareMap);
+        if (follower != null) {
+            follower.setPose(startPose);
+        }
+
         buildPaths();
-        follower.setPose(startPose);
-
-
     }
 
     @Override
@@ -346,13 +360,26 @@ public class Auto_Red_Near_With_PedroPathing_Changed extends OpMode {
 
     @Override
     public void loop() {
+
+        Turret.setVelocity(1020);
+
+        helper.AutoIntake();
+
+        switch (pathState) {
+            case SHOOT_PRELOAD_1:
+            case SHOOT_PRELOAD_2:
+            case SHOOT_PRELOAD_3:
+            case SHOOT_PRELOAD_4:
+                MotorFeeder.setPower(-1.0);
+                helper.AutoTrack();
+                break;
+
+            default:
+                MotorFeeder.setPower(1.0);
+                break;
+        }
+
         follower.update();
         statePathUpdate();
-
-        telemetry.addData("path state", pathState.toString());
-        telemetry.addData("x", follower.getPose().getX());
-        telemetry.addData("y", follower.getPose().getY());
-        telemetry.addData("heading", follower.getPose().getHeading());
-        telemetry.addData("Path time", pathTimer.getElapsedTimeSeconds());
     }
 }
