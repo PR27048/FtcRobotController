@@ -82,12 +82,12 @@ public class Auto_BlueFar_WithPedroPath extends OpMode {
                // if(!follower.isBusy()) {
                     follower.followPath(Intake_loadingzoneback, true);
                 //}
-                if(!follower.isBusy()) {
+                //if(!follower.isBusy()) {
                     follower.followPath(Intake_loadingzoneforward, true);
-                }
+                //}
                 //if(!follower.isBusy())
-                  //  follower.followPath(Launch_Artifacts,true);
-                setPathState(PathState.NONE);
+                follower.followPath(Launch_Artifacts,true);
+                setPathState(PathState.DRIVE_INTAKEFIRSTSPIKE);
 
                 break;
 
