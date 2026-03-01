@@ -44,7 +44,7 @@ public class Auto_ServiceHelper_WithPedroPath {
 
         // TODO BELOW
         //setting PF value for flywheel turret motor
-        PIDFCoefficients pidfCoefficients = new PIDFCoefficients(400, 0, 0, 14.6 );
+        PIDFCoefficients pidfCoefficients = new PIDFCoefficients(400, 0, 0, 15.047 );
         Turret.setPIDFCoefficients(DcMotorEx.RunMode.RUN_USING_ENCODER, pidfCoefficients);
 
         ServoConTurret = hwMap.get(Servo.class, "servo_con_turret");

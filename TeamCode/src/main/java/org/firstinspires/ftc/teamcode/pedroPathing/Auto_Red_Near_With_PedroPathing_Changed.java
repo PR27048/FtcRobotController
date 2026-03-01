@@ -9,9 +9,6 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.pedropathing.util.Timer;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.hardware.Servo;
-
-import org.firstinspires.ftc.teamcode.decode.ServiceHelperAaditya;
 
 
 @Autonomous
@@ -19,6 +16,9 @@ public class Auto_Red_Near_With_PedroPathing_Changed extends OpMode {
     Auto_ServiceHelper_WithPedroPath helper = new Auto_ServiceHelper_WithPedroPath();
     private DcMotorEx Turret, MotorFeeder;
     private CRServo ServoConFront;
+
+    private double TurretVelocity = 1020;
+
     private Follower follower;
     private Timer pathTimer, OpModeTimer;
 
@@ -30,16 +30,16 @@ public class Auto_Red_Near_With_PedroPathing_Changed extends OpMode {
         DRIVE_INTAKE_FIRSTROW_GATE_SETUP,
         DRIVE_INTAKE_GATE_SETUP_OPEN_GATE,
         DRIVE_OPEN_GATE_SHOOT_POS,
-        SHOOT_PRELOAD_2,
+        SHOOT_2,
         DRIVE_SHOOT_POS_SECOND_ROW_INTAKE_SETUP,
         DRIVE_SECOND_ROW_INTAKE_SETUP_INTAKE_SECOND_ROW,
         DRIVE_INTAKE_SECOND_ROW_AVOID_GATE,
         DRIVE_AVOID_GATE_SHOOT_POS,
-        SHOOT_PRELOAD_3,
+        SHOOT_3,
         DRIVE_SHOOT_POS_THIRD_ROW_INTAKE_SETUP,
         DRIVE_THIRD_ROW_INTAKE_SETUP_INTAKE_THIRD_ROW,
         DRIVE_INTAKE_THIRD_ROW_SHOOT_POS,
-        SHOOT_PRELOAD_4,
+        SHOOT_4,
         DRIVE_SHOOT_POS_GATE_SETUP
     }
 
@@ -134,7 +134,8 @@ public class Auto_Red_Near_With_PedroPathing_Changed extends OpMode {
                 break;
 
             case SHOOT_PRELOAD_1:
-                if (pathTimer.getElapsedTimeSeconds() > 4) {
+                if (pathTimer.getElapsedTimeSeconds() > 2.5) {
+                    Turret.setVelocity(2000);
                     // TODO: flywheel logic
                     setPathState(PathState.DRIVE_SHOOT_POS_FIRSTROW_INTAKE_SETUP);
                     pathStarted = false;
@@ -195,14 +196,14 @@ public class Auto_Red_Near_With_PedroPathing_Changed extends OpMode {
                     pathStarted = true;
                 }
                 if (!follower.isBusy()) {
-                    setPathState(PathState.SHOOT_PRELOAD_2);
+                    setPathState(PathState.SHOOT_2);
                     pathStarted = false;
                     telemetry.addLine("done path 6");
                 }
                 break;
 
-            case SHOOT_PRELOAD_2:
-                if (pathTimer.getElapsedTimeSeconds() > 4) {
+            case SHOOT_2:
+                if (pathTimer.getElapsedTimeSeconds() > 2.5) {
                     // TODO: flywheel logic
                     setPathState(PathState.DRIVE_SHOOT_POS_SECOND_ROW_INTAKE_SETUP);
                     pathStarted = false;
@@ -251,14 +252,14 @@ public class Auto_Red_Near_With_PedroPathing_Changed extends OpMode {
                     pathStarted = true;
                 }
                 if (!follower.isBusy()) {
-                    setPathState(PathState.SHOOT_PRELOAD_3);
+                    setPathState(PathState.SHOOT_3);
                     pathStarted = false;
                     telemetry.addLine("done path 10");
                 }
                 break;
 
-            case SHOOT_PRELOAD_3:
-                if (pathTimer.getElapsedTimeSeconds() > 4) {
+            case SHOOT_3:
+                if (pathTimer.getElapsedTimeSeconds() > 2.5) {
                     // TODO: flywheel logic
                     setPathState(PathState.DRIVE_SHOOT_POS_THIRD_ROW_INTAKE_SETUP);
                     pathStarted = false;
@@ -295,14 +296,14 @@ public class Auto_Red_Near_With_PedroPathing_Changed extends OpMode {
                     pathStarted = true;
                 }
                 if (!follower.isBusy()) {
-                    setPathState(PathState.SHOOT_PRELOAD_4);
+                    setPathState(PathState.SHOOT_4);
                     pathStarted = false;
                     telemetry.addLine("done path 13");
                 }
                 break;
 
-            case SHOOT_PRELOAD_4:
-                if (pathTimer.getElapsedTimeSeconds() > 4) {
+            case SHOOT_4:
+                if (pathTimer.getElapsedTimeSeconds() > 2.5) {
                     // TODO: flywheel logic
                     setPathState(PathState.DRIVE_SHOOT_POS_GATE_SETUP);
                     pathStarted = false;
@@ -354,22 +355,21 @@ public class Auto_Red_Near_With_PedroPathing_Changed extends OpMode {
 
     @Override
     public void start() {
+        Turret.setVelocity(TurretVelocity);
+
         OpModeTimer.resetTimer();
         setPathState(pathState);
     }
 
     @Override
     public void loop() {
-
-        Turret.setVelocity(1020);
-
         helper.AutoIntake();
 
         switch (pathState) {
             case SHOOT_PRELOAD_1:
-            case SHOOT_PRELOAD_2:
-            case SHOOT_PRELOAD_3:
-            case SHOOT_PRELOAD_4:
+            case SHOOT_2:
+            case SHOOT_3:
+            case SHOOT_4:
                 MotorFeeder.setPower(-1.0);
                 helper.AutoTrack();
                 break;
