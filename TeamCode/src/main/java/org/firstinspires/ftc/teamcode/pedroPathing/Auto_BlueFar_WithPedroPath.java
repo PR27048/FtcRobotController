@@ -21,9 +21,10 @@ public class Auto_BlueFar_WithPedroPath extends OpMode {
         DRIVE_LOADINGZONE_BACK,
         DRIVE_LOADINGZONE_FORWARD,
         DRIVE_LAUNCH,
+        SHOOT_PRELOAD_1,
         DRIVE_FIRSTSPIKE,
         DRIVE_INTAKE_FIRSTSPIKE,
-        RETURN_TO_START,   // <-- NEW STATE
+        SHOOT_PRELOAD_2,
         NONE
     }
 
@@ -43,9 +44,77 @@ public class Auto_BlueFar_WithPedroPath extends OpMode {
     private PathChain Launch_Artifacts;
     private PathChain Drive_firstspike;
     private PathChain Intake_FirstSpike;
-    private PathChain Return_To_Start;   // <-- NEW PATH
+    private PathChain Return_To_Start;
 
-    public void buildPaths() {
+    @Override
+    public void init() {
+
+        Helper.init(hardwareMap, "FALSE");
+
+        pathTimer = new Timer();
+        opModeTimer = new Timer();
+
+        follower = Constants.createFollower(hardwareMap);
+        buildPaths();
+        follower.setPose(StartC1);
+
+        pathState = PathState.SHOOT_PRELOAD;
+        pathTimer.resetTimer();
+
+        Helper.lifthood();
+    }
+
+    @Override
+    public void start() {
+        opModeTimer.resetTimer();
+        pathTimer.resetTimer();
+    }
+
+    @Override
+    public void loop() {
+
+        follower.update();
+        statePathUpdate();
+        Helper.AutoIntake();
+
+        // Shooting logic
+        switch (pathState) {
+            case SHOOT_PRELOAD:
+            case SHOOT_PRELOAD_1:
+            case SHOOT_PRELOAD_2:
+                handleShooting();
+                break;
+
+            default:
+               // Helper.SetTurretOFF();
+                Helper.PauseTrack();
+                break;
+        }
+
+        telemetry.addData("State", pathState);
+        telemetry.addData("X", follower.getPose().getX());
+        telemetry.addData("Y", follower.getPose().getY());
+        telemetry.addData("Heading", follower.getPose().getHeading());
+        telemetry.update();
+    }
+
+    private boolean turretStarted = false;
+
+    private void handleShooting() {
+        // Start turret only once per shooting state
+        if (!turretStarted) {
+            Helper.StartTurret(1400);
+            turretStarted = true;
+        }
+
+        // Only shoot if turret is at speed AND robot is stationary
+        if (/*Helper.isTurretAtSpeed(1400) &&*/ !follower.isBusy()) {
+            Helper.AutoShoot(1400);
+            // Optional: Helper.AutoTrack(1);
+        }
+    }
+
+    private void buildPaths() {
 
         Intake_loadingzone = follower.pathBuilder()
                 .addPath(new BezierLine(StartC1, CollectLoadingZone))
@@ -77,38 +146,28 @@ public class Auto_BlueFar_WithPedroPath extends OpMode {
                 .setLinearHeadingInterpolation(CollectFirstSpike.getHeading(), IntakeFullFirstSpike.getHeading())
                 .build();
 
-        // NEW RETURN PATH
         Return_To_Start = follower.pathBuilder()
                 .addPath(new BezierLine(IntakeFullFirstSpike, StartC1))
-                .setLinearHeadingInterpolation(
-                        IntakeFullFirstSpike.getHeading(),
-                        StartC1.getHeading())
+                .setLinearHeadingInterpolation(IntakeFullFirstSpike.getHeading(), StartC1.getHeading())
                 .build();
     }
 
-    public void statePathUpdate() {
+    private void statePathUpdate() {
 
         switch (pathState) {
 
             case SHOOT_PRELOAD:
-                Helper.AutoTrack(1);
-                Helper.AutoShoot(1400);
-
-                if (pathTimer.getElapsedTimeSeconds() > 4) {
-                    Helper.PauseTrack();
+                // Shoot for 3 seconds before moving
+                if (pathTimer.getElapsedTimeSeconds() > 3) {
                     follower.followPath(Intake_loadingzone);
                     setPathState(PathState.DRIVE_INTAKELOADINGZONE);
-
                 }
                 break;
 
             case DRIVE_INTAKELOADINGZONE:
-                Helper.AutoIntake();
-
                 if (!follower.isBusy()) {
                     follower.followPath(Intake_loadingzoneback);
                     setPathState(PathState.DRIVE_LOADINGZONE_BACK);
-
                 }
                 break;
 
@@ -122,94 +181,51 @@ public class Auto_BlueFar_WithPedroPath extends OpMode {
             case DRIVE_LOADINGZONE_FORWARD:
                 if (!follower.isBusy()) {
                     follower.followPath(Launch_Artifacts);
+                    setPathState(PathState.SHOOT_PRELOAD_1);
+                }
+                break;
+
+            case SHOOT_PRELOAD_1:
+                if (pathTimer.getElapsedTimeSeconds() > 3) {
                     setPathState(PathState.DRIVE_LAUNCH);
                 }
                 break;
 
             case DRIVE_LAUNCH:
-                Helper.AutoTrack(1);
-                Helper.Stop();
-
-                Helper.AutoShoot(1400);
-
-                if (!follower.isBusy() && pathTimer.getElapsedTimeSeconds() > 4) {
-
+                if (!follower.isBusy() && pathTimer.getElapsedTimeSeconds() > 1) {
                     follower.followPath(Drive_firstspike);
                     setPathState(PathState.DRIVE_FIRSTSPIKE);
                 }
                 break;
 
             case DRIVE_FIRSTSPIKE:
-                Helper.Stop();
-                Helper.AutoIntake();
                 if (!follower.isBusy()) {
-
                     follower.followPath(Intake_FirstSpike);
                     setPathState(PathState.DRIVE_INTAKE_FIRSTSPIKE);
                 }
                 break;
 
             case DRIVE_INTAKE_FIRSTSPIKE:
-                Helper.Stop();
-
                 if (!follower.isBusy()) {
                     follower.followPath(Return_To_Start);
-                    setPathState(PathState.RETURN_TO_START);
+                    setPathState(PathState.SHOOT_PRELOAD_2);
                 }
                 break;
 
-            case RETURN_TO_START:
-                Helper.AutoShoot(1400);
-                if (!follower.isBusy() && pathTimer.getElapsedTimeSeconds() > 4) {
-
+            case SHOOT_PRELOAD_2:
+                if (pathTimer.getElapsedTimeSeconds() > 3) {
                     setPathState(PathState.NONE);
                 }
                 break;
 
-
-            case NONE: // end of auto
+            case NONE:
                 telemetry.addLine("Auto Complete");
                 break;
         }
     }
 
-    public void setPathState(PathState newState) {
+    private void setPathState(PathState newState) {
         pathState = newState;
         pathTimer.resetTimer();
-    }
-
-    @Override
-    public void init() {
-        Helper.init(hardwareMap, "FALSE");
-
-        pathTimer = new Timer();
-        opModeTimer = new Timer();
-
-        follower = Constants.createFollower(hardwareMap);
-        buildPaths();
-        follower.setPose(StartC1);
-
-        pathState = PathState.SHOOT_PRELOAD;
-        Helper.lifthood();
-    }
-
-    @Override
-    public void start() {
-        opModeTimer.resetTimer();
-        pathTimer.resetTimer();
-    }
-
-    @Override
-    public void loop() {
-
-        follower.update();
-        statePathUpdate();
-        //Helper.AutoTrack(1);
-
-        telemetry.addData("State", pathState);
-        telemetry.addData("X", follower.getPose().getX());
-        telemetry.addData("Y", follower.getPose().getY());
-        telemetry.addData("Heading", follower.getPose().getHeading());
-        telemetry.update();
     }
 }

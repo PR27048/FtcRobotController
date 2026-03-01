@@ -371,7 +371,7 @@ public class Auto_Red_Near_With_PedroPathing_Changed extends OpMode {
             case SHOOT_PRELOAD_3:
             case SHOOT_PRELOAD_4:
                 MotorFeeder.setPower(-1.0);
-                helper.AutoTrack();
+                helper.AutoTrack(0);
                 break;
 
             default:
