@@ -75,7 +75,6 @@ public class Auto_ServiceHelper_WithPedroPath {
         Turret.setVelocity(Velocity);
 
     }
-    
 
     public void AutoIntake() {
         Intake.setPower(1.0);
@@ -83,10 +82,22 @@ public class Auto_ServiceHelper_WithPedroPath {
         MotorFeeder.setPower(1.0);
         ServoConFront.setPower(-1.0);
     }
-
-    public void AutoTrack() {
+    public void Stop() {
+        Intake.setPower(0.0);
+        IntakeServo.setPower(0.0);
+        MotorFeeder.setPower(0.0);
+        ServoConFront.setPower(0.0);
+    }
+    public void lifthood() {
+        HoodServo.setPosition(0.6);
+    }
+    public void PauseTrack() {
+        limelight.pause();
+    }
+    public void AutoTrack(int pipeline) {
 
         LLResult result = limelight.getLatestResult();
+        limelight.pipelineSwitch(pipeline);
 
         long now = System.nanoTime();
         double dt = (now - lastTime) / 1e9;   // seconds
