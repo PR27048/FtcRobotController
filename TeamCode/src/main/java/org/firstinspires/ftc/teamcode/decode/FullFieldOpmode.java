@@ -1,0 +1,139 @@
+package org.firstinspires.ftc.teamcode.decode;
+
+
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import com.qualcomm.robotcore.util.Range;
+
+@TeleOp
+public class FullFieldOpmode extends OpMode {
+
+    FullFieldHelper serviceHelper = new FullFieldHelper();
+
+    double forward, strafe, rotate, speed;
+    private boolean prevDpadUp = false;
+    private boolean prevDpadDown = false;
+
+    private boolean prevDpadLeft = false;
+    private boolean prevDpadRight = false;
+
+    private boolean initprevup = false;
+    private boolean initprevdown = false;
+
+
+
+    @Override
+    public void init() {
+        serviceHelper.init(hardwareMap, "FALSE");
+
+
+
+    }
+    public void init_loop() {
+        boolean upPressed = gamepad1.dpad_up && !initprevup;
+        boolean downPressed = gamepad1.dpad_down && !initprevdown;
+
+
+        initprevup = gamepad1.dpad_up;
+        initprevdown = gamepad1.dpad_down;
+
+        telemetry.addLine("\nSELECT BLUE/RED:");
+        telemetry.addLine("\nDPAD_UP = RED (0)");
+        telemetry.addLine("\nDPAD_DOWN = BLUE (1)");
+        telemetry.addData("CURRENT SELECTION:", serviceHelper.getCurrentPipeline());
+
+
+        telemetry.update();
+        serviceHelper.updatePipelineMenu(upPressed, downPressed);
+
+    }
+
+    @Override
+    public void loop() {
+        double x = serviceHelper.getDistance(); // get distance once
+
+        // --- Drive ---
+        forward = gamepad1.left_stick_y;
+        strafe = gamepad1.left_stick_x;
+        rotate = gamepad1.right_stick_x;
+        speed = 1.0;
+        serviceHelper.drive(forward, strafe, rotate, speed);
+        serviceHelper.setlimelightpipeline();
+
+        // --- Turret Tracking ---
+        serviceHelper.trackWithLimelight();
+        // telemetry.addData("Turret Angle: ", serviceHelper.turretAngle);
+
+        // --- Shooter Calculations ---
+        double Velocity = 0;
+        double Hoodpos = 0;
+
+        if (!Double.isNaN(x) && x > 0) { // only calculate if distance is valid
+            Velocity = Range.clip(
+                    (-0.00000622468) * x * x * x * x
+                            + 0.00220552 * x * x * x
+                            - 0.270902 * x * x
+                            + 17.19245 * x
+                            + 593.70277,
+                    0, 1440
+            );
+
+            Hoodpos = Range.clip(
+                    (2.02902e-8) * x * x * x * x
+                            - 0.0000069818 * x * x * x
+                            + 0.000863395 * x * x
+                            - 0.0479336 * x
+                            + 1.75901,
+                    0.4, 1.0
+            );
+
+            serviceHelper.setHood(Hoodpos);
+        }
+
+        telemetry.addData("Distance from goal: ", x);
+        telemetry.update();
+
+        // --- Intake / Feeder Control ---
+        if (gamepad1.left_trigger > 0.1) {
+            serviceHelper.SetIntakePower(1.0);
+            serviceHelper.SetServoConFrontPower(-1.0);
+            serviceHelper.setFeederPower(0.7);
+            serviceHelper.setIntakeServoPower(-1.0);
+        } else if (gamepad1.right_trigger > 0.1) {
+            if (!Double.isNaN(x) && x > 15) { // only fire if distance valid
+                serviceHelper.SetTurretVelocity(Velocity);
+
+                if (serviceHelper.isTurretAtSpeed(Velocity)) {
+                    serviceHelper.SetIntakePower(1.0);
+                    serviceHelper.SetServoConFrontPower(-1.0);
+                    serviceHelper.setFeederPower(-1.0);
+                    serviceHelper.setIntakeServoPower(-1.0);
+                }
+            }
+        } else {
+            serviceHelper.SetIntakePower(0.0);
+            serviceHelper.SetServoConFrontPower(0.0);
+            serviceHelper.setFeederPower(0.0);
+            serviceHelper.setIntakeServoPower(0.0);
+            serviceHelper.SetTurretOFF();
+        }
+
+        // --- Manual turret aim ---
+        double rightStick = gamepad2.right_stick_x;
+        double clockwise = 0, counterclockwise = 0;
+        if (rightStick > 0.05) clockwise -= rightStick;
+        if (rightStick < -0.05) counterclockwise = rightStick;
+
+        serviceHelper.aimTurret(clockwise, counterclockwise);
+    }
+
+    @Override
+    public void stop() {
+        serviceHelper.SetIntakePower(0.0);
+        serviceHelper.SetServoConFrontPower(0.0);
+        serviceHelper.setServoConPower(0.0);
+        serviceHelper.setFeederPower(0.0);
+        serviceHelper.setIntakeServoPower(0.0);
+        serviceHelper.stopLimelight();
+    }
+}

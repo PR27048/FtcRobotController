@@ -64,7 +64,9 @@ public class Auto_ServiceHelper_WithPedroPath {
 
     }
 
-
+    public void StartTurret(int velocity) {
+        Turret.setVelocity(velocity);
+    }
     public void AutoShoot(int Velocity) {
 
         Intake.setPower(1.0);
@@ -119,9 +121,8 @@ public class Auto_ServiceHelper_WithPedroPath {
             if (lostDuration > LOST_DELAY) {
                 // Smoothly return to center
                 double currentPos = ServoConTurret.getPosition();
-                double newPos = currentPos + (servoCenter - currentPos) * 0.05;
-                newPos = Math.max(min, Math.min(max, newPos));
-                ServoConTurret.setPosition(newPos);
+
+                ServoConTurret.setPosition(currentPos);
                 // gamepad2.rumble(500);
             }
 

@@ -7,6 +7,7 @@ import com.pedropathing.paths.PathChain;
 import com.pedropathing.util.Timer;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 
 @Autonomous
 public class Auto_BlueFar_WithPedroPath extends OpMode {
@@ -14,6 +15,8 @@ public class Auto_BlueFar_WithPedroPath extends OpMode {
     private Follower follower;
     private Timer pathTimer, opModeTimer;
     Auto_ServiceHelper_WithPedroPath Helper = new Auto_ServiceHelper_WithPedroPath();
+
+    private DcMotorEx MotorFeeder;
 
     public enum PathState {
         SHOOT_PRELOAD,
@@ -25,6 +28,10 @@ public class Auto_BlueFar_WithPedroPath extends OpMode {
         DRIVE_FIRSTSPIKE,
         DRIVE_INTAKE_FIRSTSPIKE,
         SHOOT_PRELOAD_2,
+        DRIVE_SECOND_SPIKE,
+        DRIVE_INTAKE_SECOND_SPIKE,
+        SHOOT_PRELOAD_3,
+        DRIVE_OFF_LAUNCHLINE,
         NONE
     }
 
@@ -37,6 +44,9 @@ public class Auto_BlueFar_WithPedroPath extends OpMode {
     private final Pose CollectFirstSpike = new Pose(56, 35.57, Math.toRadians(180));
     private final Pose IntakeFullFirstSpike = new Pose(10.01, 35.68, Math.toRadians(180));
 
+    private final Pose SecondSpike = new Pose(56, 61.26, Math.toRadians(180));
+    private final Pose CollectSecondSpike = new Pose(16.06, 61.26, Math.toRadians(180));
+
     // Paths
     private PathChain Intake_loadingzone;
     private PathChain Intake_loadingzoneback;
@@ -46,10 +56,16 @@ public class Auto_BlueFar_WithPedroPath extends OpMode {
     private PathChain Intake_FirstSpike;
     private PathChain Return_To_Start;
 
+    private PathChain Drive_SecondSpike;
+    private PathChain Intake_SecondSpike;
+
+    private boolean pathStarted = false; // Track if path has started for current segment
+
     @Override
     public void init() {
 
         Helper.init(hardwareMap, "FALSE");
+        MotorFeeder = hardwareMap.get(DcMotorEx.class, "motorizedtransfer");
 
         pathTimer = new Timer();
         opModeTimer = new Timer();
@@ -77,16 +93,18 @@ public class Auto_BlueFar_WithPedroPath extends OpMode {
         statePathUpdate();
         Helper.AutoIntake();
 
-        // Shooting logic
+        // Shooting logic updated to match Red Near mechanics
         switch (pathState) {
             case SHOOT_PRELOAD:
             case SHOOT_PRELOAD_1:
             case SHOOT_PRELOAD_2:
-                handleShooting();
+            case SHOOT_PRELOAD_3:
+                MotorFeeder.setPower(-1.0);
+                Helper.AutoTrack(1); // Track to goal during shooting
                 break;
 
             default:
-               // Helper.SetTurretOFF();
+                MotorFeeder.setPower(1.0); // Intake running forward when not shooting
                 Helper.PauseTrack();
                 break;
         }
@@ -96,22 +114,6 @@ public class Auto_BlueFar_WithPedroPath extends OpMode {
         telemetry.addData("Y", follower.getPose().getY());
         telemetry.addData("Heading", follower.getPose().getHeading());
         telemetry.update();
-    }
-
-    private boolean turretStarted = false;
-
-    private void handleShooting() {
-        // Start turret only once per shooting state
-        if (!turretStarted) {
-            Helper.StartTurret(1400);
-            turretStarted = true;
-        }
-
-        // Only shoot if turret is at speed AND robot is stationary
-        if (/*Helper.isTurretAtSpeed(1400) &&*/ !follower.isBusy()) {
-            Helper.AutoShoot(1400);
-            // Optional: Helper.AutoTrack(1);
-        }
     }
 
     private void buildPaths() {
@@ -150,6 +152,16 @@ public class Auto_BlueFar_WithPedroPath extends OpMode {
                 .addPath(new BezierLine(IntakeFullFirstSpike, StartC1))
                 .setLinearHeadingInterpolation(IntakeFullFirstSpike.getHeading(), StartC1.getHeading())
                 .build();
+
+        Drive_SecondSpike = follower.pathBuilder()
+                .addPath(new BezierLine(StartC1, SecondSpike))
+                .setLinearHeadingInterpolation(StartC1.getHeading(), SecondSpike.getHeading())
+                .build();
+
+        Intake_SecondSpike = follower.pathBuilder()
+                .addPath(new BezierLine(SecondSpike, CollectSecondSpike))
+                .setLinearHeadingInterpolation(SecondSpike.getHeading(), CollectSecondSpike.getHeading())
+                .build();
     }
 
     private void statePathUpdate() {
@@ -157,8 +169,7 @@ public class Auto_BlueFar_WithPedroPath extends OpMode {
         switch (pathState) {
 
             case SHOOT_PRELOAD:
-                // Shoot for 3 seconds before moving
-                if (pathTimer.getElapsedTimeSeconds() > 3) {
+                if (pathTimer.getElapsedTimeSeconds() > 4) {
                     follower.followPath(Intake_loadingzone);
                     setPathState(PathState.DRIVE_INTAKELOADINGZONE);
                 }
@@ -186,7 +197,7 @@ public class Auto_BlueFar_WithPedroPath extends OpMode {
                 break;
 
             case SHOOT_PRELOAD_1:
-                if (pathTimer.getElapsedTimeSeconds() > 3) {
+                if (pathTimer.getElapsedTimeSeconds() > 4) {
                     setPathState(PathState.DRIVE_LAUNCH);
                 }
                 break;
@@ -213,7 +224,35 @@ public class Auto_BlueFar_WithPedroPath extends OpMode {
                 break;
 
             case SHOOT_PRELOAD_2:
-                if (pathTimer.getElapsedTimeSeconds() > 3) {
+                if (pathTimer.getElapsedTimeSeconds() > 4) {
+                    follower.followPath(Drive_SecondSpike);
+                    setPathState(PathState.DRIVE_SECOND_SPIKE);
+                }
+                break;
+
+            case DRIVE_SECOND_SPIKE:
+                if (!follower.isBusy()) {
+                    follower.followPath(Intake_SecondSpike);
+                    setPathState(PathState.DRIVE_INTAKE_SECOND_SPIKE);
+                }
+                break;
+
+            case DRIVE_INTAKE_SECOND_SPIKE:
+                if (!follower.isBusy()) {
+                    follower.followPath(Return_To_Start);
+                    setPathState(PathState.SHOOT_PRELOAD_3);
+                }
+                break;
+
+            case SHOOT_PRELOAD_3:
+                if (pathTimer.getElapsedTimeSeconds() > 4) {
+                    setPathState(PathState.DRIVE_OFF_LAUNCHLINE);
+                }
+                break;
+
+            case DRIVE_OFF_LAUNCHLINE:
+                if (!follower.isBusy()) {
+                    follower.followPath(Drive_SecondSpike);
                     setPathState(PathState.NONE);
                 }
                 break;
