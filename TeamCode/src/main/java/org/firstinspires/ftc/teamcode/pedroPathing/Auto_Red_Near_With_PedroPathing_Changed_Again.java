@@ -361,7 +361,7 @@ public class Auto_Red_Near_With_PedroPathing_Changed_Again extends OpMode {
             case SHOOT_PRELOAD_3:
             case SHOOT_PRELOAD_4:
                 helper.AutoShoot(1020);
-                helper.AutoTrack();
+                helper.AutoTrack(0);
                 break;
             default:
                 helper.SetTurretOFF();
