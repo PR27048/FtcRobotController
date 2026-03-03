@@ -91,7 +91,7 @@ public class Auto_ServiceHelper_WithPedroPath {
         ServoConFront.setPower(0.0);
     }
     public void lifthood() {
-        HoodServo.setPosition(0.6);
+        HoodServo.setPosition(0.56);
     }
     public void PauseTrack() {
         limelight.pause();

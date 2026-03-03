@@ -20,6 +20,7 @@ https://www.youtube.com/watch?v=qB0TlN4KCI0
 
 
 @TeleOp
+@Disabled
 
 public class ToGetMaxVelocityOfMotor extends OpMode {
 

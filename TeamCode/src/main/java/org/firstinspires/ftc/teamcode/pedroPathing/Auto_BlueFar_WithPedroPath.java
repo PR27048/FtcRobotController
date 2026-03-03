@@ -92,8 +92,8 @@ public class Auto_BlueFar_WithPedroPath extends OpMode {
         follower.update();
         statePathUpdate();
         Helper.AutoIntake();
+        Helper.StartTurret(1370);
 
-        // Shooting logic updated to match Red Near mechanics
         switch (pathState) {
             case SHOOT_PRELOAD:
             case SHOOT_PRELOAD_1:

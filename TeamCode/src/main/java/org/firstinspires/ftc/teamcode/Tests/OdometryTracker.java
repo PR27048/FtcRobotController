@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.Tests;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -12,6 +13,7 @@ import org.firstinspires.ftc.teamcode.goBildaPinpoint.GoBildaPinpointDriver;
 import java.util.Locale;
 
 @TeleOp
+@Disabled
 public class OdometryTracker extends OpMode {
 
     GoBildaPinpointDriver odo;

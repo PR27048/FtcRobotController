@@ -36,12 +36,17 @@ public class FullFieldOpmode extends OpMode {
 
         initprevup = gamepad1.dpad_up;
         initprevdown = gamepad1.dpad_down;
-
+        String selection = "";
         telemetry.addLine("\nSELECT BLUE/RED:");
-        telemetry.addLine("\nDPAD_UP = RED (0)");
-        telemetry.addLine("\nDPAD_DOWN = BLUE (1)");
-        telemetry.addData("CURRENT SELECTION:", serviceHelper.getCurrentPipeline());
+        telemetry.addLine("\nDPAD_UP = RED");
+        telemetry.addLine("\nDPAD_DOWN = BLUE");
+        if (serviceHelper.getCurrentPipeline() == 0) {
+            selection = "RED";
+        } else {
+            selection = "BLUE";
+        }
 
+        telemetry.addData("CURRENT SELECTION:", selection);
 
         telemetry.update();
         serviceHelper.updatePipelineMenu(upPressed, downPressed);
@@ -63,6 +68,21 @@ public class FullFieldOpmode extends OpMode {
         // --- Turret Tracking ---
         serviceHelper.trackWithLimelight();
         // telemetry.addData("Turret Angle: ", serviceHelper.turretAngle);
+        /*if (gamepad1.dpad_up && !prevDpadUp) {
+            serviceHelper.OFFSET += 0.05;  //extra specific, change for wider tuning
+        }
+        if (gamepad1.dpad_down && !prevDpadDown) {
+            serviceHelper.OFFSET -= 0.05;        }*/
+
+
+        prevDpadUp = gamepad1.dpad_up;
+        prevDpadDown = gamepad1.dpad_down;
+
+
+        // --- Telemetry ---
+        telemetry.addData("TRACKING OFFSET ","%.2f", serviceHelper.OFFSET);
+
+       // telemetry.addData("tx: ", "%.5f", )
 
         // --- Shooter Calculations ---
         double Velocity = 0;

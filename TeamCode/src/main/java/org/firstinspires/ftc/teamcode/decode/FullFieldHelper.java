@@ -33,6 +33,7 @@ public class FullFieldHelper {
     double lockedPosition = 0.5;
     double servoCenter = 0.5;
     double min = 0.4;
+    double OFFSET = -0.018;
     double max = 0.6;
     private double lastTx = 0;
     double lastError = 0;
@@ -146,18 +147,17 @@ public class FullFieldHelper {
 
             if (lostDuration > LOST_DELAY) {
                 // Smoothly return to center
-              /*  double currentPos = ServoConTurret.getPosition();
+                double currentPos = ServoConTurret.getPosition();
                 double newPos = currentPos + (servoCenter - currentPos) * 0.05;
                 newPos = Math.max(min, Math.min(max, newPos));
-                ServoConTurret.setPosition(newPos);*/
-                limelight.pause();
+                ServoConTurret.setPosition(newPos);
                 // gamepad2.rumble(500);
             }
 
             return;
         } else {
             lostStartTime = -1; // Reset timer when target found
-            limelight.start();
+            //limelight.start();
         }
 
         // Tracking Logic
@@ -193,7 +193,7 @@ public class FullFieldHelper {
         }
 
          */
-        ServoConTurret.setPosition(targetPosition);
+        ServoConTurret.setPosition(targetPosition+OFFSET);
     }
 
 
