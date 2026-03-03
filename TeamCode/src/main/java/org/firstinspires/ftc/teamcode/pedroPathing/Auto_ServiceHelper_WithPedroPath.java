@@ -96,6 +96,12 @@ public class Auto_ServiceHelper_WithPedroPath {
     public void PauseTrack() {
         limelight.pause();
     }
+
+    public boolean hasValidTarget() {
+        LLResult result = limelight.getLatestResult();
+        return result != null && result.isValid();
+    }
+
     public void AutoTrack(int pipeline) {
 
         LLResult result = limelight.getLatestResult();

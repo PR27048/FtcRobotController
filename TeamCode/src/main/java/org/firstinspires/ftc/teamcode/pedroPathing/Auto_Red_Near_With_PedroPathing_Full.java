@@ -10,14 +10,14 @@ import com.pedropathing.util.Timer;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
-
-import org.firstinspires.ftc.ftccommon.internal.manualcontrol.responses.MotorTargetPosition;
+import com.qualcomm.robotcore.hardware.Servo;
 
 
 @Autonomous
-public class Auto_Red_Near_With_PedroPathing_Changed extends OpMode {
+public class Auto_Red_Near_With_PedroPathing_Full extends OpMode {
     Auto_ServiceHelper_WithPedroPath helper = new Auto_ServiceHelper_WithPedroPath();
     private DcMotorEx Turret, MotorFeeder;
+    private Servo ServoConTurret;
     private CRServo ServoConFront;
 
     private double TurretVelocity = 1020;
@@ -52,14 +52,14 @@ public class Auto_Red_Near_With_PedroPathing_Changed extends OpMode {
     private final Pose startPose = new Pose(123.287, 122.563, Math.toRadians(37));
     private final Pose shootPose = new Pose(91.801, 89.759, Math.toRadians(47));
     private final Pose firstRowIntakeSetUpPose = new Pose(92.121, 83.193, Math.toRadians(0));
-    private final Pose intakeFirstRowPose = new Pose(129.386, 83.132, Math.toRadians(0));
-    private final Pose gateSetUpPose = new Pose(118.94475138121548, 74.7292817679558, Math.toRadians(0));
+    private final Pose intakeFirstRowPose = new Pose(129.386, 83.632, Math.toRadians(0));
+    private final Pose gateSetUpPose = new Pose(113.94475138121548, 74.7292817679558, Math.toRadians(0));
     private final Pose openGatePose = new Pose(128.57458563535914, 74.40331491712706, Math.toRadians(0));
     private final Pose secondRowIntakeSetUpPose = new Pose(95.325, 59.790, Math.toRadians(0));
-    private final Pose intakeSecondRowPose = new Pose(134.983, 58.685, Math.toRadians(0));
+    private final Pose intakeSecondRowPose = new Pose(134.983, 59.185, Math.toRadians(0));
     private final Pose avoidGatePose = new Pose(119.011, 58.961, Math.toRadians(0));
     private final Pose thirdRowIntakeSetUpPose = new Pose(96.624, 35.917, Math.toRadians(0));
-    private final Pose intakeThirdRowPose = new Pose(135.419, 35.756, Math.toRadians(0));
+    private final Pose intakeThirdRowPose = new Pose(135.419, 36.256, Math.toRadians(0));
 
     private PathChain driveStartPosShootPos, driveShootPosFirstRowIntakeSetUpPos, driveFirstRowIntakeSetUpPosIntakeFirstRowPos, driveIntakeFirstRowPosGateSetUpPos, driveGateSetUpPosOpenGatePos, driveOpenGatePosShootPos, driveShootPosSecondRowIntakeSetUp, driveSecondRowIntakeSetUpIntakeSecondRow, driveIntakeSecondRowAvoidGate, driveAvoidGateShootPos, driveShootPosThirdRowIntakeSetUp, driveThirdRowIntakeSetUpIntakeThirdRow, driveIntakeThirdRowShootPos, driveShootPosGateSetUp;
 
@@ -137,11 +137,11 @@ public class Auto_Red_Near_With_PedroPathing_Changed extends OpMode {
                 break;
 
             case SHOOT_PRELOAD_1:
-                if (pathTimer.getElapsedTimeSeconds() > 0.85) {
+                if (pathTimer.getElapsedTimeSeconds() > 0.75) {
                     MotorFeeder.setPower(-1.0);
                     helper.AutoTrack(0);
                 }
-                if (pathTimer.getElapsedTimeSeconds() > 3.85) {
+                if (pathTimer.getElapsedTimeSeconds() > 3.75) {
                     MotorFeeder.setPower(1.0);
                     // TODO: flywheel logic
                     setPathState(PathState.DRIVE_SHOOT_POS_FIRSTROW_INTAKE_SETUP);
@@ -210,7 +210,7 @@ public class Auto_Red_Near_With_PedroPathing_Changed extends OpMode {
                 break;
 
             case SHOOT_2:
-                if (pathTimer.getElapsedTimeSeconds() > 2.55) {
+                if (pathTimer.getElapsedTimeSeconds() > 2.45) {
                     // TODO: flywheel logic
                     setPathState(PathState.DRIVE_SHOOT_POS_SECOND_ROW_INTAKE_SETUP);
                     pathStarted = false;
@@ -266,7 +266,7 @@ public class Auto_Red_Near_With_PedroPathing_Changed extends OpMode {
                 break;
 
             case SHOOT_3:
-                if (pathTimer.getElapsedTimeSeconds() > 2.55) {
+                if (pathTimer.getElapsedTimeSeconds() > 2.45) {
                     // TODO: flywheel logic
                     setPathState(PathState.DRIVE_SHOOT_POS_THIRD_ROW_INTAKE_SETUP);
                     pathStarted = false;
@@ -310,7 +310,7 @@ public class Auto_Red_Near_With_PedroPathing_Changed extends OpMode {
                 break;
 
             case SHOOT_4:
-                if (pathTimer.getElapsedTimeSeconds() > 2.55) {
+                if (pathTimer.getElapsedTimeSeconds() > 2.45) {
                     // TODO: flywheel logic
                     setPathState(PathState.DRIVE_SHOOT_POS_GATE_SETUP);
                     pathStarted = false;
@@ -346,6 +346,7 @@ public class Auto_Red_Near_With_PedroPathing_Changed extends OpMode {
         pathTimer = new Timer();
         OpModeTimer = new Timer();
 
+        ServoConTurret = hardwareMap.get(Servo.class, "servo_con_turret");
         Turret = hardwareMap.get(DcMotorEx.class, "turret");
         MotorFeeder = hardwareMap.get(DcMotorEx.class, "motorizedtransfer");
         ServoConFront = hardwareMap.get(CRServo.class, "servo_con_front_transfer");
@@ -363,7 +364,7 @@ public class Auto_Red_Near_With_PedroPathing_Changed extends OpMode {
     @Override
     public void start() {
 
-        PIDFCoefficients pidf = new PIDFCoefficients(500, 0, 5, 15.047);
+        PIDFCoefficients pidf = new PIDFCoefficients(520, 0, 5, 15.047);
         Turret.setPIDFCoefficients(DcMotorEx.RunMode.RUN_USING_ENCODER, pidf);
 
         Turret.setVelocity(TurretVelocity);
@@ -381,7 +382,11 @@ public class Auto_Red_Near_With_PedroPathing_Changed extends OpMode {
             case SHOOT_3:
             case SHOOT_4:
                 MotorFeeder.setPower(-1.0);
-                helper.AutoTrack(0);
+                if (helper.hasValidTarget()) {
+                    helper.AutoTrack(0);
+                } else {
+                    ServoConTurret.setPosition(0.5);  // fallback setpoint
+                }
                 break;
 
             default:
