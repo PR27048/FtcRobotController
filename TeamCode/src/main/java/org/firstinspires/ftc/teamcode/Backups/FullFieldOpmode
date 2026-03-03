@@ -55,32 +55,9 @@ public class FullFieldOpmode extends OpMode {
 
     @Override
     public void loop() {
-        double x = serviceHelper.getDistance(); // distance from cam to tag
-        double HorizontalDistance = x * Math.cos(Math.toRadians(23.5)); // adjust if needed
-        double tx = serviceHelper.getTX(); // horizontal angle to tag, in degrees
-        double heading = serviceHelper.getHeading(); // robot heading in radians
+        double x = serviceHelper.getDistance(); // get distance once
 
-        // --- Compute Robot Field Position ---
-        double txRad = Math.toRadians(tx);
-        // Robot-relative coordinates to tag
-        double xRel = HorizontalDistance * Math.cos(txRad);
-        double yRel = HorizontalDistance * Math.sin(txRad);
-
-        // Rotate by robot heading to get field offset
-        double cosH = Math.cos(heading);
-        double sinH = Math.sin(heading);
-        double xOffset = xRel * cosH - yRel * sinH;
-        double yOffset = xRel * sinH + yRel * cosH;
-
-        // Known tag field position (example: put your actual tag coordinates here)
-        double x_tag = 72.0; // inches or your unit
-        double y_tag = 36.0;
-
-        // Compute robot field coordinates
-        double robotX = x_tag - xOffset;
-        double robotY = y_tag - yOffset;
-
-        // --- Drive Controls ---
+        // --- Drive ---
         forward = gamepad1.left_stick_y;
         strafe = gamepad1.left_stick_x;
         rotate = gamepad1.right_stick_x;
@@ -90,15 +67,28 @@ public class FullFieldOpmode extends OpMode {
 
         // --- Turret Tracking ---
         serviceHelper.trackWithLimelight();
+        // telemetry.addData("Turret Angle: ", serviceHelper.turretAngle);
+        /*if (gamepad1.dpad_up && !prevDpadUp) {
+            serviceHelper.OFFSET += 0.05;  //extra specific, change for wider tuning
+        }
+        if (gamepad1.dpad_down && !prevDpadDown) {
+            serviceHelper.OFFSET -= 0.05;        }*/
+
 
         prevDpadUp = gamepad1.dpad_up;
         prevDpadDown = gamepad1.dpad_down;
+
+
+        // --- Telemetry ---
+        telemetry.addData("TRACKING OFFSET ","%.2f", serviceHelper.OFFSET);
+
+       // telemetry.addData("tx: ", "%.5f", )
 
         // --- Shooter Calculations ---
         double Velocity = 0;
         double Hoodpos = 0;
 
-        if (!Double.isNaN(x) && x > 0) {
+        if (!Double.isNaN(x) && x > 0) { // only calculate if distance is valid
             Velocity = Range.clip(
                     (-0.00000622468) * x * x * x * x
                             + 0.00220552 * x * x * x
@@ -120,23 +110,19 @@ public class FullFieldOpmode extends OpMode {
             serviceHelper.setHood(Hoodpos);
         }
 
-        // --- Telemetry ---
-        telemetry.addData("Distance to Tag", "%.2f", x);
-        telemetry.addData("Horizontal Distance", "%.2f", HorizontalDistance);
-        telemetry.addData("Robot X", "%.2f", robotX);
-        telemetry.addData("Robot Y", "%.2f", robotY);
-        telemetry.addData("Heading (rad)", "%.2f", heading);
+        telemetry.addData("Distance from goal: ", x);
         telemetry.update();
 
-        // --- Intake / Feeder ---
+        // --- Intake / Feeder Control ---
         if (gamepad1.left_trigger > 0.1) {
             serviceHelper.SetIntakePower(1.0);
             serviceHelper.SetServoConFrontPower(-1.0);
             serviceHelper.setFeederPower(0.7);
             serviceHelper.setIntakeServoPower(-1.0);
         } else if (gamepad1.right_trigger > 0.1) {
-            if (!Double.isNaN(x) && x > 15) {
+            if (!Double.isNaN(x) && x > 15) { // only fire if distance valid
                 serviceHelper.SetTurretVelocity(Velocity);
+
                 if (serviceHelper.isTurretAtSpeed(Velocity)) {
                     serviceHelper.SetIntakePower(1.0);
                     serviceHelper.SetServoConFrontPower(-1.0);
@@ -152,13 +138,15 @@ public class FullFieldOpmode extends OpMode {
             serviceHelper.SetTurretOFF();
         }
 
-        // --- Manual Turret Aim ---
+        // --- Manual turret aim ---
         double rightStick = gamepad2.right_stick_x;
         double clockwise = 0, counterclockwise = 0;
         if (rightStick > 0.05) clockwise -= rightStick;
         if (rightStick < -0.05) counterclockwise = rightStick;
+
         serviceHelper.aimTurret(clockwise, counterclockwise);
     }
+
     @Override
     public void stop() {
         serviceHelper.SetIntakePower(0.0);

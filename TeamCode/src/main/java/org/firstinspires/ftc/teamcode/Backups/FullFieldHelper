@@ -2,7 +2,6 @@ package org.firstinspires.ftc.teamcode.decode;
 
 import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.gamepad2;
 
-import com.qualcomm.hardware.bosch.BHI260IMU;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.hardware.limelightvision.LLResult;
 
@@ -13,18 +12,8 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
-//import com.qualcomm.hardware.bhi260.BHI260IMU;
-import com.qualcomm.hardware.bosch.BHI260IMU;
-import com.qualcomm.robotcore.hardware.HardwareMap;
-
-// IMU angle representation
-import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
-import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
-import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
-import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 
 public class FullFieldHelper {
-    private BHI260IMU imu;
 
     private DcMotor FrontLeft, FrontRight, BackLeft, BackRight, Intake, MotorFeeder;
     private DcMotorEx Turret;
@@ -56,7 +45,7 @@ public class FullFieldHelper {
     private int currentPipeline = 0;
 
     // ================= INIT =================
-    public void init(HardwareMap hwMap, String autoState) {
+    public void init(HardwareMap hwMap, String autoState ) {
 
         FrontLeft = hwMap.get(DcMotor.class, "front_left");
         FrontRight = hwMap.get(DcMotor.class, "front_right");
@@ -99,22 +88,8 @@ public class FullFieldHelper {
         BackRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         driveTimer.reset();
-
-
-        imu = hwMap.get(BHI260IMU.class, "imu");  // MUST match config name exactly
-
-        // Create a parameters object
-        /*BHI260IMU.Parameters parameters = new BHI260IMU.Parameters();
-
-// Set desired parameters
-        parameters.angleUnit = BHI260IMU.Parameters.AngleUnit.RADIANS; // Ensure AngleUnit is accessed correctly
-        parameters.loggingEnabled = false;
-
-// Initialize the IMU with the parameters
-        imu.initialize(parameters);*/
         //starting hoodservo position, hood MUST be fully lowered with this servo position
         HoodServo.setPosition(1.0);
-
     }
 
     // ================= DRIVE =================
@@ -262,31 +237,6 @@ public class FullFieldHelper {
     public double getTurretVelocity() {
         return Turret.getVelocity();
     }
-    public double getTX() {
-        // Get latest Limelight result
-        LLResult result = limelight.getLatestResult();
-
-        if (result != null) {
-            return result.getTx(); // horizontal offset in degrees
-        } else {
-            return 0.0; // fallback if no tag detected
-        }
-    }
-    public double getHeading() {
-    /*    if (imu != null && imu.isGyroCalibrated()) {
-            Orientation o = imu.getAngularOrientation(
-                    AxesReference.INTRINSIC,
-                    AxesOrder.ZYX,
-                    AngleUnit.RADIANS
-            );
-            return o.firstAngle;
-        }*/
-        return 0.0;
-    }
-
-
-
-
     public double getDistance() {
         LLResult result = limelight.getLatestResult();
 
@@ -309,8 +259,6 @@ public class FullFieldHelper {
         return (tagHeight - cameraHeight) /
                 Math.tan(Math.toRadians(angle));
     }
-
-
     public boolean isTurretAtSpeed(double velocity) {
 
         return Math.abs(getTurretVelocity() - velocity) < 50;
