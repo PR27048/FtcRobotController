@@ -8,13 +8,14 @@ import com.pedropathing.paths.Path;
 import com.pedropathing.paths.PathChain;
 import com.pedropathing.util.Timer;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.decode.DecodeAuto;
 import org.firstinspires.ftc.teamcode.decode.ServiceHelper;
 
-@Autonomous
+@Disabled
 public class Auto_BlueNear_WithPedroPath extends OpMode {
     private Follower follower;
     private Timer pathTimer, opModeTimer;

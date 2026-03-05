@@ -15,7 +15,7 @@ public class Auto_Red_Near_With_PedroPathing extends OpMode {
     private Follower follower;
     private Timer pathTimer, OpModeTimer;
 
-    public enum PathState {
+    public enum PathState { 
 
         DRIVE_STARTPOS_SHOOT_POS,
 
