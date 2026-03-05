@@ -26,10 +26,10 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 public class FullFieldHelper {
     private BHI260IMU imu;
 
-    private DcMotor FrontLeft, FrontRight, BackLeft, BackRight, Intake, MotorFeeder;
+    private DcMotor FrontLeft, FrontRight, BackLeft, BackRight, Intake, MotorFeeder, ServoConFront;
     private DcMotorEx Turret;
 
-    private CRServo ServoCon, ServoConFront, IntakeServo;
+    private CRServo ServoCon, IntakeServo;
     private Servo HoodServo, ServoConTurret;
     private Limelight3A limelight;
 
@@ -64,6 +64,7 @@ public class FullFieldHelper {
         BackLeft = hwMap.get(DcMotor.class, "back_left");
         BackRight = hwMap.get(DcMotor.class, "back_right");
         MotorFeeder = hwMap.get(DcMotor.class, "motorizedtransfer");
+        ServoConFront = hwMap.get(DcMotor.class, "servo_con_front_transfer");
 
         Intake = hwMap.get(DcMotor.class, "intake");
         Turret = hwMap.get(DcMotorEx.class, "turret");
@@ -76,7 +77,6 @@ public class FullFieldHelper {
         HoodServo = hwMap.get(Servo.class, "hoodservo");
         IntakeServo = hwMap.get(CRServo.class, "intakeservo");
         ServoCon = hwMap.get(CRServo.class, "servo_con_back_transfer");
-        ServoConFront = hwMap.get(CRServo.class, "servo_con_front_transfer");
 
         limelight = hwMap.get(Limelight3A.class, "limelight");
 
@@ -323,7 +323,7 @@ public class FullFieldHelper {
 
     public boolean isTurretAtSpeed(double velocity) {
 
-        return Math.abs(getTurretVelocity() - velocity) < 50;
+        return Math.abs(getTurretVelocity() - velocity) < 20;
     }
     public void setHood(double pos) {
         HoodServo.setPosition(pos);
