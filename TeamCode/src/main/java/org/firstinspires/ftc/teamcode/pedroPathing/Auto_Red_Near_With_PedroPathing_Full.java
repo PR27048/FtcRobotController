@@ -8,6 +8,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.pedropathing.util.Timer;
 import com.qualcomm.robotcore.hardware.CRServo;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -18,7 +19,7 @@ public class Auto_Red_Near_With_PedroPathing_Full extends OpMode {
     Auto_ServiceHelper_WithPedroPath helper = new Auto_ServiceHelper_WithPedroPath();
     private DcMotorEx Turret, MotorFeeder;
     private Servo ServoConTurret;
-    private CRServo ServoConFront;
+    private DcMotor ServoConFront;
 
     private double TurretVelocity = 1020;
 
@@ -349,7 +350,7 @@ public class Auto_Red_Near_With_PedroPathing_Full extends OpMode {
         ServoConTurret = hardwareMap.get(Servo.class, "servo_con_turret");
         Turret = hardwareMap.get(DcMotorEx.class, "turret");
         MotorFeeder = hardwareMap.get(DcMotorEx.class, "motorizedtransfer");
-        ServoConFront = hardwareMap.get(CRServo.class, "servo_con_front_transfer");
+        ServoConFront = hardwareMap.get(DcMotor.class, "servo_con_front_transfer");
 
         helper.init(hardwareMap, "Auto");
 

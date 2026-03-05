@@ -5,46 +5,51 @@ import com.pedropathing.geometry.BezierLine;
 import com.pedropathing.geometry.Pose;
 import com.pedropathing.paths.PathChain;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.pedropathing.util.Timer;
+import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.PIDFCoefficients;
+import com.qualcomm.robotcore.hardware.Servo;
 
 @Autonomous
 public class Auto_Blue_Near_With_PedroPathing_Full extends OpMode {
+
+    Auto_ServiceHelper_WithPedroPath helper = new Auto_ServiceHelper_WithPedroPath();
+    private DcMotorEx Turret, MotorFeeder;
+    private Servo ServoConTurret;
+    private DcMotor ServoConFront;
+
+    private double TurretVelocity = 1020;
 
     private Follower follower;
     private Timer pathTimer, OpModeTimer;
 
     public enum PathState {
-
         DRIVE_STARTPOS_SHOOT_POS,
         SHOOT_PRELOAD_1,
-
         DRIVE_SHOOT_POS_FIRSTROW_INTAKE_SETUP,
         DRIVE_FIRSTROW_INTAKE_SETUP_INTAKE_FIRSTROW,
         DRIVE_INTAKE_FIRSTROW_GATE_SETUP,
         DRIVE_INTAKE_GATE_SETUP_OPEN_GATE,
         DRIVE_OPEN_GATE_SHOOT_POS,
-
-        SHOOT_PRELOAD_2,
-
+        SHOOT_2,
         DRIVE_SHOOT_POS_SECOND_ROW_INTAKE_SETUP,
         DRIVE_SECOND_ROW_INTAKE_SETUP_INTAKE_SECOND_ROW,
         DRIVE_INTAKE_SECOND_ROW_AVOID_GATE,
         DRIVE_AVOID_GATE_SHOOT_POS,
-
-        SHOOT_PRELOAD_3,
-
+        SHOOT_3,
         DRIVE_SHOOT_POS_THIRD_ROW_INTAKE_SETUP,
         DRIVE_THIRD_ROW_INTAKE_SETUP_INTAKE_THIRD_ROW,
         DRIVE_INTAKE_THIRD_ROW_SHOOT_POS,
-
-        SHOOT_PRELOAD_4,
-
+        SHOOT_4,
         DRIVE_SHOOT_POS_GATE_SETUP
     }
 
     PathState pathState;
+    private boolean pathStarted = false;
+
+    // ================= BLUE POSES =================
 
     private final Pose startPose =
             new Pose(123.28729281767956, 21.43646408839778, Math.toRadians(-37));
@@ -78,6 +83,8 @@ public class Auto_Blue_Near_With_PedroPathing_Full extends OpMode {
 
     private final Pose intakeThirdRowPose =
             new Pose(135.41988950276243, 108.24309392265193, Math.toRadians(0));
+
+    // =================================================
 
     private PathChain driveStartPosShootPos,
             driveShootPosFirstRowIntakeSetUpPos,
@@ -168,144 +175,173 @@ public class Auto_Blue_Near_With_PedroPathing_Full extends OpMode {
     }
 
     public void statePathUpdate() {
-
         switch (pathState) {
 
             case DRIVE_STARTPOS_SHOOT_POS:
-                follower.followPath(driveStartPosShootPos, true);
-                setPathState(PathState.SHOOT_PRELOAD_1);
-                telemetry.addLine("done path 1");
+                if (!pathStarted) {
+                    follower.followPath(driveStartPosShootPos, true);
+                    pathStarted = true;
+                }
+                if (!follower.isBusy()) {
+                    setPathState(PathState.SHOOT_PRELOAD_1);
+                    pathStarted = false;
+                }
                 break;
 
             case SHOOT_PRELOAD_1:
-                if (pathTimer.getElapsedTimeSeconds() > 4) {
+                if (pathTimer.getElapsedTimeSeconds() > 0.75) {
+                    MotorFeeder.setPower(-1.0);
+                    helper.AutoTrack(0);
+                }
+                if (pathTimer.getElapsedTimeSeconds() > 3.75) {
+                    MotorFeeder.setPower(1.0);
                     setPathState(PathState.DRIVE_SHOOT_POS_FIRSTROW_INTAKE_SETUP);
                 }
                 break;
 
             case DRIVE_SHOOT_POS_FIRSTROW_INTAKE_SETUP:
-                if (!follower.isBusy()) {
+                if (!pathStarted) {
                     follower.followPath(driveShootPosFirstRowIntakeSetUpPos, true);
+                    pathStarted = true;
+                }
+                if (!follower.isBusy()) {
                     setPathState(PathState.DRIVE_FIRSTROW_INTAKE_SETUP_INTAKE_FIRSTROW);
-                    telemetry.addLine("done path 2");
                 }
                 break;
 
             case DRIVE_FIRSTROW_INTAKE_SETUP_INTAKE_FIRSTROW:
-                if (!follower.isBusy()) {
+                if (!pathStarted) {
                     follower.followPath(driveFirstRowIntakeSetUpPosIntakeFirstRowPos, true);
+                    pathStarted = true;
+                }
+                if (!follower.isBusy()) {
                     setPathState(PathState.DRIVE_INTAKE_FIRSTROW_GATE_SETUP);
-                    telemetry.addLine("done path 3");
                 }
                 break;
 
             case DRIVE_INTAKE_FIRSTROW_GATE_SETUP:
-                if (!follower.isBusy()) {
+                if (!pathStarted) {
                     follower.followPath(driveIntakeFirstRowPosGateSetUpPos, true);
+                    pathStarted = true;
+                }
+                if (!follower.isBusy()) {
                     setPathState(PathState.DRIVE_INTAKE_GATE_SETUP_OPEN_GATE);
-                    telemetry.addLine("done path 4");
                 }
                 break;
 
             case DRIVE_INTAKE_GATE_SETUP_OPEN_GATE:
-                if (!follower.isBusy()) {
+                if (!pathStarted) {
                     follower.followPath(driveGateSetUpPosOpenGatePos, true);
+                    pathStarted = true;
+                }
+                if (!follower.isBusy()) {
                     setPathState(PathState.DRIVE_OPEN_GATE_SHOOT_POS);
-                    telemetry.addLine("done path 5");
                 }
                 break;
 
             case DRIVE_OPEN_GATE_SHOOT_POS:
-                if (!follower.isBusy()) {
+                if (!pathStarted) {
                     follower.followPath(driveOpenGatePosShootPos, true);
-                    setPathState(PathState.SHOOT_PRELOAD_2);
-                    telemetry.addLine("done path 6");
+                    pathStarted = true;
+                }
+                if (!follower.isBusy()) {
+                    setPathState(PathState.SHOOT_2);
                 }
                 break;
 
-            case SHOOT_PRELOAD_2:
-                if (pathTimer.getElapsedTimeSeconds() > 4) {
+            case SHOOT_2:
+                if (pathTimer.getElapsedTimeSeconds() > 2.45) {
                     setPathState(PathState.DRIVE_SHOOT_POS_SECOND_ROW_INTAKE_SETUP);
                 }
                 break;
 
             case DRIVE_SHOOT_POS_SECOND_ROW_INTAKE_SETUP:
-                if (!follower.isBusy()) {
+                if (!pathStarted) {
                     follower.followPath(driveShootPosSecondRowIntakeSetUp, true);
+                    pathStarted = true;
+                }
+                if (!follower.isBusy()) {
                     setPathState(PathState.DRIVE_SECOND_ROW_INTAKE_SETUP_INTAKE_SECOND_ROW);
-                    telemetry.addLine("done path 7");
                 }
                 break;
 
             case DRIVE_SECOND_ROW_INTAKE_SETUP_INTAKE_SECOND_ROW:
-                if (!follower.isBusy()) {
+                if (!pathStarted) {
                     follower.followPath(driveSecondRowIntakeSetUpIntakeSecondRow, true);
+                    pathStarted = true;
+                }
+                if (!follower.isBusy()) {
                     setPathState(PathState.DRIVE_INTAKE_SECOND_ROW_AVOID_GATE);
-                    telemetry.addLine("done path 8");
                 }
                 break;
 
             case DRIVE_INTAKE_SECOND_ROW_AVOID_GATE:
-                if (!follower.isBusy()) {
+                if (!pathStarted) {
                     follower.followPath(driveIntakeSecondRowAvoidGate, true);
+                    pathStarted = true;
+                }
+                if (!follower.isBusy()) {
                     setPathState(PathState.DRIVE_AVOID_GATE_SHOOT_POS);
-                    telemetry.addLine("done path 9");
                 }
                 break;
 
             case DRIVE_AVOID_GATE_SHOOT_POS:
-                if (!follower.isBusy()) {
+                if (!pathStarted) {
                     follower.followPath(driveAvoidGateShootPos, true);
-                    setPathState(PathState.SHOOT_PRELOAD_3);
-                    telemetry.addLine("done path 10");
+                    pathStarted = true;
+                }
+                if (!follower.isBusy()) {
+                    setPathState(PathState.SHOOT_3);
                 }
                 break;
 
-            case SHOOT_PRELOAD_3:
-                if (pathTimer.getElapsedTimeSeconds() > 4) {
+            case SHOOT_3:
+                if (pathTimer.getElapsedTimeSeconds() > 2.45) {
                     setPathState(PathState.DRIVE_SHOOT_POS_THIRD_ROW_INTAKE_SETUP);
                 }
                 break;
 
             case DRIVE_SHOOT_POS_THIRD_ROW_INTAKE_SETUP:
-                if (!follower.isBusy()) {
+                if (!pathStarted) {
                     follower.followPath(driveShootPosThirdRowIntakeSetUp, true);
+                    pathStarted = true;
+                }
+                if (!follower.isBusy()) {
                     setPathState(PathState.DRIVE_THIRD_ROW_INTAKE_SETUP_INTAKE_THIRD_ROW);
-                    telemetry.addLine("done path 11");
                 }
                 break;
 
             case DRIVE_THIRD_ROW_INTAKE_SETUP_INTAKE_THIRD_ROW:
-                if (!follower.isBusy()) {
+                if (!pathStarted) {
                     follower.followPath(driveThirdRowIntakeSetUpIntakeThirdRow, true);
+                    pathStarted = true;
+                }
+                if (!follower.isBusy()) {
                     setPathState(PathState.DRIVE_INTAKE_THIRD_ROW_SHOOT_POS);
-                    telemetry.addLine("done path 12");
                 }
                 break;
 
             case DRIVE_INTAKE_THIRD_ROW_SHOOT_POS:
-                if (!follower.isBusy()) {
+                if (!pathStarted) {
                     follower.followPath(driveIntakeThirdRowShootPos, true);
-                    setPathState(PathState.SHOOT_PRELOAD_4);
-                    telemetry.addLine("done path 13");
+                    pathStarted = true;
+                }
+                if (!follower.isBusy()) {
+                    setPathState(PathState.SHOOT_4);
                 }
                 break;
 
-            case SHOOT_PRELOAD_4:
-                if (pathTimer.getElapsedTimeSeconds() > 4) {
+            case SHOOT_4:
+                if (pathTimer.getElapsedTimeSeconds() > 2.45) {
                     setPathState(PathState.DRIVE_SHOOT_POS_GATE_SETUP);
                 }
                 break;
 
             case DRIVE_SHOOT_POS_GATE_SETUP:
-                if (!follower.isBusy()) {
+                if (!pathStarted) {
                     follower.followPath(driveShootPosGateSetUp, true);
-                    telemetry.addLine("done path 14");
+                    pathStarted = true;
                 }
-                break;
-
-            default:
-                telemetry.addLine("no state commanded");
                 break;
         }
     }
@@ -313,6 +349,7 @@ public class Auto_Blue_Near_With_PedroPathing_Full extends OpMode {
     public void setPathState(PathState newState) {
         pathState = newState;
         pathTimer.resetTimer();
+        pathStarted = false;
     }
 
     @Override
@@ -323,14 +360,28 @@ public class Auto_Blue_Near_With_PedroPathing_Full extends OpMode {
         pathTimer = new Timer();
         OpModeTimer = new Timer();
 
+        ServoConTurret = hardwareMap.get(Servo.class, "servo_con_turret");
+        Turret = hardwareMap.get(DcMotorEx.class, "turret");
+        MotorFeeder = hardwareMap.get(DcMotorEx.class, "motorizedtransfer");
+        ServoConFront = hardwareMap.get(DcMotor.class, "servo_con_front_transfer");
+
+        helper.init(hardwareMap, "Auto");
+
         follower = Constants.createFollower(hardwareMap);
+        if (follower != null) {
+            follower.setPose(startPose);
+        }
 
         buildPaths();
-        follower.setPose(startPose);
     }
 
     @Override
     public void start() {
+
+        PIDFCoefficients pidf = new PIDFCoefficients(520, 0, 5, 15.047);
+        Turret.setPIDFCoefficients(DcMotorEx.RunMode.RUN_USING_ENCODER, pidf);
+        Turret.setVelocity(TurretVelocity);
+
         OpModeTimer.resetTimer();
         setPathState(pathState);
     }
@@ -338,13 +389,26 @@ public class Auto_Blue_Near_With_PedroPathing_Full extends OpMode {
     @Override
     public void loop() {
 
+        helper.AutoIntake();
+
+        switch (pathState) {
+            case SHOOT_2:
+            case SHOOT_3:
+            case SHOOT_4:
+                MotorFeeder.setPower(-1.0);
+                if (helper.hasValidTarget()) {
+                    helper.AutoTrack(0);
+                } else {
+                    ServoConTurret.setPosition(0.5);
+                }
+                break;
+
+            default:
+                MotorFeeder.setPower(1.0);
+                break;
+        }
+
         follower.update();
         statePathUpdate();
-
-        telemetry.addData("path state", pathState.toString());
-        telemetry.addData("x", follower.getPose().getX());
-        telemetry.addData("y", follower.getPose().getY());
-        telemetry.addData("heading", follower.getPose().getHeading());
-        telemetry.addData("Path time", pathTimer.getElapsedTimeSeconds());
     }
 }
