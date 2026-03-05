@@ -18,7 +18,8 @@ public class Auto_ServiceHelper_WithPedroPath {
     private Limelight3A limelight;
 
     private DcMotorEx Turret;
-    private CRServo ServoCon, ServoConFront, IntakeServo;
+    private DcMotor ServoConFront;
+    private CRServo ServoCon, IntakeServo;
     private Servo HoodServo, ServoConTurret;
     public static double KP = 0.009;
     public static double KD = 0.00177; //could be a little higher?
