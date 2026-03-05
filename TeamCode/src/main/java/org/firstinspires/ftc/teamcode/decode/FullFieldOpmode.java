@@ -119,7 +119,11 @@ public class FullFieldOpmode extends OpMode {
 
             serviceHelper.setHood(Hoodpos);
         }
-
+        if (serviceHelper.Losttarget) {
+            gamepad2.rumble(200);
+        } else {
+            gamepad2.stopRumble();
+        }
         // --- Telemetry ---
         telemetry.addData("Distance to Tag", "%.2f", x);
         telemetry.addData("Horizontal Distance", "%.2f", HorizontalDistance);

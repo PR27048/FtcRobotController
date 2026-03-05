@@ -100,7 +100,7 @@ public class Auto_BlueFar_WithPedroPath extends OpMode {
             case SHOOT_PRELOAD_2:
             case SHOOT_PRELOAD_3:
                 MotorFeeder.setPower(-1.0);
-                Helper.AutoTrack2(1, true); // Track to goal during shooting
+                Helper.AutoTrack(1); // Track to goal during shooting
                 break;
 
             default:

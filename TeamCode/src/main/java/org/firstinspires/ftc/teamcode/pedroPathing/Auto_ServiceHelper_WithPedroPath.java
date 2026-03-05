@@ -68,7 +68,7 @@ public class Auto_ServiceHelper_WithPedroPath {
     }
     public boolean isTurretAtSpeed(double velocity) {
 
-        return Math.abs(getTurretVelocity() - velocity) < 50;
+        return Math.abs(getTurretVelocity() - velocity) < 20;
     }
 
     public void StartTurret(int velocity) {
@@ -112,41 +112,32 @@ public class Auto_ServiceHelper_WithPedroPath {
     public void AutoTrack(int pipeline) {
 
         LLResult result = limelight.getLatestResult();
-        //limelight.pipelineSwitch(pipeline);
-
+        // limelight.pipelineSwitch(pipeline);
 
         long now = System.nanoTime();
-        double dt = (now - lastTime) / 1e9;   // seconds
+        double dt = (now - lastTime) / 1e9;
         lastTime = now;
 
-        // Prevent divide-by-zero or crazy derivative spike
         if (dt <= 0) dt = 0.001;
 
-        //no target detected then:
+        // =============================
+        // NO TARGET DETECTED
+        // =============================
         if (result == null || !result.isValid()) {
 
-            if (lostStartTime < 0) {
-                lostStartTime = System.nanoTime() / 1e9;
-            }
+            // Send STOP signal (CR servo stop)
+            ServoConTurret.setPosition(servoCenter);
 
-            double currentTime = System.nanoTime() / 1e9;
-            double lostDuration = currentTime - lostStartTime;
-
-            if (lostDuration > LOST_DELAY) {
-                // Smoothly return to center
-                double currentPos = ServoConTurret.getPosition();
-
-                ServoConTurret.setPosition(currentPos);
-                // gamepad2.rumble(500);
-            }
+            // Reset PD state
+            lastError = 0;
+            lastTime = System.nanoTime();
 
             return;
-        } else {
-            lostStartTime = -1; // Reset timer when target found
         }
 
-        // Tracking Logic
-
+        // =============================
+        // TARGET DETECTED
+        // =============================
 
         double tx = result.getTx();
 
@@ -155,91 +146,26 @@ public class Auto_ServiceHelper_WithPedroPath {
         }
 
         double error = tx;
-
         double derivative = (error - lastError) / dt;
-
-        // derivative = Math.max(-50, Math.min(50, derivative)); //CAN ADD IF WANTED BUT MUST TUNE LATER AGAIN
-
         lastError = error;
 
         double output = (KP * error) + (KD * derivative);
 
-        double targetPosition = servoCenter - output;
+        // For CR servo, output should be speed around center
+        double command = servoCenter - output;
 
-        // Clamp to safe servo range
-        targetPosition = Math.max(min, Math.min(max, targetPosition));
+        command = Math.max(min, Math.min(max, command));
 
-
-            ServoConTurret.setPosition(targetPosition);
-
+        ServoConTurret.setPosition(command);
     }
-    public void AutoTrack2(int pipeline, boolean enabled) {
-
-        LLResult result = limelight.getLatestResult();
-        //limelight.pipelineSwitch(pipeline);
-
-
-        long now = System.nanoTime();
-        double dt = (now - lastTime) / 1e9;   // seconds
-        lastTime = now;
-
-        // Prevent divide-by-zero or crazy derivative spike
-        if (dt <= 0) dt = 0.001;
-
-        //no target detected then:
-        if (result == null || !result.isValid()) {
-
-            if (lostStartTime < 0) {
-                lostStartTime = System.nanoTime() / 1e9;
-            }
-
-            double currentTime = System.nanoTime() / 1e9;
-            double lostDuration = currentTime - lostStartTime;
-
-            if (lostDuration > LOST_DELAY) {
-                // Smoothly return to center
-                double currentPos = ServoConTurret.getPosition();
-
-                ServoConTurret.setPosition(currentPos);
-                // gamepad2.rumble(500);
-            }
-
-            return;
-        } else {
-            lostStartTime = -1; // Reset timer when target found
-        }
 
         // Tracking Logic
 
 
-        double tx = result.getTx();
 
-        if (Math.abs(tx) < DEAD_ZONE_DEG) {
-            tx = 0;
-        }
 
-        double error = tx;
 
-        double derivative = (error - lastError) / dt;
 
-        // derivative = Math.max(-50, Math.min(50, derivative)); //CAN ADD IF WANTED BUT MUST TUNE LATER AGAIN
-
-        lastError = error;
-
-        double output = (KP * error) + (KD * derivative);
-
-        double targetPosition = servoCenter - output;
-
-        // Clamp to safe servo range
-        targetPosition = Math.max(min, Math.min(max, targetPosition));
-
-        if(enabled) {
-            ServoConTurret.setPosition(targetPosition);
-        }
-        else {
-
-        }
-    }
 
     public void SetTurretOFF() {
         Turret.setVelocity(0);

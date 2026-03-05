@@ -135,13 +135,13 @@ public class Auto_RedFar_WithPedroPath extends OpMode {
             case FINAL_SHOOT:
                 if (!follower.isBusy()) {
                     MotorFeeder.setPower(-1.0);
-                    //Helper.AutoTrack2(0,true);
+                    Helper.AutoTrack(0);
                 }
                 break;
 
             default:
                 MotorFeeder.setPower(1.0);
-               // Helper.AutoTrack2(0,false);
+                Helper.AutoTrack(0);
                 break;
         }
 

@@ -43,6 +43,7 @@ public class FullFieldHelper {
     private final double LOST_DELAY = 0.5;
     double lockedPosition = 0.5;
     double servoCenter = 0.5;
+    boolean Losttarget = false;
     double min = 0.4;
     double OFFSET = -0.018;
     double max = 0.6;
@@ -162,7 +163,7 @@ public class FullFieldHelper {
 
         //no target detected then:
         if (result == null || !result.isValid()) {
-
+            Losttarget = true;
             if (lostStartTime < 0) {
                 lostStartTime = System.nanoTime() / 1e9;
             }
@@ -172,17 +173,20 @@ public class FullFieldHelper {
 
             if (lostDuration > LOST_DELAY) {
                 // Smoothly return to center
-                double currentPos = ServoConTurret.getPosition();
-                double newPos = currentPos + (servoCenter - currentPos) * 0.05;
-                newPos = Math.max(min, Math.min(max, newPos));
-                ServoConTurret.setPosition(newPos);
-                // gamepad2.rumble(500);
+                //double currentPos = ServoConTurret.getPosition();
+                //double newPos = currentPos + (servoCenter - currentPos) * 0.05;
+                //newPos = Math.max(min, Math.min(max, newPos));
+                ServoConTurret.setPosition(servoCenter);
+                lastError = 0;
+                lastTime = System.nanoTime();
+                gamepad2.rumble(500);
             }
 
             return;
         } else {
             lostStartTime = -1; // Reset timer when target found
             //limelight.start();
+            Losttarget = false;
         }
 
         // Tracking Logic
@@ -220,6 +224,12 @@ public class FullFieldHelper {
          */
         ServoConTurret.setPosition(targetPosition+OFFSET);
     }
+
+        // Tracking Logic
+
+
+
+
 
 
 

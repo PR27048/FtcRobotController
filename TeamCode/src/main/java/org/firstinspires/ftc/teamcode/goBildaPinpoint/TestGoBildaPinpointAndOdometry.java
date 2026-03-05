@@ -12,7 +12,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.UnnormalizedAngleUnit
 
 
 import java.util.Locale;
-
+@Disabled
 @TeleOp(name = "TestGoBildaPinpointAndOdometry", group = "TeleOp")
 public class TestGoBildaPinpointAndOdometry extends LinearOpMode{
 

@@ -1,15 +1,14 @@
-package org.firstinspires.ftc.teamcode.decode;
+package org.firstinspires.ftc.teamcode.Tests;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 //import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
-import com.qualcomm.robotcore.hardware.CRServo;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.Servo;
 
 //import org.firstinspires.ftc.teamcode.autos.DecodeAutoAaditya;
+import org.firstinspires.ftc.teamcode.decode.Limelightservicehelper;
 import org.firstinspires.ftc.teamcode.decode.ServiceHelper;
-
+@Disabled
 @Autonomous(name = "DecodeAuto", group = "Auto")
 public class DecodeAuto extends OpMode {
     ServiceHelper serviceHelper = new ServiceHelper();
