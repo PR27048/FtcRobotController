@@ -61,7 +61,7 @@ public class Auto_RedFar_WithPedroPath extends OpMode {
     private final Pose CollectLoadingZoneBack = new Pose(126, 9.5, Math.toRadians(0));
 
     private final Pose CollectFirstSpike = new Pose(88, 35.57, Math.toRadians(0));
-    private final Pose IntakeFullFirstSpike = new Pose(133.99, 35.68, Math.toRadians(0));
+    private final Pose IntakeFullFirstSpike = new Pose(133.99, 35.57, Math.toRadians(0));
 
     private final Pose SecondSpike = new Pose(88, 61.26, Math.toRadians(0));
     private final Pose CollectSecondSpike = new Pose(127.94, 61.26, Math.toRadians(0));
@@ -124,7 +124,7 @@ public class Auto_RedFar_WithPedroPath extends OpMode {
         statePathUpdate();
 
         Helper.AutoIntake();
-        Helper.StartTurret(1370);
+        Helper.StartTurret(1380);
 
         // ===== Shooter Safety Logic =====
         switch (pathState) {
@@ -140,7 +140,7 @@ public class Auto_RedFar_WithPedroPath extends OpMode {
                 break;
 
             default:
-                MotorFeeder.setPower(1.0);
+                MotorFeeder.setPower(0.6);
                 Helper.AutoTrack(0);
                 break;
         }
@@ -242,13 +242,13 @@ public class Auto_RedFar_WithPedroPath extends OpMode {
             case WAIT_BEFORE_START:
                 //Helper.StartTurret(1370);
 
-                if (Helper.isTurretAtSpeed(1370)) {
+                if (Helper.isTurretAtSpeed(1380)) {
                     setPathState(PathState.SHOOT_PRELOAD);
                 }
                 break;
 
             case SHOOT_PRELOAD:
-                if (pathTimer.getElapsedTimeSeconds() > 3) {
+                if (pathTimer.getElapsedTimeSeconds() > 3 && Helper.isTurretAtSpeed(1380)) {
                     follower.followPath(Intake_loadingzone);
                     setPathState(PathState.DRIVE_INTAKELOADINGZONE);
                 }

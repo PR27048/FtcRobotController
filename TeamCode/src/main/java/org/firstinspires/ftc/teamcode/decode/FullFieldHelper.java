@@ -33,6 +33,7 @@ public class FullFieldHelper {
     private Servo HoodServo, ServoConTurret;
     private Limelight3A limelight;
 
+
     private ElapsedTime driveTimer = new ElapsedTime();
 
     // ================= LIMELIGHT PD TUNING =================
@@ -179,7 +180,7 @@ public class FullFieldHelper {
                 ServoConTurret.setPosition(servoCenter);
                 lastError = 0;
                 lastTime = System.nanoTime();
-                gamepad2.rumble(500);
+                //gamepad2.rumble(500);
             }
 
             return;
@@ -229,7 +230,16 @@ public class FullFieldHelper {
 
 
 
+    public boolean LostTag() {
+        LLResult result = limelight.getLatestResult();
 
+        if (result == null || !result.isValid()) {
+            return true;
+        } else {
+            return false;
+        }
+
+    }
 
 
 

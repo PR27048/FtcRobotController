@@ -118,8 +118,10 @@ public class FullFieldOpmode extends OpMode {
             );
 
             serviceHelper.setHood(Hoodpos);
+            serviceHelper.SetTurretVelocity(Velocity);
+
         }
-        if (serviceHelper.Losttarget) {
+        if (serviceHelper.LostTag()) {
             gamepad2.rumble(200);
         } else {
             gamepad2.stopRumble();
@@ -135,12 +137,11 @@ public class FullFieldOpmode extends OpMode {
         // --- Intake / Feeder ---
         if (gamepad1.left_trigger > 0.1) {
             serviceHelper.SetIntakePower(1.0);
-            serviceHelper.SetServoConFrontPower(-1.0);
-            serviceHelper.setFeederPower(0.7);
+            serviceHelper.SetServoConFrontPower(-0.6);
+            serviceHelper.setFeederPower(1.0);
             serviceHelper.setIntakeServoPower(-1.0);
         } else if (gamepad1.right_trigger > 0.1) {
             if (!Double.isNaN(x) && x > 15) {
-                serviceHelper.SetTurretVelocity(Velocity);
                 if (serviceHelper.isTurretAtSpeed(Velocity)) {
                     serviceHelper.SetIntakePower(1.0);
                     serviceHelper.SetServoConFrontPower(-1.0);
