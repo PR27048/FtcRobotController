@@ -386,7 +386,7 @@ public class Auto_Red_Near_With_PedroPathing_Full extends OpMode {
                 if (helper.hasValidTarget()) {
                     helper.AutoTrack(0);
                 } else {
-                    ServoConTurret.setPosition(0.5);  // fallback setpoint
+                    ServoConTurret.setPosition(0.525);  // fallback setpoint
                 }
                 break;
 
