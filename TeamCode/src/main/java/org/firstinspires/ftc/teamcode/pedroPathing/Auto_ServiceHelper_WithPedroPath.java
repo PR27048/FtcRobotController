@@ -52,7 +52,7 @@ public class Auto_ServiceHelper_WithPedroPath {
         HoodServo = hwMap.get(Servo.class, "hoodservo");
         IntakeServo = hwMap.get(CRServo.class, "intakeservo");
         ServoCon = hwMap.get(CRServo.class, "servo_con_back_transfer");
-        ServoConFront = hwMap.get(CRServo.class, "servo_con_front_transfer");
+        ServoConFront = hwMap.get(DcMotor.class, "servo_con_front_transfer");
 
         Turret.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         Intake.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
