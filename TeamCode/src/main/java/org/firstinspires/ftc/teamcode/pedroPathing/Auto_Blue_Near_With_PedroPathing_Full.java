@@ -67,7 +67,7 @@ public class Auto_Blue_Near_With_PedroPathing_Full extends OpMode {
             new Pose(119.20994475138122, 72.98342541436465, Math.toRadians(0));
 
     private final Pose openGatePose =
-            new Pose(128.30939226519337, 73.30939226519338, Math.toRadians(0));
+            new Pose(128.80939226519337, 73.30939226519338, Math.toRadians(0));
 
     private final Pose secondRowIntakeSetUpPose =
             new Pose(95.3259668508287, 84.2099447513812, Math.toRadians(0));

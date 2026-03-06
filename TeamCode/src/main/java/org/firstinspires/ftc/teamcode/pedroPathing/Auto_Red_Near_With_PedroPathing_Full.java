@@ -55,7 +55,7 @@ public class Auto_Red_Near_With_PedroPathing_Full extends OpMode {
     private final Pose firstRowIntakeSetUpPose = new Pose(92.121, 83.193, Math.toRadians(0));
     private final Pose intakeFirstRowPose = new Pose(129.386, 83.632, Math.toRadians(0));
     private final Pose gateSetUpPose = new Pose(113.94475138121548, 74.7292817679558, Math.toRadians(0));
-    private final Pose openGatePose = new Pose(128.57458563535914, 74.40331491712706, Math.toRadians(0));
+    private final Pose openGatePose = new Pose(129.07458563535914, 74.40331491712706, Math.toRadians(0));
     private final Pose secondRowIntakeSetUpPose = new Pose(95.325, 59.790, Math.toRadians(0));
     private final Pose intakeSecondRowPose = new Pose(134.983, 59.185, Math.toRadians(0));
     private final Pose avoidGatePose = new Pose(119.011, 58.961, Math.toRadians(0));
