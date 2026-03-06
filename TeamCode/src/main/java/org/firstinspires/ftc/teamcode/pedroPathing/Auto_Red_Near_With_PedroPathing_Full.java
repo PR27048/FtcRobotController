@@ -138,11 +138,11 @@ public class Auto_Red_Near_With_PedroPathing_Full extends OpMode {
                 break;
 
             case SHOOT_PRELOAD_1:
-                if (pathTimer.getElapsedTimeSeconds() > 0.75) {
+                if (pathTimer.getElapsedTimeSeconds() > 0.85) {
                     MotorFeeder.setPower(-1.0);
                     helper.AutoTrack(0);
                 }
-                if (pathTimer.getElapsedTimeSeconds() > 3.75) {
+                if (pathTimer.getElapsedTimeSeconds() > 3.85) {
                     MotorFeeder.setPower(1.0);
                     // TODO: flywheel logic
                     setPathState(PathState.DRIVE_SHOOT_POS_FIRSTROW_INTAKE_SETUP);
@@ -211,7 +211,7 @@ public class Auto_Red_Near_With_PedroPathing_Full extends OpMode {
                 break;
 
             case SHOOT_2:
-                if (pathTimer.getElapsedTimeSeconds() > 2.45) {
+                if (pathTimer.getElapsedTimeSeconds() > 2.35) {
                     // TODO: flywheel logic
                     setPathState(PathState.DRIVE_SHOOT_POS_SECOND_ROW_INTAKE_SETUP);
                     pathStarted = false;
@@ -267,7 +267,7 @@ public class Auto_Red_Near_With_PedroPathing_Full extends OpMode {
                 break;
 
             case SHOOT_3:
-                if (pathTimer.getElapsedTimeSeconds() > 2.45) {
+                if (pathTimer.getElapsedTimeSeconds() > 2.35) {
                     // TODO: flywheel logic
                     setPathState(PathState.DRIVE_SHOOT_POS_THIRD_ROW_INTAKE_SETUP);
                     pathStarted = false;
@@ -311,7 +311,7 @@ public class Auto_Red_Near_With_PedroPathing_Full extends OpMode {
                 break;
 
             case SHOOT_4:
-                if (pathTimer.getElapsedTimeSeconds() > 2.45) {
+                if (pathTimer.getElapsedTimeSeconds() > 2.35) {
                     // TODO: flywheel logic
                     setPathState(PathState.DRIVE_SHOOT_POS_GATE_SETUP);
                     pathStarted = false;
