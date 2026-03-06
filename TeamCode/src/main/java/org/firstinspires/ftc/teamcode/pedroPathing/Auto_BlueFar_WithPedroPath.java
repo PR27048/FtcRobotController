@@ -37,29 +37,33 @@ public class Auto_BlueFar_WithPedroPath extends OpMode {
 
     private PathState pathState;
 
-    // Poses
-    private final Pose StartC1 = new Pose(56, 9.5, Math.toRadians(180));
-    private final Pose CollectLoadingZone = new Pose(10.6, 9.5, Math.toRadians(180));
-    private final Pose CollectLoadingZoneBack = new Pose(18, 9.5, Math.toRadians(180));
-    private final Pose CollectFirstSpike = new Pose(56, 35.57, Math.toRadians(180));
-    private final Pose IntakeFullFirstSpike = new Pose(10.01, 35.68, Math.toRadians(180));
+    /*
+     BLUE SIDE POSES
+     (Mirrored from Red: y = 72 - y)
+     */
 
-    private final Pose SecondSpike = new Pose(56, 61.26, Math.toRadians(180));
-    private final Pose CollectSecondSpike = new Pose(16.06, 61.26, Math.toRadians(180));
+    private final Pose StartC1 = new Pose(56, 62.5, Math.toRadians(180));
+    private final Pose CollectLoadingZone = new Pose(10.6, 62.5, Math.toRadians(180));
+    private final Pose CollectLoadingZoneBack = new Pose(18, 62.5, Math.toRadians(180));
+
+    private final Pose CollectFirstSpike = new Pose(56, 36.43, Math.toRadians(180));
+    private final Pose IntakeFullFirstSpike = new Pose(10.01, 36.32, Math.toRadians(180));
+
+    private final Pose SecondSpike = new Pose(56, 10.74, Math.toRadians(180));
+    private final Pose CollectSecondSpike = new Pose(16.06, 10.74, Math.toRadians(180));
 
     // Paths
     private PathChain Intake_loadingzone;
     private PathChain Intake_loadingzoneback;
     private PathChain Intake_loadingzoneforward;
     private PathChain Launch_Artifacts;
+
     private PathChain Drive_firstspike;
     private PathChain Intake_FirstSpike;
     private PathChain Return_To_Start;
 
     private PathChain Drive_SecondSpike;
     private PathChain Intake_SecondSpike;
-
-    private boolean pathStarted = false; // Track if path has started for current segment
 
     @Override
     public void init() {
@@ -72,6 +76,7 @@ public class Auto_BlueFar_WithPedroPath extends OpMode {
 
         follower = Constants.createFollower(hardwareMap);
         buildPaths();
+
         follower.setPose(StartC1);
 
         pathState = PathState.SHOOT_PRELOAD;
@@ -91,20 +96,24 @@ public class Auto_BlueFar_WithPedroPath extends OpMode {
 
         follower.update();
         statePathUpdate();
+
         Helper.AutoIntake();
         Helper.StartTurret(1370);
 
         switch (pathState) {
+
             case SHOOT_PRELOAD:
             case SHOOT_PRELOAD_1:
             case SHOOT_PRELOAD_2:
             case SHOOT_PRELOAD_3:
+
                 MotorFeeder.setPower(-1.0);
-                Helper.AutoTrack(1); // Track to goal during shooting
+                Helper.AutoTrack(1);
                 break;
 
             default:
-                MotorFeeder.setPower(1.0); // Intake running forward when not shooting
+
+                MotorFeeder.setPower(0.6);
                 Helper.PauseTrack();
                 break;
         }
@@ -169,102 +178,158 @@ public class Auto_BlueFar_WithPedroPath extends OpMode {
         switch (pathState) {
 
             case SHOOT_PRELOAD:
+
                 if (pathTimer.getElapsedTimeSeconds() > 4) {
+
                     follower.followPath(Intake_loadingzone);
                     setPathState(PathState.DRIVE_INTAKELOADINGZONE);
+
                 }
+
                 break;
 
             case DRIVE_INTAKELOADINGZONE:
+
                 if (!follower.isBusy()) {
+
                     follower.followPath(Intake_loadingzoneback);
                     setPathState(PathState.DRIVE_LOADINGZONE_BACK);
+
                 }
+
                 break;
 
             case DRIVE_LOADINGZONE_BACK:
+
                 if (!follower.isBusy()) {
+
                     follower.followPath(Intake_loadingzoneforward);
                     setPathState(PathState.DRIVE_LOADINGZONE_FORWARD);
+
                 }
+
                 break;
 
             case DRIVE_LOADINGZONE_FORWARD:
+
                 if (!follower.isBusy()) {
+
                     follower.followPath(Launch_Artifacts);
                     setPathState(PathState.SHOOT_PRELOAD_1);
+
                 }
+
                 break;
 
             case SHOOT_PRELOAD_1:
+
                 if (pathTimer.getElapsedTimeSeconds() > 4) {
+
                     setPathState(PathState.DRIVE_LAUNCH);
+
                 }
+
                 break;
 
             case DRIVE_LAUNCH:
+
                 if (!follower.isBusy() && pathTimer.getElapsedTimeSeconds() > 1) {
+
                     follower.followPath(Drive_firstspike);
                     setPathState(PathState.DRIVE_FIRSTSPIKE);
+
                 }
+
                 break;
 
             case DRIVE_FIRSTSPIKE:
+
                 if (!follower.isBusy()) {
+
                     follower.followPath(Intake_FirstSpike);
                     setPathState(PathState.DRIVE_INTAKE_FIRSTSPIKE);
+
                 }
+
                 break;
 
             case DRIVE_INTAKE_FIRSTSPIKE:
+
                 if (!follower.isBusy()) {
+
                     follower.followPath(Return_To_Start);
                     setPathState(PathState.SHOOT_PRELOAD_2);
+
                 }
+
                 break;
 
             case SHOOT_PRELOAD_2:
+
                 if (pathTimer.getElapsedTimeSeconds() > 4) {
+
                     follower.followPath(Drive_SecondSpike);
                     setPathState(PathState.DRIVE_SECOND_SPIKE);
+
                 }
+
                 break;
 
             case DRIVE_SECOND_SPIKE:
+
                 if (!follower.isBusy()) {
+
                     follower.followPath(Intake_SecondSpike);
                     setPathState(PathState.DRIVE_INTAKE_SECOND_SPIKE);
+
                 }
+
                 break;
 
             case DRIVE_INTAKE_SECOND_SPIKE:
+
                 if (!follower.isBusy()) {
+
                     follower.followPath(Return_To_Start);
                     setPathState(PathState.SHOOT_PRELOAD_3);
+
                 }
+
                 break;
 
             case SHOOT_PRELOAD_3:
+
                 if (pathTimer.getElapsedTimeSeconds() > 4) {
+
                     setPathState(PathState.DRIVE_OFF_LAUNCHLINE);
+
                 }
+
                 break;
 
             case DRIVE_OFF_LAUNCHLINE:
+
                 if (!follower.isBusy()) {
+
                     follower.followPath(Drive_SecondSpike);
                     setPathState(PathState.NONE);
+
                 }
+
                 break;
 
             case NONE:
+
                 telemetry.addLine("Auto Complete");
+
                 break;
         }
     }
 
     private void setPathState(PathState newState) {
+
         pathState = newState;
         pathTimer.resetTimer();
+
     }
 }
