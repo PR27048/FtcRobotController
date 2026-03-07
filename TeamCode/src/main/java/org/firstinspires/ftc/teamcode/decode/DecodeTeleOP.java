@@ -9,6 +9,7 @@ import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 
 @TeleOp
+@Disabled
 public class DecodeTeleOP extends OpMode {
 
     ServiceHelperAaditya serviceHelper = new ServiceHelperAaditya();

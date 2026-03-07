@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.util.Range;
 
 @TeleOp
-public class FullFieldOpmode extends OpMode {
+public class DecodeTeleopFINAL extends OpMode {
 
     FullFieldHelper serviceHelper = new FullFieldHelper();
 
@@ -19,7 +19,7 @@ public class FullFieldOpmode extends OpMode {
 
     private boolean initprevup = false;
     private boolean initprevdown = false;
-
+    private boolean hasRumbled = false;
 
 
     @Override
@@ -87,7 +87,7 @@ public class FullFieldOpmode extends OpMode {
         speed = 1.0;
         serviceHelper.drive(forward, strafe, rotate, speed);
         serviceHelper.setlimelightpipeline();
-
+        serviceHelper.currentPipeline = serviceHelper.getCurrentPipeline();
         // --- Turret Tracking ---
         serviceHelper.trackWithLimelight();
 
@@ -122,13 +122,13 @@ public class FullFieldOpmode extends OpMode {
 
         }
         boolean tagLost = serviceHelper.LostTag();
-        boolean hasRumbled = false;
 
 
         if (tagLost) {
             gamepad2.rumble(500);
             hasRumbled = true;
-        } else {
+        }
+        if (!tagLost) {
             gamepad2.stopRumble();
             hasRumbled = false;
 

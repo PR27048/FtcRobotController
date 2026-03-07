@@ -46,7 +46,8 @@ public class FullFieldHelper {
     double servoCenter = 0.5;
     boolean Losttarget = false;
     double min = 0.4;
-    double OFFSET = -0.018;
+    double OFFSETRED = -0.018;
+    double OFFSETBLUE = -0.018;
     double max = 0.6;
     private double lastTx = 0;
     double lastError = 0;
@@ -55,7 +56,7 @@ public class FullFieldHelper {
     //private double lastTime = 0;
 
     // ================= PIPELINE MENU =================
-    private int currentPipeline = 0;
+    int currentPipeline = 0;
 
     // ================= INIT =================
     public void init(HardwareMap hwMap, String autoState) {
@@ -200,8 +201,13 @@ public class FullFieldHelper {
         }
 
         double error = tx;
-
+        double OFFSET = -0.018;
         double derivative = (error - lastError) / dt;
+        if (currentPipeline == 0) {
+            OFFSET = OFFSETRED;
+        } else if (currentPipeline == 1) {
+            OFFSET = OFFSETBLUE;
+        }
 
         // derivative = Math.max(-50, Math.min(50, derivative)); //CAN ADD IF WANTED BUT MUST TUNE LATER AGAIN
 
@@ -286,7 +292,7 @@ public class FullFieldHelper {
         // Get latest Limelight result
         LLResult result = limelight.getLatestResult();
 
-        if (result != null) {
+        if (result != null /*&& result.isValid()*/) {
             return result.getTx(); // horizontal offset in degrees
         } else {
             return 0.0; // fallback if no tag detected
