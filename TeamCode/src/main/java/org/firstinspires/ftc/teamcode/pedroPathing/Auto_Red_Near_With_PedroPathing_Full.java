@@ -5,6 +5,7 @@ import com.pedropathing.geometry.BezierLine;
 import com.pedropathing.geometry.Pose;
 import com.pedropathing.paths.PathChain;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.pedropathing.util.Timer;
 import com.qualcomm.robotcore.hardware.CRServo;
@@ -13,8 +14,8 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.hardware.Servo;
 
-
-@Autonomous
+@Disabled
+//@Autonomous
 public class Auto_Red_Near_With_PedroPathing_Full extends OpMode {
     Auto_ServiceHelper_WithPedroPath helper = new Auto_ServiceHelper_WithPedroPath();
     private DcMotorEx Turret, MotorFeeder;
