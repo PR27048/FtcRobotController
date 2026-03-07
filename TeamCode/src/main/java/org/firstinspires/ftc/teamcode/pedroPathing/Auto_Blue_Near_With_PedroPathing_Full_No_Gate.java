@@ -357,6 +357,7 @@ public class Auto_Blue_Near_With_PedroPathing_Full_No_Gate extends OpMode {
         pathTimer = new Timer();
         OpModeTimer = new Timer();
 
+        Servo
         ServoConTurret = hardwareMap.get(Servo.class, "servo_con_turret");
         Turret = hardwareMap.get(DcMotorEx.class, "turret");
         MotorFeeder = hardwareMap.get(DcMotorEx.class, "motorizedtransfer");
@@ -398,12 +399,10 @@ public class Auto_Blue_Near_With_PedroPathing_Full_No_Gate extends OpMode {
             case SHOOT_3:
             case SHOOT_4:
                 MotorFeeder.setPower(-1.0);
-                ServoConFront.setPower(-1.0);
                 break;
 
             default:
                 MotorFeeder.setPower(1.0);
-                ServoConFront.setPower(0.6);
                 break;
         }
 
