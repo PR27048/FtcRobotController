@@ -387,6 +387,11 @@ public class Auto_Red_Near_With_PedroPathing_Full_No_Gate extends OpMode {
     public void loop() {
 
         helper.AutoIntake();
+        if (helper.hasValidTarget()) {
+            helper.AutoTrack(0);
+        } else {
+            ServoConTurret.setPosition(0.5);  // fallback setpoint
+        }
 
         switch (pathState) {
             case SHOOT_2:
