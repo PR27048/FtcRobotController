@@ -140,7 +140,8 @@ public class Auto_RedFar_WithPedroPath extends OpMode {
                 break;
 
             default:
-                MotorFeeder.setPower(0.6);
+                MotorFeeder.setPower(1.0);
+
                 Helper.AutoTrack(0);
                 break;
         }
@@ -242,7 +243,7 @@ public class Auto_RedFar_WithPedroPath extends OpMode {
             case WAIT_BEFORE_START:
                 //Helper.StartTurret(1370);
 
-                if (Helper.isTurretAtSpeed(1380)) {
+                if (Helper.isTurretAtSpeed(1380) && pathTimer.getElapsedTimeSeconds() > 3) {
                     setPathState(PathState.SHOOT_PRELOAD);
                 }
                 break;
@@ -315,7 +316,7 @@ public class Auto_RedFar_WithPedroPath extends OpMode {
             // ================= SECOND SPIKE =================
 
             case SHOOT_PRELOAD_2:
-                if (pathTimer.getElapsedTimeSeconds() > 3) {
+                if (pathTimer.getElapsedTimeSeconds() > 4) {
                     follower.followPath(Drive_SecondSpike);
                     setPathState(PathState.DRIVE_SECOND_SPIKE);
                 }
@@ -345,37 +346,11 @@ public class Auto_RedFar_WithPedroPath extends OpMode {
 
             case SHOOT_PRELOAD_3:
                 if (pathTimer.getElapsedTimeSeconds() > 3) {
-                    follower.followPath(Drive_ThirdSpike);
-                    setPathState(PathState.DRIVE_THIRD_SPIKE);
-                }
-                break;
-
-            case DRIVE_THIRD_SPIKE:
-                if (!follower.isBusy()) {
-                    follower.followPath(Intake_ThirdSpike);
-                    setPathState(PathState.DRIVE_INTAKE_THIRD_SPIKE);
-                }
-                break;
-
-            case DRIVE_INTAKE_THIRD_SPIKE:
-                if (!follower.isBusy()) {
-                    follower.followPath(Launch_NearThirdSpike);
-                    setPathState(PathState.DRIVE_TO_FINAL_SHOOT);
-                }
-                break;
-
-            case DRIVE_TO_FINAL_SHOOT:
-                if (!follower.isBusy()) {
-                    setPathState(PathState.FINAL_SHOOT);
-                }
-                break;
-
-            case FINAL_SHOOT:
-                if (pathTimer.getElapsedTimeSeconds() > 3) {
                     follower.followPath(MovefromShootLinePath);
                     setPathState(PathState.START_DRIVE_OFF_LAUNCHLINE);
                 }
                 break;
+
 
             case START_DRIVE_OFF_LAUNCHLINE:
                 setPathState(PathState.DRIVE_OFF_LAUNCHLINE);

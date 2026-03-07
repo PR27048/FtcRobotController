@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.teamcode.decode.ServiceHelper;
 
 @TeleOp
-@Disabled
+
 public class AllFieldShootingTuner extends OpMode {
     AFSTUNERservicehelper serviceHelper = new AFSTUNERservicehelper();
     private boolean prevDpadUp = false;

@@ -15,8 +15,8 @@ public class AFSTUNERservicehelper {
 
     private DcMotor FrontLeft, FrontRight, BackLeft, BackRight, Intake, MotorFeeder;
     private DcMotorEx Turret;
-
-    private CRServo ServoCon, ServoConFront, IntakeServo;
+    private DcMotor ServoConFront;
+    private CRServo ServoCon,  IntakeServo;
     private Servo HoodServo, ServoConTurret;
     private Limelight3A limelight;
 
@@ -66,7 +66,7 @@ public class AFSTUNERservicehelper {
         HoodServo = hwMap.get(Servo.class, "hoodservo");
         IntakeServo = hwMap.get(CRServo.class, "intakeservo");
         ServoCon = hwMap.get(CRServo.class, "servo_con_back_transfer");
-        ServoConFront = hwMap.get(CRServo.class, "servo_con_front_transfer");
+        ServoConFront = hwMap.get(DcMotor.class, "servo_con_front_transfer");
 
         limelight = hwMap.get(Limelight3A.class, "limelight");
 

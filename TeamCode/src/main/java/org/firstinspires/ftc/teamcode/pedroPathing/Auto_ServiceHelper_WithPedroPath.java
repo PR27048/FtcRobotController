@@ -90,7 +90,7 @@ public class Auto_ServiceHelper_WithPedroPath {
         Intake.setPower(1.0);
         IntakeServo.setPower(-1.0);
         MotorFeeder.setPower(1.0);
-        ServoConFront.setPower(-1.0);
+        ServoConFront.setPower(-0.6);
     }
     public void Stop() {
         Intake.setPower(0.0);

@@ -154,7 +154,6 @@ public class FullFieldOpmode extends OpMode {
             serviceHelper.SetServoConFrontPower(0.0);
             serviceHelper.setFeederPower(0.0);
             serviceHelper.setIntakeServoPower(0.0);
-            serviceHelper.SetTurretOFF();
         }
 
         // --- Manual Turret Aim ---
