@@ -14,6 +14,7 @@ import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.hardware.Servo;
 
 @Disabled
+//@Autonomous
 public class Auto_Blue_Near_With_PedroPathing_Full extends OpMode {
 
     Auto_ServiceHelper_WithPedroPath helper = new Auto_ServiceHelper_WithPedroPath();
