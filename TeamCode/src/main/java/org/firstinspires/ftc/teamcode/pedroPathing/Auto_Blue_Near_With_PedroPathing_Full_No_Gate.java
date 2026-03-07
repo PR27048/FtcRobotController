@@ -386,7 +386,7 @@ public class Auto_Blue_Near_With_PedroPathing_Full_No_Gate extends OpMode {
     @Override
     public void loop() {
 
-        helper.AutoIntake();
+        helper.AutoIntakeNear();
         if (helper.hasValidTarget()) {
             helper.AutoTrack(0);
         } else {
