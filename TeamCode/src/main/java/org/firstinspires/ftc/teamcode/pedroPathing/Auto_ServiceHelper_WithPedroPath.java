@@ -115,6 +115,10 @@ public class Auto_ServiceHelper_WithPedroPath {
         return result != null && result.isValid();
     }
 
+    public void SetDefaultServoConTurret()
+    {
+        ServoConTurret.setPosition(0.5);
+    }
     public void AutoTrack(int pipeline) {
 
         LLResult result = limelight.getLatestResult();

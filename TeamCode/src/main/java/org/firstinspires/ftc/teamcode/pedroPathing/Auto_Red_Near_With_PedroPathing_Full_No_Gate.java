@@ -17,10 +17,10 @@ public class Auto_Red_Near_With_PedroPathing_Full_No_Gate extends OpMode {
 
     Auto_ServiceHelper_WithPedroPath helper = new Auto_ServiceHelper_WithPedroPath();
     private DcMotorEx Turret, MotorFeeder;
-    private Servo ServoConTurret;
+   // private Servo ServoConTurret;
     private DcMotor ServoConFront;
 
-    private double TurretVelocity = 1020;
+    private int TurretVelocity = 1020;
 
     private Follower follower;
     private Timer pathTimer, OpModeTimer;
@@ -72,7 +72,7 @@ public class Auto_Red_Near_With_PedroPathing_Full_No_Gate extends OpMode {
     // driveIntakeFirstRowPosGateSetUpPos,
     // driveGateSetUpPosOpenGatePos,
     // driveOpenGatePosShootPos,
-    driveIntakeFirstRowPosShootPos,
+            driveIntakeFirstRowPosShootPos,
             driveShootPosSecondRowIntakeSetUp,
             driveSecondRowIntakeSetUpIntakeSecondRow,
             driveIntakeSecondRowAvoidGate,
@@ -357,8 +357,8 @@ public class Auto_Red_Near_With_PedroPathing_Full_No_Gate extends OpMode {
         pathTimer = new Timer();
         OpModeTimer = new Timer();
 
-        ServoConTurret = hardwareMap.get(Servo.class, "servo_con_turret");
-        Turret = hardwareMap.get(DcMotorEx.class, "turret");
+      //  ServoConTurret = hardwareMap.get(Servo.class, "servo_con_turret");
+       // Turret = hardwareMap.get(DcMotorEx.class, "turret");
         MotorFeeder = hardwareMap.get(DcMotorEx.class, "motorizedtransfer");
         ServoConFront = hardwareMap.get(DcMotor.class, "servo_con_front_transfer");
 
@@ -375,22 +375,24 @@ public class Auto_Red_Near_With_PedroPathing_Full_No_Gate extends OpMode {
     @Override
     public void start() {
 
-        PIDFCoefficients pidf = new PIDFCoefficients(520, 0, 5, 15.047);
-        Turret.setPIDFCoefficients(DcMotorEx.RunMode.RUN_USING_ENCODER, pidf);
-        Turret.setVelocity(TurretVelocity);
-
+       // PIDFCoefficients pidf = new PIDFCoefficients(520, 0, 5, 15.047);
+       // Turret.setPIDFCoefficients(DcMotorEx.RunMode.RUN_USING_ENCODER, pidf);
+       // Turret.setVelocity(TurretVelocity);
+        helper.StartTurret(TurretVelocity);
         OpModeTimer.resetTimer();
         setPathState(pathState);
     }
 
     @Override
     public void loop() {
-
+        //Turret.setVelocity(TurretVelocity);
+        helper.StartTurret(TurretVelocity);
         helper.AutoIntakeNear();
         if (helper.hasValidTarget()) {
             helper.AutoTrack(0);
         } else {
-            ServoConTurret.setPosition(0.5);  // fallback setpoint
+           // ServoConTurret.setPosition(0.5);  // fallback setpoint
+            helper.SetDefaultServoConTurret();
         }
 
         switch (pathState) {
@@ -398,10 +400,12 @@ public class Auto_Red_Near_With_PedroPathing_Full_No_Gate extends OpMode {
             case SHOOT_3:
             case SHOOT_4:
                 MotorFeeder.setPower(-1.0);
+                helper.AutoTrack(0);
                 break;
 
             default:
                 MotorFeeder.setPower(1.0);
+                helper.AutoTrack(0);
                 break;
         }
 
