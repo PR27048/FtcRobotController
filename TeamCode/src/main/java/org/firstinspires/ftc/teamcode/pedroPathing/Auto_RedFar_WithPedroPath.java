@@ -60,22 +60,21 @@ public class Auto_RedFar_WithPedroPath extends OpMode {
 
     // ================= POSES =================
 
-    private final Pose StartC1 = new Pose(88, 9.5, Math.toRadians(0));
-    private final Pose CollectLoadingZone = new Pose(133.4, 9.5, Math.toRadians(0));
-    private final Pose CollectLoadingZoneBack = new Pose(126, 9.5, Math.toRadians(0));
+    private final Pose StartC1 = new Pose(56, 9.5, Math.toRadians(180));
+    private final Pose CollectLoadingZone = new Pose(10.6, 9.5, Math.toRadians(180));
+    private final Pose CollectLoadingZoneBack = new Pose(18, 9.5, Math.toRadians(180));
 
-    private final Pose CollectFirstSpike = new Pose(88, 35.57, Math.toRadians(0));
-    private final Pose IntakeFullFirstSpike = new Pose(133.99, 35.57, Math.toRadians(0));
+    private final Pose CollectFirstSpike = new Pose(56, 35.57, Math.toRadians(180));
+    private final Pose IntakeFullFirstSpike = new Pose(10.01, 35.57, Math.toRadians(180));
 
-    private final Pose SecondSpike = new Pose(88, 61.26, Math.toRadians(0));
-    private final Pose CollectSecondSpike = new Pose(127.94, 61.26, Math.toRadians(0));
+    private final Pose SecondSpike = new Pose(56, 61.26, Math.toRadians(180));
+    private final Pose CollectSecondSpike = new Pose(16.06, 61.26, Math.toRadians(180));
 
-    private final Pose ThirdSpike = new Pose(87.53, 84.41, Math.toRadians(0));
-    private final Pose CollectThirdSpike = new Pose(127.80, 83.99, Math.toRadians(0));
+    private final Pose ThirdSpike = new Pose(56.47, 84.41, Math.toRadians(180));
+    private final Pose CollectThirdSpike = new Pose(16.20, 83.99, Math.toRadians(180));
 
-    private final Pose NearShootPositionForThirdSpike = new Pose(87.53, 84.41, Math.toRadians(50));
-    private final Pose MovefromShootLine = new Pose(101.2, 76.3, Math.toRadians(50));
-
+    private final Pose NearShootPositionForThirdSpike = new Pose(56.47, 84.41, Math.toRadians(130));
+    private final Pose MovefromShootLine = new Pose(42.8, 76.3, Math.toRadians(130));
     // ================= PATHS =================
 
     private PathChain Intake_loadingzone;

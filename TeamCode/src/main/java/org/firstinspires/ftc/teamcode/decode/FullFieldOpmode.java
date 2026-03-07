@@ -121,10 +121,17 @@ public class FullFieldOpmode extends OpMode {
             serviceHelper.SetTurretVelocity(Velocity);
 
         }
-        if (serviceHelper.LostTag()) {
-            gamepad2.rumble(200);
+        boolean tagLost = serviceHelper.LostTag();
+        boolean hasRumbled = false;
+
+
+        if (tagLost) {
+            gamepad2.rumble(500);
+            hasRumbled = true;
         } else {
             gamepad2.stopRumble();
+            hasRumbled = false;
+
         }
         // --- Telemetry ---
         telemetry.addData("Distance to Tag", "%.2f", x);
@@ -132,6 +139,8 @@ public class FullFieldOpmode extends OpMode {
         telemetry.addData("Robot X", "%.2f", robotX);
         telemetry.addData("Robot Y", "%.2f", robotY);
         telemetry.addData("Heading (rad)", "%.2f", heading);
+        telemetry.addData("LostTag?", serviceHelper.LostTag());
+
         telemetry.update();
 
         // --- Intake / Feeder ---
@@ -141,13 +150,13 @@ public class FullFieldOpmode extends OpMode {
             serviceHelper.setFeederPower(1.0);
             serviceHelper.setIntakeServoPower(-1.0);
         } else if (gamepad1.right_trigger > 0.1) {
-            if (!Double.isNaN(x) && x > 15) {
-                if (serviceHelper.isTurretAtSpeed(Velocity)) {
+            serviceHelper.SetTurretVelocity(Velocity);
+            if (!Double.isNaN(x) && x > 15 && serviceHelper.isTurretAtSpeed(Velocity)) {
                     serviceHelper.SetIntakePower(1.0);
                     serviceHelper.SetServoConFrontPower(-1.0);
                     serviceHelper.setFeederPower(-1.0);
                     serviceHelper.setIntakeServoPower(-1.0);
-                }
+
             }
         } else {
             serviceHelper.SetIntakePower(0.0);
