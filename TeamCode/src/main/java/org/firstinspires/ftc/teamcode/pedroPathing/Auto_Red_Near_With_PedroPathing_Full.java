@@ -388,10 +388,12 @@ public class Auto_Red_Near_With_PedroPathing_Full extends OpMode {
             case SHOOT_3:
             case SHOOT_4:
                 MotorFeeder.setPower(-1.0);
+                ServoConFront.setPower(-1.0);
                 break;
 
             default:
                 MotorFeeder.setPower(1.0);
+                ServoConFront.setPower(0.6);
                 break;
         }
 
