@@ -388,11 +388,6 @@ public class Auto_Red_Near_With_PedroPathing_Full extends OpMode {
             case SHOOT_3:
             case SHOOT_4:
                 MotorFeeder.setPower(-1.0);
-                if (helper.hasValidTarget()) {
-                    helper.AutoTrack(0);
-                } else {
-                    ServoConTurret.setPosition(0.5);  // fallback setpoint
-                }
                 break;
 
             default:
