@@ -7,6 +7,7 @@ import com.pedropathing.paths.PathChain;
 import com.pedropathing.util.Timer;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 
 @Autonomous(name="Auto_RedFar_WithPedroPath")
@@ -14,6 +15,9 @@ public class Auto_RedFar_WithPedroPath extends OpMode {
 
     private Follower follower;
     private Timer pathTimer, opModeTimer;
+
+    private DcMotor ServoConFront;
+
     Auto_ServiceHelper_WithPedroPath Helper = new Auto_ServiceHelper_WithPedroPath();
 
     private DcMotorEx MotorFeeder;
@@ -95,6 +99,7 @@ public class Auto_RedFar_WithPedroPath extends OpMode {
 
         Helper.init(hardwareMap, "FALSE");
         MotorFeeder = hardwareMap.get(DcMotorEx.class, "motorizedtransfer");
+        ServoConFront = hardwareMap.get(DcMotor.class, "servo_con_front_transfer");
 
         pathTimer = new Timer();
         opModeTimer = new Timer();
@@ -135,12 +140,15 @@ public class Auto_RedFar_WithPedroPath extends OpMode {
             case FINAL_SHOOT:
                 if (!follower.isBusy()) {
                     MotorFeeder.setPower(-1.0);
+                    ServoConFront.setPower(-1.0);
+
                     Helper.AutoTrack(0);
                 }
                 break;
 
             default:
                 MotorFeeder.setPower(1.0);
+                ServoConFront.setPower(0.6);
 
                 Helper.AutoTrack(0);
                 break;

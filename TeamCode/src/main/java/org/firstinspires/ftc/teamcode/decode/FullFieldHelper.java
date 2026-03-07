@@ -333,7 +333,7 @@ public class FullFieldHelper {
 
     public boolean isTurretAtSpeed(double velocity) {
 
-        return Math.abs(getTurretVelocity() - velocity) < 20;
+        return Math.abs(getTurretVelocity() - velocity) < 40;
     }
     public void setHood(double pos) {
         HoodServo.setPosition(pos);
