@@ -399,7 +399,7 @@ public class Auto_Blue_Near_With_PedroPathing_Full extends OpMode {
                 if (helper.hasValidTarget()) {
                     helper.AutoTrack(1);
                 } else {
-                    ServoConTurret.setPosition(0.475);
+                    ServoConTurret.setPosition(0.5);
                 }
                 break;
 

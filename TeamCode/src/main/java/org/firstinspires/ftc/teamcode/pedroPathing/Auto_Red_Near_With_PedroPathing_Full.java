@@ -24,7 +24,7 @@ public class Auto_Red_Near_With_PedroPathing_Full extends OpMode {
     private double TurretVelocity = 1020;
 
     private Follower follower;
-    private Timer pathTimer, OpModeTime r;
+    private Timer pathTimer, OpModeTimer;
 
     public enum PathState {
         DRIVE_STARTPOS_SHOOT_POS,
@@ -138,7 +138,7 @@ public class Auto_Red_Near_With_PedroPathing_Full extends OpMode {
                 break;
 
             case SHOOT_PRELOAD_1:
-                if (pathTimer.getElapsedTimeSeconds() > 1.00) {
+                if (pathTimer.getElapsedTimeSeconds() > 1.0) {
                     MotorFeeder.setPower(-1.0);
                     helper.AutoTrack(0);
                 }
@@ -386,7 +386,7 @@ public class Auto_Red_Near_With_PedroPathing_Full extends OpMode {
                 if (helper.hasValidTarget()) {
                     helper.AutoTrack(0);
                 } else {
-                    ServoConTurret.setPosition(0.525);  // fallback setpoint
+                    ServoConTurret.setPosition(0.5);  // fallback setpoint
                 }
                 break;
 
