@@ -150,6 +150,7 @@ public class DecodeTeleopFINAL extends OpMode {
                 ACCELERATION = 50;
             }
             serviceHelper.SetTurretVelocity(Velocity+ACCELERATION); //small acceleration
+
             if (!Double.isNaN(x) && x > 15 && serviceHelper.isTurretAtSpeed(Velocity)) {
                     serviceHelper.SetIntakePower(1.0);
                     serviceHelper.SetServoConFrontPower(-1.0);

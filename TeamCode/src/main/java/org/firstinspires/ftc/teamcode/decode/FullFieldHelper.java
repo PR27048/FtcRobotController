@@ -232,8 +232,13 @@ public class FullFieldHelper {
         ServoConTurret.setPosition(targetPosition+OFFSET);
     }
 
-        // Tracking Logic
+    /*public boolean AlignedWithTag() {
+        LLResult result = limelight.getLatestResult();
+        double tx = result.getTx();
+        if (!result.isValid()) return false;
 
+        return Math.abs(tx) <= 3.5;
+    }*/
 
 
     public boolean LostTag() {
