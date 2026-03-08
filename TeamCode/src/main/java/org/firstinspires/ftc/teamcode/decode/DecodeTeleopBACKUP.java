@@ -1,10 +1,12 @@
 package org.firstinspires.ftc.teamcode.decode;
 
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
 @TeleOp
+@Disabled
 public class DecodeTeleopBACKUP extends OpMode {
 
     Limelightservicehelper serviceHelper = new Limelightservicehelper();
@@ -91,7 +93,7 @@ public class DecodeTeleopBACKUP extends OpMode {
         // --- Intake / Feeder Control ---
         if (gamepad1.left_trigger > 0.1) {
             serviceHelper.SetIntakePower(1.0);
-            serviceHelper.SetServoConFrontPower(-1.0);
+            serviceHelper.SetServoConFrontPower(-0.6);
             serviceHelper.setFeederPower(0.7);
             serviceHelper.setIntakeServoPower(-1.0);
             //serviceHelper.SetTurretVelocity();

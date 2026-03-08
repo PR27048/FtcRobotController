@@ -56,33 +56,17 @@ public class DecodeTeleopFINAL extends OpMode {
 
     @Override
     public void loop() {
+
         double x = serviceHelper.getDistance(); // distance from cam to tag
+
         if (Double.isNaN(x) || x <= 0) {
             x = 0;
         }
         double HorizontalDistance = x * Math.cos(Math.toRadians(23.5)); // adjust if needed
-        double tx = serviceHelper.getTX(); // horizontal angle to tag, in degrees
-        double heading = serviceHelper.getHeading(); // robot heading in radians
+
 
         // --- Compute Robot Field Position ---
-        double txRad = Math.toRadians(tx);
-        // Robot-relative coordinates to tag
-        double xRel = HorizontalDistance * Math.cos(txRad);
-        double yRel = HorizontalDistance * Math.sin(txRad);
 
-        // Rotate by robot heading to get field offset
-        double cosH = Math.cos(heading);
-        double sinH = Math.sin(heading);
-        double xOffset = xRel * cosH - yRel * sinH;
-        double yOffset = xRel * sinH + yRel * cosH;
-
-        // Known tag field position (example: put your actual tag coordinates here)
-        double x_tag = 72.0; // inches or your unit
-        double y_tag = 36.0;
-
-        // Compute robot field coordinates
-        double robotX = x_tag - xOffset;
-        double robotY = y_tag - yOffset;
 
         // --- Drive Controls ---
         forward = gamepad1.left_stick_y;
@@ -140,9 +124,9 @@ public class DecodeTeleopFINAL extends OpMode {
         // --- Telemetry ---
         telemetry.addData("Distance to Tag", "%.2f", x);
         telemetry.addData("Horizontal Distance", "%.2f", HorizontalDistance);
-        telemetry.addData("Robot X", "%.2f", robotX);
-        telemetry.addData("Robot Y", "%.2f", robotY);
-        telemetry.addData("Heading (rad)", "%.2f", heading);
+        //telemetry.addData("Robot X", "%.2f", robotX);
+        //telemetry.addData("Robot Y", "%.2f", robotY);
+        //telemetry.addData("Heading (rad)", "%.2f", heading);
         telemetry.addData("LostTag?", serviceHelper.LostTag());
 
         telemetry.update();
@@ -155,7 +139,9 @@ public class DecodeTeleopFINAL extends OpMode {
             serviceHelper.setIntakeServoPower(-1.0);
 
         } else if (gamepad1.right_trigger > 0.1) {
-            speed = 0.4; // slower while shooting
+
+
+            speed = 0.3; // slower while shooting
             if (x>52 && x < 100) {
                 ACCELERATION = 40;
             } else if (x<52) {

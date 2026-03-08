@@ -139,6 +139,8 @@ public class Auto_BlueFar_WithPedroPath extends OpMode {
         Helper.AutoIntake();
 
         Helper.StartTurret(1380);
+        Helper.AutoTrack(1);
+
 
         switch (pathState) {
 

@@ -15,10 +15,10 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 public class Limelightservicehelper {
 
-    private DcMotor FrontLeft, FrontRight, BackLeft, BackRight, Intake, MotorFeeder;
+    private DcMotor FrontLeft, FrontRight, BackLeft, BackRight, Intake, MotorFeeder,ServoConFront;
     private DcMotorEx Turret;
 
-    private CRServo ServoCon, ServoConFront, IntakeServo;
+    private CRServo ServoCon, IntakeServo;
     private Servo HoodServo, ServoConTurret;
     private Limelight3A limelight;
 
@@ -51,6 +51,7 @@ public class Limelightservicehelper {
         BackLeft = hwMap.get(DcMotor.class, "back_left");
         BackRight = hwMap.get(DcMotor.class, "back_right");
         MotorFeeder = hwMap.get(DcMotor.class, "motorizedtransfer");
+        ServoConFront = hwMap.get(DcMotor.class, "servo_con_front_transfer");
 
         Intake = hwMap.get(DcMotor.class, "intake");
         Turret = hwMap.get(DcMotorEx.class, "turret");
@@ -59,11 +60,10 @@ public class Limelightservicehelper {
         Turret.setPIDFCoefficients(DcMotorEx.RunMode.RUN_USING_ENCODER, pidfCoefficients);
 
 
-        ServoConTurret = hwMap.get(Servo.class, "servo_con_turret");
         HoodServo = hwMap.get(Servo.class, "hoodservo");
         IntakeServo = hwMap.get(CRServo.class, "intakeservo");
         ServoCon = hwMap.get(CRServo.class, "servo_con_back_transfer");
-        ServoConFront = hwMap.get(CRServo.class, "servo_con_front_transfer");
+        ServoConFront = hwMap.get(DcMotor.class, "servo_con_front_transfer");
 
         limelight = hwMap.get(Limelight3A.class, "limelight");
 
