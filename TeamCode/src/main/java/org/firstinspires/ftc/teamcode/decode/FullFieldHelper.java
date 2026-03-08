@@ -104,7 +104,7 @@ public class FullFieldHelper {
         driveTimer.reset();
 
 
-        imu = hwMap.get(BHI260IMU.class, "imu");  // MUST match config name exactly
+       // imu = hwMap.get(BHI260IMU.class, "imu");  // MUST match config name exactly
 
         // Create a parameters object
         /*BHI260IMU.Parameters parameters = new BHI260IMU.Parameters();

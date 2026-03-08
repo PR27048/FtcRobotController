@@ -16,6 +16,7 @@ public class DecodeTeleopFINAL extends OpMode {
 
     private boolean prevDpadLeft = false;
     private boolean prevDpadRight = false;
+    private double ACCELERATION = 40;
 
     private boolean initprevup = false;
     private boolean initprevdown = false;
@@ -33,20 +34,20 @@ public class DecodeTeleopFINAL extends OpMode {
         boolean upPressed = gamepad1.dpad_up && !initprevup;
         boolean downPressed = gamepad1.dpad_down && !initprevdown;
 
-
+        // select alliance color menu in init
         initprevup = gamepad1.dpad_up;
         initprevdown = gamepad1.dpad_down;
         String selection = "";
-        telemetry.addLine("\nSELECT BLUE/RED:");
-        telemetry.addLine("\nDPAD_UP = RED");
-        telemetry.addLine("\nDPAD_DOWN = BLUE");
+        telemetry.addLine("SELECT BLUE/RED:");
+        telemetry.addLine("\n---> DPAD_UP = RED");
+        telemetry.addLine("---> DPAD_DOWN = BLUE");
         if (serviceHelper.getCurrentPipeline() == 0) {
             selection = "RED";
         } else {
             selection = "BLUE";
         }
 
-        telemetry.addData("CURRENT SELECTION:", selection);
+        telemetry.addData("\nCURRENT SELECTION:", selection);
 
         telemetry.update();
         serviceHelper.updatePipelineMenu(upPressed, downPressed);
@@ -56,6 +57,9 @@ public class DecodeTeleopFINAL extends OpMode {
     @Override
     public void loop() {
         double x = serviceHelper.getDistance(); // distance from cam to tag
+        if (Double.isNaN(x) || x <= 0) {
+            x = 0;
+        }
         double HorizontalDistance = x * Math.cos(Math.toRadians(23.5)); // adjust if needed
         double tx = serviceHelper.getTX(); // horizontal angle to tag, in degrees
         double heading = serviceHelper.getHeading(); // robot heading in radians
@@ -84,7 +88,7 @@ public class DecodeTeleopFINAL extends OpMode {
         forward = gamepad1.left_stick_y;
         strafe = gamepad1.left_stick_x;
         rotate = gamepad1.right_stick_x;
-        speed = 1.0;
+        //speed = 1.0;
         serviceHelper.drive(forward, strafe, rotate, speed);
         serviceHelper.setlimelightpipeline();
         serviceHelper.currentPipeline = serviceHelper.getCurrentPipeline();
@@ -105,7 +109,7 @@ public class DecodeTeleopFINAL extends OpMode {
                             - 0.270902 * x * x
                             + 17.19245 * x
                             + 593.70277,
-                    0, 1440
+                    0, 1580
             );
 
             Hoodpos = Range.clip(
@@ -149,8 +153,17 @@ public class DecodeTeleopFINAL extends OpMode {
             serviceHelper.SetServoConFrontPower(-0.6);
             serviceHelper.setFeederPower(1.0);
             serviceHelper.setIntakeServoPower(-1.0);
+
         } else if (gamepad1.right_trigger > 0.1) {
-            serviceHelper.SetTurretVelocity(Velocity);
+            speed = 0.4; // slower while shooting
+            if (x>52 && x < 100) {
+                ACCELERATION = 40;
+            } else if (x<52) {
+                ACCELERATION = 0;
+            } else if (x>100) {
+                ACCELERATION = 50;
+            }
+            serviceHelper.SetTurretVelocity(Velocity+ACCELERATION); //small acceleration
             if (!Double.isNaN(x) && x > 15 && serviceHelper.isTurretAtSpeed(Velocity)) {
                     serviceHelper.SetIntakePower(1.0);
                     serviceHelper.SetServoConFrontPower(-1.0);
@@ -163,7 +176,9 @@ public class DecodeTeleopFINAL extends OpMode {
             serviceHelper.SetServoConFrontPower(0.0);
             serviceHelper.setFeederPower(0.0);
             serviceHelper.setIntakeServoPower(0.0);
+            speed = 1.0;  //normal
         }
+        serviceHelper.drive(forward, strafe, rotate, speed);
 
         // --- Manual Turret Aim ---
         double rightStick = gamepad2.right_stick_x;
