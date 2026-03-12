@@ -67,9 +67,10 @@ public class Auto_ServiceHelper_WithPedroPath {
     public double getTurretVelocity() {
         return Turret.getVelocity();
     }
+
     public boolean isTurretAtSpeed(double velocity) {
 
-        return Math.abs(getTurretVelocity() - velocity) < 20;
+        return Math.abs(getTurretVelocity() - velocity) < 50;
     }
 
     public void StartTurret(int velocity) {
@@ -106,6 +107,10 @@ public class Auto_ServiceHelper_WithPedroPath {
     }
     public void lifthood() {
         HoodServo.setPosition(0.56);
+    }
+
+    public void lowerhood() {
+        HoodServo.setPosition(0.16);
     }
     public void PauseTrack() {
         limelight.pause();
@@ -168,18 +173,6 @@ public class Auto_ServiceHelper_WithPedroPath {
         command = Math.max(min, Math.min(max, command));
 
         ServoConTurret.setPosition(command);
-    }
-
-        // Tracking Logic
-
-
-
-
-
-
-
-    public void SetTurretOFF() {
-        Turret.setVelocity(0);
     }
 
 }

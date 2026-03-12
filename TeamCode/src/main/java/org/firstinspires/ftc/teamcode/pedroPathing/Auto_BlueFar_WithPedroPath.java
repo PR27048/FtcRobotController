@@ -38,7 +38,7 @@ public class Auto_BlueFar_WithPedroPath extends OpMode {
         SHOOT_PRELOAD_2,
         DRIVE_SECOND_SPIKE,
         DRIVE_INTAKE_SECOND_SPIKE,
-        DRIVE_TO_FINAL_SHOOT,
+        DRIVE_AWAY_FROM_SHOOT_LINE,
 
         NONE
     }
@@ -46,19 +46,20 @@ public class Auto_BlueFar_WithPedroPath extends OpMode {
     private PathState pathState;
 
     // ================= BLUE SIDE POSES =================
-    private final Pose StartC1 = new Pose(56, 9.5, Math.toRadians(180));
+    private final Pose StartC1 = new Pose(55, 9.5, Math.toRadians(180));
     private final Pose CollectLoadingZone = new Pose(10.6, 9.5, Math.toRadians(180));
     private final Pose CollectLoadingZoneBack = new Pose(18, 9.5, Math.toRadians(180));
 
     private final Pose CollectFirstSpike = new Pose(56, 35.57, Math.toRadians(180));
     private final Pose IntakeFullFirstSpike = new Pose(10.01, 35.57, Math.toRadians(180));
 
-    private final Pose SecondSpike = new Pose(56, 61.26, Math.toRadians(180));
-    private final Pose CollectSecondSpike = new Pose(16.06, 61.26, Math.toRadians(180));
+    private final Pose SecondSpike = new Pose(56, 57.6, Math.toRadians(180));
+    private final Pose CollectSecondSpike = new Pose(16.06, 57.3, Math.toRadians(180));
 
-    private final Pose NearShootPositionForSecondSpike = new Pose(61.187, 101.11835334476848, Math.toRadians(130)); // mirrored from Red
-    private final Pose MovefromShootLine = new Pose(42.8, 76.3, Math.toRadians(130));
-
+    //private final Pose NearShootPositionForSecondSpike = new Pose(61.187, 101.11835334476848, Math.toRadians(130)); // mirrored from Red
+    private final Pose NearShootPositionForSecondSpike = new Pose(55, 78.2, Math.toRadians(117));
+    //private final Pose MovefromShootLine = new Pose(42.8, 76.3, Math.toRadians(130));
+    private final Pose MovefromShootLine = new Pose(50.354766031195844, 73.29480069324089, Math.toRadians(136));
     private final Pose ThirdSpike = new Pose(56.47, 84.41, Math.toRadians(180));
     private final Pose CollectThirdSpike = new Pose(16.20, 83.99, Math.toRadians(180));
 
@@ -100,7 +101,7 @@ public class Auto_BlueFar_WithPedroPath extends OpMode {
 
         pathState = PathState.WAIT_BEFORE_START;
         pathTimer.resetTimer();
-
+        Helper.StartTurret(1320);
         Helper.lifthood();
     }
 
@@ -121,7 +122,7 @@ public class Auto_BlueFar_WithPedroPath extends OpMode {
 
         Helper.AutoIntake();
 
-        Helper.StartTurret(1320);
+       // Helper.StartTurret(1320);
         Helper.AutoTrack(1); // Blue side
 
         switch (pathState) {
@@ -129,11 +130,12 @@ public class Auto_BlueFar_WithPedroPath extends OpMode {
             case SHOOT_PRELOAD:
             case SHOOT_PRELOAD_1:
             case SHOOT_PRELOAD_2:
-                if (!follower.isBusy()) {
+            case DRIVE_AWAY_FROM_SHOOT_LINE:
+               // if (!follower.isBusy()) {  // commented per chatgpt
                     MotorFeeder.setPower(-1.0);
                     ServoConFront.setPower(-1.0);
                     Helper.AutoTrack(1);
-                }
+              //  }
                 break;
 
             default:
@@ -201,6 +203,11 @@ public class Auto_BlueFar_WithPedroPath extends OpMode {
                 .addPath(new BezierLine(CollectSecondSpike, NearShootPositionForSecondSpike))
                 .setLinearHeadingInterpolation(CollectSecondSpike.getHeading(), NearShootPositionForSecondSpike.getHeading())
                 .build();
+
+        MovefromShootLinePath = follower.pathBuilder()
+                .addPath(new BezierLine(NearShootPositionForSecondSpike, MovefromShootLine))
+                .setLinearHeadingInterpolation(NearShootPositionForSecondSpike.getHeading(), MovefromShootLine.getHeading())
+                .build();
     }
 
     private void statePathUpdate() {
@@ -208,13 +215,13 @@ public class Auto_BlueFar_WithPedroPath extends OpMode {
         switch (pathState) {
 
             case WAIT_BEFORE_START:
-                if (Helper.isTurretAtSpeed(1320) && pathTimer.getElapsedTimeSeconds() > 3) {
+                if (Helper.isTurretAtSpeed(1320) && pathTimer.getElapsedTimeSeconds() > 2) {
                     setPathState(PathState.SHOOT_PRELOAD);
                 }
                 break;
 
             case SHOOT_PRELOAD:
-                if (pathTimer.getElapsedTimeSeconds() > 3 && Helper.isTurretAtSpeed(1320)) {
+                if (pathTimer.getElapsedTimeSeconds() > 2 && Helper.isTurretAtSpeed(1320)) {
                     follower.followPath(Intake_loadingzone);
                     setPathState(PathState.DRIVE_INTAKELOADINGZONE);
                 }
@@ -223,16 +230,18 @@ public class Auto_BlueFar_WithPedroPath extends OpMode {
             case DRIVE_INTAKELOADINGZONE:
                 if (!follower.isBusy()) {
                     follower.followPath(Intake_loadingzoneback);
-                    setPathState(PathState.DRIVE_LOADINGZONE_BACK);
+                   // setPathState(PathState.DRIVE_LOADINGZONE_BACK); // to see if we can save this time
+                    setPathState(PathState.DRIVE_LOADINGZONE_FORWARD);
                 }
                 break;
 
-            case DRIVE_LOADINGZONE_BACK:
+//Not doing double load in loading zone
+           /* case DRIVE_LOADINGZONE_BACK:
                 if (!follower.isBusy()) {
                     follower.followPath(Intake_loadingzoneforward);
                     setPathState(PathState.DRIVE_LOADINGZONE_FORWARD);
                 }
-                break;
+                break;*/
 
             case DRIVE_LOADINGZONE_FORWARD:
                 if (!follower.isBusy()) {
@@ -248,7 +257,7 @@ public class Auto_BlueFar_WithPedroPath extends OpMode {
                 break;
 
             case SHOOT_PRELOAD_1:
-                if (pathTimer.getElapsedTimeSeconds() > 3) {
+                if (pathTimer.getElapsedTimeSeconds() > 2.5) {
                     follower.followPath(Drive_firstspike);
                     setPathState(PathState.DRIVE_FIRSTSPIKE);
                 }
@@ -271,13 +280,15 @@ public class Auto_BlueFar_WithPedroPath extends OpMode {
             case RETURN_FROM_FIRST:
                 if (!follower.isBusy()) {
                     setPathState(PathState.SHOOT_PRELOAD_2);
+
                 }
                 break;
 
             case SHOOT_PRELOAD_2:
-                if (pathTimer.getElapsedTimeSeconds() > 3) {
+                if (pathTimer.getElapsedTimeSeconds() > 2.5) {
                     follower.followPath(Drive_SecondSpike);
                     setPathState(PathState.DRIVE_SECOND_SPIKE);
+                    Helper.StartTurret(1020); // turret speed for shooting
                 }
                 break;
 
@@ -289,14 +300,26 @@ public class Auto_BlueFar_WithPedroPath extends OpMode {
                 break;
 
             case DRIVE_INTAKE_SECOND_SPIKE:
-                if (!follower.isBusy()) {
+               // Helper.StartTurret(1020); // turret speed for shooting - moved up
+
+                if (!follower.isBusy() && (Helper.isTurretAtSpeed(1020) && pathTimer.getElapsedTimeSeconds() > 3)) {
+                    telemetry.addLine("velocity" + Helper.isTurretAtSpeed(1020));
                     follower.followPath(Launch_NearSecondSpike);
-                    setPathState(PathState.NONE);
-                    Helper.StartTurret(1020); // turret speed for shooting
+                    Helper.lowerhood();
+                    setPathState(PathState.DRIVE_AWAY_FROM_SHOOT_LINE);
+
                 }
                 break;
 
+            case DRIVE_AWAY_FROM_SHOOT_LINE:
+                telemetry.addLine("velocity next" + Helper.isTurretAtSpeed(1020));
+                if (!follower.isBusy() && (Helper.isTurretAtSpeed(1020) && pathTimer.getElapsedTimeSeconds() > 3)) {
+                    follower.followPath(MovefromShootLinePath);
+                    setPathState(PathState.NONE);
+                }
+                break;
             case NONE:
+
                 telemetry.addLine("Auto Complete");
                 break;
         }
