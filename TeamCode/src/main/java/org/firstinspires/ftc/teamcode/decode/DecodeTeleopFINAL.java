@@ -11,16 +11,18 @@ public class DecodeTeleopFINAL extends OpMode {
     FullFieldHelper serviceHelper = new FullFieldHelper();
 
     double forward, strafe, rotate, speed;
-    private boolean prevDpadUp = false;
+    /*private boolean prevDpadUp = false;
     private boolean prevDpadDown = false;
 
     private boolean prevDpadLeft = false;
-    private boolean prevDpadRight = false;
+    private boolean prevDpadRight = false;*/
     private double ACCELERATION = 40;
 
     private boolean initprevup = false;
     private boolean initprevdown = false;
     private boolean hasRumbled = false;
+
+    private double previousVelocity = 0;
 
 
     @Override
@@ -62,7 +64,7 @@ public class DecodeTeleopFINAL extends OpMode {
         if (Double.isNaN(x) || x <= 0) {
             x = 0;
         }
-        double HorizontalDistance = x * Math.cos(Math.toRadians(23.5)); // adjust if needed
+        //double HorizontalDistance = x * Math.cos(Math.toRadians(23.5)); // adjust if needed
 
 
         // --- Compute Robot Field Position ---
@@ -73,17 +75,17 @@ public class DecodeTeleopFINAL extends OpMode {
         strafe = gamepad1.left_stick_x;
         rotate = gamepad1.right_stick_x;
         //speed = 1.0;
-        serviceHelper.drive(forward, strafe, rotate, speed);
+        //serviceHelper.drive(forward, strafe, rotate, speed);
         serviceHelper.setlimelightpipeline();
         serviceHelper.currentPipeline = serviceHelper.getCurrentPipeline();
         // --- Turret Tracking ---
         serviceHelper.trackWithLimelight();
 
-        prevDpadUp = gamepad1.dpad_up;
-        prevDpadDown = gamepad1.dpad_down;
+        //prevDpadUp = gamepad1.dpad_up;
+      //  prevDpadDown = gamepad1.dpad_down;
 
         // --- Shooter Calculations ---
-        double Velocity = 0;
+        double Velocity = previousVelocity;
         double Hoodpos = 0;
 
         if (!Double.isNaN(x) && x > 0) {
@@ -93,7 +95,7 @@ public class DecodeTeleopFINAL extends OpMode {
                             - 0.270902 * x * x
                             + 17.19245 * x
                             + 593.70277,
-                    0, 1580
+                    0, 1600
             );
 
             Hoodpos = Range.clip(
@@ -107,6 +109,8 @@ public class DecodeTeleopFINAL extends OpMode {
 
             serviceHelper.setHood(Hoodpos);
             serviceHelper.SetTurretVelocity(Velocity);
+
+            previousVelocity = Velocity; //servicehelper.setTurretVelocity(Veloctiy);
 
         }
         boolean tagLost = serviceHelper.LostTag();
@@ -123,7 +127,7 @@ public class DecodeTeleopFINAL extends OpMode {
         }
         // --- Telemetry ---
         telemetry.addData("Distance to Tag", "%.2f", x);
-        telemetry.addData("Horizontal Distance", "%.2f", HorizontalDistance);
+        //telemetry.addData("Horizontal Distance", "%.2f", HorizontalDistance);
         //telemetry.addData("Robot X", "%.2f", robotX);
         //telemetry.addData("Robot Y", "%.2f", robotY);
         //telemetry.addData("Heading (rad)", "%.2f", heading);
@@ -141,13 +145,13 @@ public class DecodeTeleopFINAL extends OpMode {
         } else if (gamepad1.right_trigger > 0.1) {
 
 
-            speed = 0.3; // slower while shooting
+            speed = 0.46; // slower while shooting
             if (x>52 && x < 100) {
                 ACCELERATION = 40;
             } else if (x<52) {
                 ACCELERATION = 0;
             } else if (x>100) {
-                ACCELERATION = 50;
+                ACCELERATION = 60;
             }
             serviceHelper.SetTurretVelocity(Velocity+ACCELERATION); //small acceleration
 
@@ -158,7 +162,28 @@ public class DecodeTeleopFINAL extends OpMode {
                     serviceHelper.setIntakeServoPower(-1.0);
 
             }
-        } else {
+        } else if (gamepad2.right_trigger > 0.1) {  // backup if limelight is getting blocked/unresponsive
+            speed = 0.46; // slower while shooting
+            if (x>52 && x < 100) {
+                ACCELERATION = 40;
+            } else if (x<52) {
+                ACCELERATION = 0;
+            } else if (x>100) {
+                ACCELERATION = 60;
+            } else {
+                ACCELERATION = 45;
+            }
+            serviceHelper.SetTurretVelocity(Velocity+ACCELERATION); //small acceleration
+
+            if (serviceHelper.isTurretAtSpeed(Velocity)) {
+                serviceHelper.SetIntakePower(1.0);
+                serviceHelper.SetServoConFrontPower(-1.0);
+                serviceHelper.setFeederPower(-1.0);
+                serviceHelper.setIntakeServoPower(-1.0);
+
+            }
+        }
+        else {
             serviceHelper.SetIntakePower(0.0);
             serviceHelper.SetServoConFrontPower(0.0);
             serviceHelper.setFeederPower(0.0);

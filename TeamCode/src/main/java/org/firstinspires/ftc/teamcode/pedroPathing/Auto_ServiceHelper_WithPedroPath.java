@@ -86,6 +86,7 @@ public class Auto_ServiceHelper_WithPedroPath {
 
     }
 
+
     public void AutoIntake() {
         Intake.setPower(1.0);
         IntakeServo.setPower(-1.0);
@@ -122,7 +123,7 @@ public class Auto_ServiceHelper_WithPedroPath {
     public void AutoTrack(int pipeline) {
 
         LLResult result = limelight.getLatestResult();
-        // limelight.pipelineSwitch(pipeline);
+        limelight.pipelineSwitch(pipeline);
 
         long now = System.nanoTime();
         double dt = (now - lastTime) / 1e9;

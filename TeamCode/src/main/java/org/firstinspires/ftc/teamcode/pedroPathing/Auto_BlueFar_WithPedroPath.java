@@ -22,7 +22,6 @@ public class Auto_BlueFar_WithPedroPath extends OpMode {
     Auto_ServiceHelper_WithPedroPath Helper = new Auto_ServiceHelper_WithPedroPath();
 
     public enum PathState {
-
         WAIT_BEFORE_START,
         SHOOT_PRELOAD,
 
@@ -39,27 +38,14 @@ public class Auto_BlueFar_WithPedroPath extends OpMode {
         SHOOT_PRELOAD_2,
         DRIVE_SECOND_SPIKE,
         DRIVE_INTAKE_SECOND_SPIKE,
-        RETURN_FROM_SECOND,
-
-        SHOOT_PRELOAD_3,
-        DRIVE_THIRD_SPIKE,
-        DRIVE_INTAKE_THIRD_SPIKE,
         DRIVE_TO_FINAL_SHOOT,
-
-        FINAL_SHOOT,
-        START_DRIVE_OFF_LAUNCHLINE,
-        DRIVE_OFF_LAUNCHLINE,
 
         NONE
     }
 
     private PathState pathState;
 
-    /*
-       BLUE SIDE POSES
-       Mirrored from Red
-    */
-
+    // ================= BLUE SIDE POSES =================
     private final Pose StartC1 = new Pose(56, 9.5, Math.toRadians(180));
     private final Pose CollectLoadingZone = new Pose(10.6, 9.5, Math.toRadians(180));
     private final Pose CollectLoadingZoneBack = new Pose(18, 9.5, Math.toRadians(180));
@@ -70,16 +56,13 @@ public class Auto_BlueFar_WithPedroPath extends OpMode {
     private final Pose SecondSpike = new Pose(56, 61.26, Math.toRadians(180));
     private final Pose CollectSecondSpike = new Pose(16.06, 61.26, Math.toRadians(180));
 
+    private final Pose NearShootPositionForSecondSpike = new Pose(61.187, 101.11835334476848, Math.toRadians(130)); // mirrored from Red
+    private final Pose MovefromShootLine = new Pose(42.8, 76.3, Math.toRadians(130));
+
     private final Pose ThirdSpike = new Pose(56.47, 84.41, Math.toRadians(180));
     private final Pose CollectThirdSpike = new Pose(16.20, 83.99, Math.toRadians(180));
 
-    private final Pose NearShootPositionForThirdSpike = new Pose(56.47, 84.41, Math.toRadians(130));
-    private final Pose MovefromShootLine = new Pose(42.8, 76.3, Math.toRadians(130));
-
-    /*
-       PATHS
-    */
-
+    // ================= PATHS =================
     private PathChain Intake_loadingzone;
     private PathChain Intake_loadingzoneback;
     private PathChain Intake_loadingzoneforward;
@@ -91,11 +74,11 @@ public class Auto_BlueFar_WithPedroPath extends OpMode {
 
     private PathChain Drive_SecondSpike;
     private PathChain Intake_SecondSpike;
+    private PathChain Launch_NearSecondSpike;
 
     private PathChain Drive_ThirdSpike;
     private PathChain Intake_ThirdSpike;
 
-    private PathChain Launch_NearThirdSpike;
     private PathChain MovefromShootLinePath;
 
     @Override
@@ -138,35 +121,25 @@ public class Auto_BlueFar_WithPedroPath extends OpMode {
 
         Helper.AutoIntake();
 
-        Helper.StartTurret(1380);
-        Helper.AutoTrack(1);
-
+        Helper.StartTurret(1320);
+        Helper.AutoTrack(1); // Blue side
 
         switch (pathState) {
 
             case SHOOT_PRELOAD:
             case SHOOT_PRELOAD_1:
             case SHOOT_PRELOAD_2:
-            case SHOOT_PRELOAD_3:
-            case FINAL_SHOOT:
-
                 if (!follower.isBusy()) {
-
                     MotorFeeder.setPower(-1.0);
                     ServoConFront.setPower(-1.0);
-
                     Helper.AutoTrack(1);
                 }
-
                 break;
 
             default:
-
                 MotorFeeder.setPower(1.0);
                 ServoConFront.setPower(0.6);
-
                 Helper.AutoTrack(1);
-
                 break;
         }
 
@@ -224,24 +197,9 @@ public class Auto_BlueFar_WithPedroPath extends OpMode {
                 .setLinearHeadingInterpolation(SecondSpike.getHeading(), CollectSecondSpike.getHeading())
                 .build();
 
-        Drive_ThirdSpike = follower.pathBuilder()
-                .addPath(new BezierLine(StartC1, ThirdSpike))
-                .setLinearHeadingInterpolation(StartC1.getHeading(), ThirdSpike.getHeading())
-                .build();
-
-        Intake_ThirdSpike = follower.pathBuilder()
-                .addPath(new BezierLine(ThirdSpike, CollectThirdSpike))
-                .setLinearHeadingInterpolation(ThirdSpike.getHeading(), CollectThirdSpike.getHeading())
-                .build();
-
-        Launch_NearThirdSpike = follower.pathBuilder()
-                .addPath(new BezierLine(CollectThirdSpike, StartC1))
-                .setLinearHeadingInterpolation(CollectThirdSpike.getHeading(), StartC1.getHeading())
-                .build();
-
-        MovefromShootLinePath = follower.pathBuilder()
-                .addPath(new BezierLine(StartC1, MovefromShootLine))
-                .setLinearHeadingInterpolation(StartC1.getHeading(), MovefromShootLine.getHeading())
+        Launch_NearSecondSpike = follower.pathBuilder()
+                .addPath(new BezierLine(CollectSecondSpike, NearShootPositionForSecondSpike))
+                .setLinearHeadingInterpolation(CollectSecondSpike.getHeading(), NearShootPositionForSecondSpike.getHeading())
                 .build();
     }
 
@@ -250,209 +208,102 @@ public class Auto_BlueFar_WithPedroPath extends OpMode {
         switch (pathState) {
 
             case WAIT_BEFORE_START:
-
-                if (Helper.isTurretAtSpeed(1380) && pathTimer.getElapsedTimeSeconds() > 3) {
-
+                if (Helper.isTurretAtSpeed(1320) && pathTimer.getElapsedTimeSeconds() > 3) {
                     setPathState(PathState.SHOOT_PRELOAD);
-
                 }
-
                 break;
 
             case SHOOT_PRELOAD:
-
-                if (pathTimer.getElapsedTimeSeconds() > 3 && Helper.isTurretAtSpeed(1380)) {
-
+                if (pathTimer.getElapsedTimeSeconds() > 3 && Helper.isTurretAtSpeed(1320)) {
                     follower.followPath(Intake_loadingzone);
-
                     setPathState(PathState.DRIVE_INTAKELOADINGZONE);
-
                 }
-
                 break;
 
             case DRIVE_INTAKELOADINGZONE:
-
                 if (!follower.isBusy()) {
-
                     follower.followPath(Intake_loadingzoneback);
-
                     setPathState(PathState.DRIVE_LOADINGZONE_BACK);
-
                 }
-
                 break;
 
             case DRIVE_LOADINGZONE_BACK:
-
                 if (!follower.isBusy()) {
-
                     follower.followPath(Intake_loadingzoneforward);
-
                     setPathState(PathState.DRIVE_LOADINGZONE_FORWARD);
-
                 }
-
                 break;
 
             case DRIVE_LOADINGZONE_FORWARD:
-
                 if (!follower.isBusy()) {
-
                     follower.followPath(Launch_Artifacts);
-
                     setPathState(PathState.DRIVE_LAUNCH);
-
                 }
-
                 break;
 
             case DRIVE_LAUNCH:
-
                 if (!follower.isBusy()) {
-
                     setPathState(PathState.SHOOT_PRELOAD_1);
-
                 }
-
                 break;
 
             case SHOOT_PRELOAD_1:
-
                 if (pathTimer.getElapsedTimeSeconds() > 3) {
-
                     follower.followPath(Drive_firstspike);
-
                     setPathState(PathState.DRIVE_FIRSTSPIKE);
-
                 }
-
                 break;
 
             case DRIVE_FIRSTSPIKE:
-
                 if (!follower.isBusy()) {
-
                     follower.followPath(Intake_FirstSpike);
-
                     setPathState(PathState.DRIVE_INTAKE_FIRSTSPIKE);
-
                 }
-
                 break;
 
             case DRIVE_INTAKE_FIRSTSPIKE:
-
                 if (!follower.isBusy()) {
-
                     follower.followPath(Return_To_Start);
-
                     setPathState(PathState.RETURN_FROM_FIRST);
-
                 }
-
                 break;
 
             case RETURN_FROM_FIRST:
-
                 if (!follower.isBusy()) {
-
                     setPathState(PathState.SHOOT_PRELOAD_2);
-
                 }
-
                 break;
 
             case SHOOT_PRELOAD_2:
-
                 if (pathTimer.getElapsedTimeSeconds() > 3) {
-
                     follower.followPath(Drive_SecondSpike);
-
                     setPathState(PathState.DRIVE_SECOND_SPIKE);
-
                 }
-
                 break;
 
             case DRIVE_SECOND_SPIKE:
-
                 if (!follower.isBusy()) {
-
                     follower.followPath(Intake_SecondSpike);
-
                     setPathState(PathState.DRIVE_INTAKE_SECOND_SPIKE);
-
                 }
-
                 break;
 
             case DRIVE_INTAKE_SECOND_SPIKE:
-
                 if (!follower.isBusy()) {
-
-                    follower.followPath(Return_To_Start);
-
-                    setPathState(PathState.RETURN_FROM_SECOND);
-
-                }
-
-                break;
-
-            case RETURN_FROM_SECOND:
-
-                if (!follower.isBusy()) {
-
-                    setPathState(PathState.SHOOT_PRELOAD_3);
-
-                }
-
-                break;
-
-            case SHOOT_PRELOAD_3:
-
-                if (pathTimer.getElapsedTimeSeconds() > 3) {
-
-                    follower.followPath(MovefromShootLinePath);
-
-                    setPathState(PathState.START_DRIVE_OFF_LAUNCHLINE);
-
-                }
-
-                break;
-
-            case START_DRIVE_OFF_LAUNCHLINE:
-
-                setPathState(PathState.DRIVE_OFF_LAUNCHLINE);
-
-                break;
-
-            case DRIVE_OFF_LAUNCHLINE:
-
-                if (!follower.isBusy()) {
-
+                    follower.followPath(Launch_NearSecondSpike);
                     setPathState(PathState.NONE);
-
+                    Helper.StartTurret(1020); // turret speed for shooting
                 }
-
                 break;
 
             case NONE:
-
                 telemetry.addLine("Auto Complete");
-
                 break;
-
         }
-
     }
 
     private void setPathState(PathState newState) {
-
         pathState = newState;
-
         pathTimer.resetTimer();
-
     }
-
 }

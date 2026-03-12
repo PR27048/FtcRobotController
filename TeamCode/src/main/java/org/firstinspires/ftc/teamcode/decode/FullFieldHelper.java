@@ -88,13 +88,14 @@ public class FullFieldHelper {
         FrontRight.setDirection(DcMotor.Direction.REVERSE);
         BackRight.setDirection(DcMotor.Direction.REVERSE);
 
-        FrontLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        FrontRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        BackLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        BackRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        FrontLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER); // used to have enc
+        FrontRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER); //used to have enc
+        BackLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER); //used to have enc
+        BackRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER); //used to have enc
         Turret.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         Intake.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        MotorFeeder.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        MotorFeeder.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER); //used to have enc
+        ServoConFront.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER); // used to not be here
 
         FrontLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         FrontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);

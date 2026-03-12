@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
 @TeleOp
-@Disabled
+
 public class DecodeTeleopBACKUP extends OpMode {
 
     Limelightservicehelper serviceHelper = new Limelightservicehelper();
