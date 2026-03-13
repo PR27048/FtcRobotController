@@ -9,11 +9,9 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.pedropathing.util.Timer;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.hardware.PIDFCoefficients;
-import com.qualcomm.robotcore.hardware.Servo;
 
-@Autonomous
-public class Auto_Blue_Near_With_PedroPathing_Full_No_Gate extends OpMode {
+@Autonomous()
+public class BlueNearAuto extends OpMode {
 
     Auto_ServiceHelper_WithPedroPath helper = new Auto_ServiceHelper_WithPedroPath();
     private DcMotorEx Turret, MotorFeeder;
@@ -401,12 +399,13 @@ public class Auto_Blue_Near_With_PedroPathing_Full_No_Gate extends OpMode {
             case SHOOT_4:
                 helper.AutoTrack(1);
                 MotorFeeder.setPower(-1.0);
-
+                ServoConFront.setPower(-1.0); //added to match far
                 break;
 
             default:
                 helper.AutoTrack(1);
                 MotorFeeder.setPower(1.0);
+               ServoConFront.setPower(0.6); //added to match far
 
                 break;
         }

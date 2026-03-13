@@ -11,7 +11,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 
 @Autonomous(name="Auto_RedFar_WithPedroPath")
-public class Auto_RedFar_WithPedroPath extends OpMode {
+public class RedFarAuto extends OpMode {
 
     private Follower follower;
     private Timer pathTimer, opModeTimer;
@@ -60,23 +60,23 @@ public class Auto_RedFar_WithPedroPath extends OpMode {
 
     // ================= POSES =================
 
-    private final Pose StartC1 = new Pose(88.3, 9.746967071057194, Math.toRadians(0));
+    private final Pose StartC1 = new Pose(88.3, 9.746967071057194, Math.toRadians(-0));
 
-    private final Pose CollectLoadingZone = new Pose(133.4, 9.5, Math.toRadians(0));
-    private final Pose CollectLoadingZoneBack = new Pose(126, 9.5, Math.toRadians(0));
+    private final Pose CollectLoadingZone = new Pose(133.4, 9.5, Math.toRadians(-0));
+    private final Pose CollectLoadingZoneBack = new Pose(126, 9.5, Math.toRadians(-0));
 
-    private final Pose CollectFirstSpike = new Pose(88.3, 35.57, Math.toRadians(0));
-    private final Pose IntakeFullFirstSpike = new Pose(128.9, 35.57, Math.toRadians(0));
+    private final Pose CollectFirstSpike = new Pose(88.3, 35.57, Math.toRadians(-0));
+    private final Pose IntakeFullFirstSpike = new Pose(128.9, 35.57, Math.toRadians(-0));
 
-    private final Pose SecondSpike = new Pose(88.3, 57.6, Math.toRadians(0));
-    private final Pose CollectSecondSpike = new Pose(127.94, 57.3, Math.toRadians(0));
+    private final Pose SecondSpike = new Pose(88.3, 57.6, Math.toRadians(-0));
+    private final Pose CollectSecondSpike = new Pose(127.94, 57.3, Math.toRadians(-0));
 
-    private final Pose NearShootPositionForSecondSpike = new Pose(89, 81.9, Math.toRadians(63));
+    private final Pose NearShootPositionForSecondSpike = new Pose(89, 81.9, Math.toRadians(-63));
 
-    private final Pose MovefromShootLine = new Pose(94.6533795493934, 76.71750433275561, Math.toRadians(45));
+    private final Pose MovefromShootLine = new Pose(94.6533795493934, 76.71750433275561, Math.toRadians(-45));
 
-    private final Pose ThirdSpike = new Pose(87.53, 84.41, Math.toRadians(0));
-    private final Pose CollectThirdSpike = new Pose(127.80, 83.99, Math.toRadians(0)); // ================= PATHS =================
+    private final Pose ThirdSpike = new Pose(87.53, 84.41, Math.toRadians(-0));
+    private final Pose CollectThirdSpike = new Pose(127.80, 83.99, Math.toRadians(-0)); // ================= PATHS =================
 
     private PathChain Intake_loadingzone;
     private PathChain Intake_loadingzoneback;
@@ -110,7 +110,7 @@ public class Auto_RedFar_WithPedroPath extends OpMode {
 
         pathState = PathState.WAIT_BEFORE_START;
         pathTimer.resetTimer();
-        Helper.StartTurret(1320);
+        Helper.StartTurret(1290);
         Helper.lifthood();
     }
 
@@ -129,7 +129,7 @@ public class Auto_RedFar_WithPedroPath extends OpMode {
         statePathUpdate();
 
         Helper.AutoIntake();
-      //  Helper.StartTurret(1320);
+      //  Helper.StartTurret(1290);
         Helper.AutoTrack(0);
 
         // ===== Shooter Safety Logic =====
@@ -252,13 +252,13 @@ public class Auto_RedFar_WithPedroPath extends OpMode {
             case WAIT_BEFORE_START:
                 //Helper.StartTurret(1370);
 
-                if (Helper.isTurretAtSpeed(1320) && pathTimer.getElapsedTimeSeconds() > 2) {
+                if (Helper.isTurretAtSpeed(1290) && pathTimer.getElapsedTimeSeconds() > 2) {
                     setPathState(PathState.SHOOT_PRELOAD);
                 }
                 break;
 
             case SHOOT_PRELOAD:
-                if (pathTimer.getElapsedTimeSeconds() > 2 && Helper.isTurretAtSpeed(1320)) {
+                if (pathTimer.getElapsedTimeSeconds() > 2 && Helper.isTurretAtSpeed(1290)) {
                     follower.followPath(Intake_loadingzone);
                     setPathState(PathState.DRIVE_INTAKELOADINGZONE);
                 }

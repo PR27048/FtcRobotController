@@ -58,8 +58,8 @@ public class DecodeTeleopFINAL extends OpMode {
 
     @Override
     public void loop() {
-
-        double x = serviceHelper.getDistance(); // distance from cam to tag
+       double x = serviceHelper.getDistance();
+       //double x = serviceHelper.getDistance(); // distance from cam to tag
 
         if (Double.isNaN(x) || x <= 0) {
             x = 0;
@@ -147,11 +147,11 @@ public class DecodeTeleopFINAL extends OpMode {
 
             speed = 0.46; // slower while shooting
             if (x>52 && x < 100) {
-                ACCELERATION = 40;
+                ACCELERATION = 10;
             } else if (x<52) {
-                ACCELERATION = 0;
+                ACCELERATION = -40;
             } else if (x>100) {
-                ACCELERATION = 60;
+                ACCELERATION = 14;
             }
             serviceHelper.SetTurretVelocity(Velocity+ACCELERATION); //small acceleration
 
@@ -165,13 +165,13 @@ public class DecodeTeleopFINAL extends OpMode {
         } else if (gamepad2.right_trigger > 0.1) {  // backup if limelight is getting blocked/unresponsive
             speed = 0.46; // slower while shooting
             if (x>52 && x < 100) {
-                ACCELERATION = 40;
+                ACCELERATION = 10;
             } else if (x<52) {
-                ACCELERATION = 0;
+                ACCELERATION = -40;
             } else if (x>100) {
-                ACCELERATION = 60;
+                ACCELERATION = 14;
             } else {
-                ACCELERATION = 45;
+                ACCELERATION = 5;
             }
             serviceHelper.SetTurretVelocity(Velocity+ACCELERATION); //small acceleration
 

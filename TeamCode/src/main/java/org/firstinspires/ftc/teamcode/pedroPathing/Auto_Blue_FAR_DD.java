@@ -6,12 +6,14 @@ import com.pedropathing.geometry.Pose;
 import com.pedropathing.paths.PathChain;
 import com.pedropathing.util.Timer;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 
-@Autonomous(name="Auto_BlueFar_WithPedroPath")
-public class Auto_BlueFar_WithPedroPath extends OpMode {
+@Disabled
+@Autonomous
+public class Auto_Blue_FAR_DD extends OpMode {
 
     private Follower follower;
     private Timer pathTimer, opModeTimer;
@@ -122,7 +124,7 @@ public class Auto_BlueFar_WithPedroPath extends OpMode {
 
         Helper.AutoIntake();
 
-       // Helper.StartTurret(1320);
+        // Helper.StartTurret(1320);
         Helper.AutoTrack(1); // Blue side
 
         switch (pathState) {
@@ -131,11 +133,11 @@ public class Auto_BlueFar_WithPedroPath extends OpMode {
             case SHOOT_PRELOAD_1:
             case SHOOT_PRELOAD_2:
             case DRIVE_AWAY_FROM_SHOOT_LINE:
-               // if (!follower.isBusy()) {  // commented per chatgpt
-                    MotorFeeder.setPower(-1.0);
-                    ServoConFront.setPower(-1.0);
-                    Helper.AutoTrack(1);
-              //  }
+                // if (!follower.isBusy()) {  // commented per chatgpt
+                MotorFeeder.setPower(-1.0);
+                ServoConFront.setPower(-1.0);
+                Helper.AutoTrack(1);
+                //  }
                 break;
 
             default:
@@ -230,7 +232,7 @@ public class Auto_BlueFar_WithPedroPath extends OpMode {
             case DRIVE_INTAKELOADINGZONE:
                 if (!follower.isBusy()) {
                     follower.followPath(Intake_loadingzoneback);
-                   // setPathState(PathState.DRIVE_LOADINGZONE_BACK); // to see if we can save this time
+                    // setPathState(PathState.DRIVE_LOADINGZONE_BACK); // to see if we can save this time
                     setPathState(PathState.DRIVE_LOADINGZONE_FORWARD);
                 }
                 break;
@@ -300,7 +302,7 @@ public class Auto_BlueFar_WithPedroPath extends OpMode {
                 break;
 
             case DRIVE_INTAKE_SECOND_SPIKE:
-               // Helper.StartTurret(1020); // turret speed for shooting - moved up
+                // Helper.StartTurret(1020); // turret speed for shooting - moved up
 
                 if (!follower.isBusy() && (Helper.isTurretAtSpeed(1020) && pathTimer.getElapsedTimeSeconds() > 3)) {
                     telemetry.addLine("velocity" + Helper.isTurretAtSpeed(1020));
@@ -308,12 +310,14 @@ public class Auto_BlueFar_WithPedroPath extends OpMode {
                     Helper.lowerhood();
                     setPathState(PathState.DRIVE_AWAY_FROM_SHOOT_LINE);
 
+                    telemetry.addLine("velocity again" + Helper.isTurretAtSpeed(1020));
                 }
+                telemetry.addLine("path state " + pathState);
                 break;
 
             case DRIVE_AWAY_FROM_SHOOT_LINE:
                 telemetry.addLine("velocity next" + Helper.isTurretAtSpeed(1020));
-                if (!follower.isBusy() && (Helper.isTurretAtSpeed(1020) && pathTimer.getElapsedTimeSeconds() > 3)) {
+                if ((Helper.isTurretAtSpeed(1020) && pathTimer.getElapsedTimeSeconds() > 4)) {
                     follower.followPath(MovefromShootLinePath);
                     setPathState(PathState.NONE);
                 }
@@ -326,6 +330,7 @@ public class Auto_BlueFar_WithPedroPath extends OpMode {
     }
 
     private void setPathState(PathState newState) {
+        telemetry.addLine("path func" + newState);
         pathState = newState;
         pathTimer.resetTimer();
     }

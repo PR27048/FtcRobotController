@@ -364,7 +364,7 @@ public class Auto_Red_Near_With_PedroPathing_Changed_Again extends OpMode {
                 helper.AutoTrack(0);
                 break;
             default:
-                helper.SetTurretOFF();
+               // helper.SetTurretOFF();
                 break;
         }
 

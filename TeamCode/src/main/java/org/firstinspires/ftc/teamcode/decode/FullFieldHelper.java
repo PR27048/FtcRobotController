@@ -39,7 +39,7 @@ public class FullFieldHelper {
     // ================= LIMELIGHT PD TUNING =================
     public static double KP = 0.009;
     public static double KD = 0.00177; //could be a little higher?
-    private final double DEAD_ZONE_DEG = 1.5;
+    private final double DEAD_ZONE_DEG = 1.0;  //LATEST CHANGE USED TO BE 1.5
     private double lostStartTime = -1;
     private final double LOST_DELAY = 0.5;
     double lockedPosition = 0.5;
@@ -47,7 +47,7 @@ public class FullFieldHelper {
     boolean Losttarget = false;
     double min = 0.4;
     double OFFSETRED = -0.018;
-    double OFFSETBLUE = -0.018;
+    double OFFSETBLUE = 0.018;  //LATEST CHANGE USED TO BE POSITIVE
     double max = 0.6;
     private double lastTx = 0;
     double lastError = 0;
