@@ -34,8 +34,9 @@ public class BlueFarAuto extends OpMode {
         DRIVE_FIRSTSPIKE,
         DRIVE_INTAKE_FIRSTSPIKE,
         RETURN_FROM_FIRST,
-
+        RETURN_FROM_SECOND,
         SHOOT_PRELOAD_2,
+        SHOOT_PRELOAD_3,
         DRIVE_SECOND_SPIKE,
         DRIVE_INTAKE_SECOND_SPIKE,
         DRIVE_AWAY_FROM_SHOOT_LINE,
@@ -59,7 +60,7 @@ public class BlueFarAuto extends OpMode {
     //private final Pose NearShootPositionForSecondSpike = new Pose(61.187, 101.11835334476848, Math.toRadians(130)); // mirrored from Red
     private final Pose NearShootPositionForSecondSpike = new Pose(55, 78.2, Math.toRadians(117));
     //private final Pose MovefromShootLine = new Pose(42.8, 76.3, Math.toRadians(130));
-    private final Pose MovefromShootLine = new Pose(50.354766031195844, 73.29480069324089, Math.toRadians(136));
+    private final Pose MovefromShootLine = new Pose(49.354766031195844, 72.29480069324089, Math.toRadians(136));
     private final Pose ThirdSpike = new Pose(56.47, 84.41, Math.toRadians(180));
     private final Pose CollectThirdSpike = new Pose(16.20, 83.99, Math.toRadians(180));
 
@@ -101,7 +102,7 @@ public class BlueFarAuto extends OpMode {
 
         pathState = PathState.WAIT_BEFORE_START;
         pathTimer.resetTimer();
-        Helper.StartTurret(1290);
+        Helper.StartTurret(1310);
         Helper.lifthood();
     }
 
@@ -130,6 +131,7 @@ public class BlueFarAuto extends OpMode {
             case SHOOT_PRELOAD:
             case SHOOT_PRELOAD_1:
             case SHOOT_PRELOAD_2:
+            case SHOOT_PRELOAD_3:
             case DRIVE_AWAY_FROM_SHOOT_LINE:
                // if (!follower.isBusy()) {  // commented per chatgpt
                     MotorFeeder.setPower(-1.0);
@@ -306,20 +308,32 @@ public class BlueFarAuto extends OpMode {
                     telemetry.addLine("velocity" + Helper.isTurretAtSpeed(1020));
                     follower.followPath(Launch_NearSecondSpike);
                     Helper.lowerhood();
-                    setPathState(PathState.DRIVE_AWAY_FROM_SHOOT_LINE);
+                    setPathState(PathState.RETURN_FROM_SECOND);
 
                 }
                 break;
 
-            case DRIVE_AWAY_FROM_SHOOT_LINE:
+            case RETURN_FROM_SECOND:
+                if (!follower.isBusy()) {
+                    setPathState(PathState.SHOOT_PRELOAD_3);
+                }
+                break;
+            case SHOOT_PRELOAD_3:
+                if (pathTimer.getElapsedTimeSeconds() > 2.5) {
+                    follower.followPath(MovefromShootLinePath);
+                    setPathState(PathState.NONE);
+
+                }
+                break;
+
+           /* case DRIVE_AWAY_FROM_SHOOT_LINE:
                 telemetry.addLine("velocity next" + Helper.isTurretAtSpeed(1020));
                 if (!follower.isBusy() && (Helper.isTurretAtSpeed(1020) && pathTimer.getElapsedTimeSeconds() > 3)) {
                     follower.followPath(MovefromShootLinePath);
                     setPathState(PathState.NONE);
                 }
-                break;
+                break;*/
             case NONE:
-
                 telemetry.addLine("Auto Complete");
                 break;
         }

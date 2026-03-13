@@ -42,7 +42,8 @@ public class BlueNearAuto extends OpMode {
         DRIVE_THIRD_ROW_INTAKE_SETUP_INTAKE_THIRD_ROW,
         DRIVE_INTAKE_THIRD_ROW_SHOOT_POS,
         SHOOT_4,
-        DRIVE_SHOOT_POS_GATE_SETUP
+        DRIVE_SHOOT_POS_GATE_SETUP,
+        NONE
     }
 
     PathState pathState;
@@ -52,16 +53,16 @@ public class BlueNearAuto extends OpMode {
 
     private final Pose startPose = new Pose(123.28729281767956, 21.43646408839778, Math.toRadians(-37));
     private final Pose shootPose = new Pose(91.80110497237568, 54.24033149171271, Math.toRadians(-47));
-    private final Pose firstRowIntakeSetUpPose = new Pose(92.12154696132599, 60.80662983425415, Math.toRadians(0));
+    private final Pose firstRowIntakeSetUpPose = new Pose(91.12154696132599, 60.80662983425415, Math.toRadians(0));
     private final Pose intakeFirstRowPose = new Pose(129.38674033149172, 60.86740331491714, Math.toRadians(0));
     private final Pose gateSetUpPose = new Pose(119.20994475138122, 72.98342541436465, Math.toRadians(0));
    // private final Pose openGatePose = new Pose(128.80939226519337, 73.30939226519338, Math.toRadians(0));
-    private final Pose secondRowIntakeSetUpPose = new Pose(95.3259668508287, 84.2099447513812, Math.toRadians(0));
+    private final Pose secondRowIntakeSetUpPose = new Pose(94.3259668508287, 84.2099447513812, Math.toRadians(0));
     private final Pose intakeSecondRowPose = new Pose(134.98342541436463, 85.31491712707183, Math.toRadians(0));
     private final Pose avoidGatePose = new Pose(119.01104972375691, 85.03867403314918, Math.toRadians(0));
-    private final Pose thirdRowIntakeSetUpPose = new Pose(96.62430939226519, 108.08287292817678, Math.toRadians(0));
+    private final Pose thirdRowIntakeSetUpPose = new Pose(95.62430939226519, 108.08287292817678, Math.toRadians(0));
     private final Pose intakeThirdRowPose = new Pose(135.41988950276243, 108.24309392265193, Math.toRadians(0));
-
+    private final Pose finalshootPose = new Pose(91.14246100519934, 41.92253032928943, Math.toRadians(-47));
     // =================================================
 
     private PathChain driveStartPosShootPos,
@@ -77,7 +78,7 @@ public class BlueNearAuto extends OpMode {
             driveAvoidGateShootPos,
             driveShootPosThirdRowIntakeSetUp,
             driveThirdRowIntakeSetUpIntakeThirdRow,
-            driveIntakeThirdRowShootPos,
+            driveIntakeThirdRowShootPos,driveIntakeThirdRowFinalShootPos,
             driveShootPosGateSetUp;
 
     public void buildPaths() {
@@ -157,6 +158,11 @@ public class BlueNearAuto extends OpMode {
                 .addPath(new BezierLine(shootPose, gateSetUpPose))
                 .setLinearHeadingInterpolation(shootPose.getHeading(), gateSetUpPose.getHeading())
                 .build();
+
+        driveIntakeThirdRowFinalShootPos = follower.pathBuilder()
+                .addPath(new BezierLine(intakeThirdRowPose, finalshootPose))
+                .setLinearHeadingInterpolation(intakeThirdRowPose.getHeading(), finalshootPose.getHeading())
+                .build();
     }
 
     public void statePathUpdate() {
@@ -178,7 +184,7 @@ public class BlueNearAuto extends OpMode {
                     MotorFeeder.setPower(-1.0);
                     helper.AutoTrack(1);
                 }
-                if (pathTimer.getElapsedTimeSeconds() > 3.85) {
+                if (pathTimer.getElapsedTimeSeconds() > 2.5) {
                     MotorFeeder.setPower(1.0);
                     setPathState(PathState.DRIVE_SHOOT_POS_FIRSTROW_INTAKE_SETUP);
                 }
@@ -245,7 +251,7 @@ public class BlueNearAuto extends OpMode {
                 break;
 
             case SHOOT_2:
-                if (pathTimer.getElapsedTimeSeconds() > 2.3) {
+                if (pathTimer.getElapsedTimeSeconds() > 2) {
                     setPathState(PathState.DRIVE_SHOOT_POS_SECOND_ROW_INTAKE_SETUP);
                 }
                 break;
@@ -291,7 +297,7 @@ public class BlueNearAuto extends OpMode {
                 break;
 
             case SHOOT_3:
-                if (pathTimer.getElapsedTimeSeconds() > 2.3) {
+                if (pathTimer.getElapsedTimeSeconds() > 2) {
                     setPathState(PathState.DRIVE_SHOOT_POS_THIRD_ROW_INTAKE_SETUP);
                 }
                 break;
@@ -318,7 +324,7 @@ public class BlueNearAuto extends OpMode {
 
             case DRIVE_INTAKE_THIRD_ROW_SHOOT_POS:
                 if (!pathStarted) {
-                    follower.followPath(driveIntakeThirdRowShootPos, true);
+                    follower.followPath(driveIntakeThirdRowFinalShootPos, true);  //driveIntakeThirdRowShootPos
                     pathStarted = true;
                 }
                 if (!follower.isBusy()) {
@@ -327,8 +333,8 @@ public class BlueNearAuto extends OpMode {
                 break;
 
             case SHOOT_4:
-                if (pathTimer.getElapsedTimeSeconds() > 2.3) {
-                    setPathState(PathState.DRIVE_SHOOT_POS_GATE_SETUP);
+                if (pathTimer.getElapsedTimeSeconds() > 2) {
+                    setPathState(PathState.NONE); //DRIVE_SHOOT_POS_GATE_SETUP
                 }
                 break;
 
@@ -336,6 +342,11 @@ public class BlueNearAuto extends OpMode {
                 if (!pathStarted) {
                     follower.followPath(driveShootPosGateSetUp, true);
                     pathStarted = true;
+                }
+                break;
+            case NONE:
+                if (pathTimer.getElapsedTimeSeconds() > 2) {
+                    //do nothing
                 }
                 break;
         }
@@ -367,8 +378,10 @@ public class BlueNearAuto extends OpMode {
         if (follower != null) {
             follower.setPose(startPose);
         }
-
         buildPaths();
+
+        helper.StartTurret(TurretVelocity);
+
     }
 
     @Override
@@ -384,7 +397,7 @@ public class BlueNearAuto extends OpMode {
 
     @Override
     public void loop() {
-        helper.StartTurret(TurretVelocity);
+       // helper.StartTurret(TurretVelocity);
         helper.AutoIntakeNear();
         if (helper.hasValidTarget()) {
             helper.AutoTrack(1);
@@ -394,6 +407,7 @@ public class BlueNearAuto extends OpMode {
         }
 
         switch (pathState) {
+            case SHOOT_PRELOAD_1:
             case SHOOT_2:
             case SHOOT_3:
             case SHOOT_4:

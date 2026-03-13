@@ -71,9 +71,9 @@ public class RedFarAuto extends OpMode {
     private final Pose SecondSpike = new Pose(88.3, 57.6, Math.toRadians(-0));
     private final Pose CollectSecondSpike = new Pose(127.94, 57.3, Math.toRadians(-0));
 
-    private final Pose NearShootPositionForSecondSpike = new Pose(89, 81.9, Math.toRadians(-63));
+    private final Pose NearShootPositionForSecondSpike = new Pose(89, 81.9, Math.toRadians(63));
 
-    private final Pose MovefromShootLine = new Pose(94.6533795493934, 76.71750433275561, Math.toRadians(-45));
+    private final Pose MovefromShootLine = new Pose(94.6533795493934, 76.71750433275561, Math.toRadians(63));
 
     private final Pose ThirdSpike = new Pose(87.53, 84.41, Math.toRadians(-0));
     private final Pose CollectThirdSpike = new Pose(127.80, 83.99, Math.toRadians(-0)); // ================= PATHS =================
@@ -137,7 +137,7 @@ public class RedFarAuto extends OpMode {
             case SHOOT_PRELOAD:
             case SHOOT_PRELOAD_1:
             case SHOOT_PRELOAD_2:
-            //case SHOOT_PRELOAD_3:
+            case SHOOT_PRELOAD_3:
             case DRIVE_AWAY_FROM_SHOOT_LINE:
              //   if (!follower.isBusy()) {
                     MotorFeeder.setPower(-1.0);
@@ -328,31 +328,45 @@ public class RedFarAuto extends OpMode {
                 if (pathTimer.getElapsedTimeSeconds() > 2.5) {
                     follower.followPath(Drive_SecondSpike);
                     setPathState(PathState.DRIVE_SECOND_SPIKE);
-                    Helper.StartTurret(1020); // turret speed for shooting
+
                 }
                 break;
 
             case DRIVE_SECOND_SPIKE:
                 if (!follower.isBusy()) {
-                   follower.followPath(Intake_SecondSpike);
+                    Helper.StartTurret(1020); // turret speed for shooting
+                    Helper.lowerhood();
+                    follower.followPath(Intake_SecondSpike);
                     setPathState(PathState.DRIVE_INTAKE_SECOND_SPIKE);
                 }
                 break;
 
             case DRIVE_INTAKE_SECOND_SPIKE:
-                if (!follower.isBusy() && (Helper.isTurretAtSpeed(1020) && pathTimer.getElapsedTimeSeconds() > 3)) {
+                //if (!follower.isBusy() && (Helper.isTurretAtSpeed(1020) && pathTimer.getElapsedTimeSeconds() > 3)) {
+                if (!follower.isBusy()) {
                     follower.followPath(Launch_NearSecondSpike);
-                    Helper.lowerhood();
-                    setPathState(PathState.DRIVE_AWAY_FROM_SHOOT_LINE);
+                    setPathState(PathState.RETURN_FROM_SECOND);
+                    Helper.StartTurret(1020); // turret speed for shooting
+                }
+                break;
+            case RETURN_FROM_SECOND:
+                if (!follower.isBusy()) {
+                    setPathState(PathState.SHOOT_PRELOAD_3);
+                }
+                break;
+            case SHOOT_PRELOAD_3:
+                if (pathTimer.getElapsedTimeSeconds() > 3) {
+                    follower.followPath(MovefromShootLinePath);
+                    setPathState(PathState.NONE);
 
                 }
                 break;
-            case DRIVE_AWAY_FROM_SHOOT_LINE:
+           /* case DRIVE_AWAY_FROM_SHOOT_LINE:
                 if (!follower.isBusy() && (Helper.isTurretAtSpeed(1020) && pathTimer.getElapsedTimeSeconds() > 3)) {
                     follower.followPath(MovefromShootLinePath);
                     setPathState(PathState.NONE);
                 }
-                break;
+                break;*/
 
 
 
@@ -376,7 +390,9 @@ public class RedFarAuto extends OpMode {
                 break; */
 
             case NONE:
-                telemetry.addLine("Auto Complete");
+                if (!follower.isBusy()) {
+                    telemetry.addLine("Auto Complete");
+                }
                 break;
         }
     }

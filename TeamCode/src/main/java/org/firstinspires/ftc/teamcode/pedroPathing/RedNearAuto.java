@@ -51,7 +51,7 @@ public class RedNearAuto extends OpMode {
     // ================= BLUE POSES =================
 
     private final Pose startPose = new Pose(123.287, 122.563, Math.toRadians(37));
-    private final Pose shootPose = new Pose(91.801, 89.759, Math.toRadians(47));
+    private final Pose shootPose = new Pose(91.801,92.25466724436738 , Math.toRadians(47)); //89.759
     private final Pose firstRowIntakeSetUpPose = new Pose(92.121, 83.193, Math.toRadians(0));
     private final Pose intakeFirstRowPose = new Pose(129.386, 83.632, Math.toRadians(0));
     private final Pose gateSetUpPose = new Pose(113.94475138121548, 74.7292817679558, Math.toRadians(0));
@@ -394,6 +394,7 @@ public class RedNearAuto extends OpMode {
         }
 
         switch (pathState) {
+            case SHOOT_PRELOAD_1:
             case SHOOT_2:
             case SHOOT_3:
             case SHOOT_4:
