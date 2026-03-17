@@ -84,6 +84,7 @@ public class DecodeTeleopFINAL extends OpMode {
         //prevDpadUp = gamepad1.dpad_up;
       //  prevDpadDown = gamepad1.dpad_down;
 
+
         // --- Shooter Calculations ---
         double Velocity = previousVelocity;
         double Hoodpos = 0;

@@ -10,7 +10,7 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 
-@Autonomous(name="Auto_RedFar_WithPedroPath")
+@Autonomous(name="RedFar")
 public class RedFarAuto extends OpMode {
 
     private Follower follower;
@@ -110,7 +110,7 @@ public class RedFarAuto extends OpMode {
 
         pathState = PathState.WAIT_BEFORE_START;
         pathTimer.resetTimer();
-        Helper.StartTurret(1290);
+        //Helper.StartTurret(1290);
         Helper.lifthood();
     }
 
@@ -129,7 +129,7 @@ public class RedFarAuto extends OpMode {
         statePathUpdate();
 
         Helper.AutoIntake();
-      //  Helper.StartTurret(1290);
+       Helper.StartTurret(1290);
         Helper.AutoTrack(0);
 
         // ===== Shooter Safety Logic =====

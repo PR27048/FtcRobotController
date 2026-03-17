@@ -24,6 +24,7 @@ public class RedNearAuto extends OpMode {
     private Timer pathTimer, OpModeTimer;
 
     public enum PathState {
+        SHOOT_PRELOAD,
         DRIVE_STARTPOS_SHOOT_POS,
         SHOOT_PRELOAD_1,
         DRIVE_SHOOT_POS_FIRSTROW_INTAKE_SETUP,
@@ -77,7 +78,7 @@ public class RedNearAuto extends OpMode {
             driveAvoidGateShootPos,
             driveShootPosThirdRowIntakeSetUp,
             driveThirdRowIntakeSetUpIntakeThirdRow,
-            driveIntakeThirdRowShootPos,
+            driveIntakeThirdRowShootPos,driveIntakeThirdRowFinalShootPos,
             driveShootPosGateSetUp;
 
     public void buildPaths() {
@@ -162,19 +163,24 @@ public class RedNearAuto extends OpMode {
     public void statePathUpdate() {
         switch (pathState) {
 
+            case SHOOT_PRELOAD:
+                if (helper.isTurretAtSpeed(1020) && pathTimer.getElapsedTimeSeconds() > 2) {
+                    setPathState(RedNearAuto.PathState.SHOOT_PRELOAD);
+                }
+                break;
             case DRIVE_STARTPOS_SHOOT_POS:
                 if (!pathStarted) {
                     follower.followPath(driveStartPosShootPos, true);
                     pathStarted = true;
                 }
-                if (!follower.isBusy()) {
+                if (!follower.isBusy() && helper.isTurretAtSpeed(1020)) {
                     setPathState(PathState.SHOOT_PRELOAD_1);
                     pathStarted = false;
                 }
                 break;
 
             case SHOOT_PRELOAD_1:
-                if (pathTimer.getElapsedTimeSeconds() > 0.85) {
+                if (pathTimer.getElapsedTimeSeconds() > 0.85 && helper.isTurretAtSpeed(1020)) {
                     MotorFeeder.setPower(-1.0);
                     helper.AutoTrack(0);
                 }
@@ -361,7 +367,7 @@ public class RedNearAuto extends OpMode {
         ServoConFront = hardwareMap.get(DcMotor.class, "servo_con_front_transfer");
 
         helper.init(hardwareMap, "Auto");
-
+        //helper.StartTurret(TurretVelocity);
         follower = Constants.createFollower(hardwareMap);
         if (follower != null) {
             follower.setPose(startPose);
@@ -414,5 +420,11 @@ public class RedNearAuto extends OpMode {
 
         follower.update();
         statePathUpdate();
+    }
+
+    @Override
+    public void stop()
+    {
+        MotorFeeder.setPower(0);
     }
 }

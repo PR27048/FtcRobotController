@@ -10,7 +10,7 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 
-@Autonomous(name="Auto_BlueFar_WithPedroPath")
+@Autonomous(name="BlueFar")
 public class BlueFarAuto extends OpMode {
 
     private Follower follower;
@@ -102,7 +102,7 @@ public class BlueFarAuto extends OpMode {
 
         pathState = PathState.WAIT_BEFORE_START;
         pathTimer.resetTimer();
-        Helper.StartTurret(1310);
+       // Helper.StartTurret(1310);
         Helper.lifthood();
     }
 
@@ -123,7 +123,7 @@ public class BlueFarAuto extends OpMode {
 
         Helper.AutoIntake();
 
-       // Helper.StartTurret(1290);
+        Helper.StartTurret(1290);
         Helper.AutoTrack(1); // Blue side
 
         switch (pathState) {

@@ -24,6 +24,7 @@ public class BlueNearAuto extends OpMode {
     private Timer pathTimer, OpModeTimer;
 
     public enum PathState {
+        SHOOT_PRELOAD,
         DRIVE_STARTPOS_SHOOT_POS,
         SHOOT_PRELOAD_1,
         DRIVE_SHOOT_POS_FIRSTROW_INTAKE_SETUP,
@@ -168,19 +169,28 @@ public class BlueNearAuto extends OpMode {
     public void statePathUpdate() {
         switch (pathState) {
 
+
+            //(Helper.isTurretAtSpeed(1290)
+
+            case SHOOT_PRELOAD:
+                if (helper.isTurretAtSpeed(1020) && pathTimer.getElapsedTimeSeconds() > 2) {
+                    setPathState(BlueNearAuto.PathState.SHOOT_PRELOAD);
+                }
+                break;
+
             case DRIVE_STARTPOS_SHOOT_POS:
-                if (!pathStarted) {
+                if (!pathStarted && helper.isTurretAtSpeed(TurretVelocity)) {
                     follower.followPath(driveStartPosShootPos, true);
                     pathStarted = true;
                 }
-                if (!follower.isBusy()) {
+                if (!follower.isBusy() && helper.isTurretAtSpeed(1020) ) {
                     setPathState(PathState.SHOOT_PRELOAD_1);
                     pathStarted = false;
                 }
                 break;
 
             case SHOOT_PRELOAD_1:
-                if (pathTimer.getElapsedTimeSeconds() > 0.85) {
+                if (pathTimer.getElapsedTimeSeconds() > 0.85 /*&& helper.isTurretAtSpeed(1020)*/ ) {
                     MotorFeeder.setPower(-1.0);
                     helper.AutoTrack(1);
                 }
@@ -251,7 +261,7 @@ public class BlueNearAuto extends OpMode {
                 break;
 
             case SHOOT_2:
-                if (pathTimer.getElapsedTimeSeconds() > 2) {
+                if (pathTimer.getElapsedTimeSeconds() > 2.5) {
                     setPathState(PathState.DRIVE_SHOOT_POS_SECOND_ROW_INTAKE_SETUP);
                 }
                 break;
@@ -297,7 +307,7 @@ public class BlueNearAuto extends OpMode {
                 break;
 
             case SHOOT_3:
-                if (pathTimer.getElapsedTimeSeconds() > 2) {
+                if (pathTimer.getElapsedTimeSeconds() > 2.5) {
                     setPathState(PathState.DRIVE_SHOOT_POS_THIRD_ROW_INTAKE_SETUP);
                 }
                 break;
@@ -333,7 +343,7 @@ public class BlueNearAuto extends OpMode {
                 break;
 
             case SHOOT_4:
-                if (pathTimer.getElapsedTimeSeconds() > 2) {
+                if (pathTimer.getElapsedTimeSeconds() > 2.5) {
                     setPathState(PathState.NONE); //DRIVE_SHOOT_POS_GATE_SETUP
                 }
                 break;
@@ -380,7 +390,7 @@ public class BlueNearAuto extends OpMode {
         }
         buildPaths();
 
-        helper.StartTurret(TurretVelocity);
+       // helper.StartTurret(TurretVelocity);
 
     }
 
@@ -397,7 +407,7 @@ public class BlueNearAuto extends OpMode {
 
     @Override
     public void loop() {
-       // helper.StartTurret(TurretVelocity);
+        helper.StartTurret(TurretVelocity);
         helper.AutoIntakeNear();
         if (helper.hasValidTarget()) {
             helper.AutoTrack(1);
