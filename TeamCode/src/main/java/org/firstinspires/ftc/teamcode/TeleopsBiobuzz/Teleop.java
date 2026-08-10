@@ -25,11 +25,18 @@ public class Teleop extends OpMode {
         speed = 1.0; //full
 
         utils.drive(forward,strafe,rotate,speed);
+
+        if(gamepad1.left_trigger >0.1) {
+            utils.Setintake(1);
+        } else{utils.Setintake(0);}
+        if(gamepad1.right_trigger >0.1) {
+            utils.Setintake(-1);
+        } else{utils.Setintake(0);}
     }
 
     @Override
     public void stop() {
-
+        utils.Setintake(0);
     }
 
 }

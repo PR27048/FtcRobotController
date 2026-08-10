@@ -8,7 +8,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 public class Utilities {
 
-    private DcMotor FrontLeft, FrontRight, BackLeft, BackRight;
+    private DcMotor FrontLeft, FrontRight, BackLeft, BackRight, Intake;
 
     private ElapsedTime driveTimer = new ElapsedTime();
 
@@ -17,6 +17,8 @@ public class Utilities {
         FrontRight = hwMap.get(DcMotor.class, "front_right");
         BackLeft = hwMap.get(DcMotor.class, "back_left");
         BackRight = hwMap.get(DcMotor.class, "back_right");
+        Intake = hwMap.get(DcMotor.class, "Intake");
+
 
         FrontRight.setDirection(DcMotor.Direction.REVERSE);
         BackRight.setDirection(DcMotor.Direction.REVERSE);
@@ -55,5 +57,8 @@ public class Utilities {
         BackRight.setPower(maxSpeed * BackRightPower / maxPower);
     }
 
+    public void Setintake(double speed) {
+        Intake.setPower(speed);
+    }
 
 }
