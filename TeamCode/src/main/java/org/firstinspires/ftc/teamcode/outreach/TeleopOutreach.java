@@ -15,7 +15,11 @@ public class TeleopOutreach extends OpMode {
         telemetry.addLine("Press start");
         telemetry.update();
     }
-
+    @Override
+    public void start() {
+        utils.Sethand(0);
+        utils.Setarm(0);
+    }
 
     @Override
     public void loop() {
@@ -26,13 +30,16 @@ public class TeleopOutreach extends OpMode {
 
         utils.drive(forward,strafe,rotate,speed);
 
-        if (gamepad1.left_trigger > 0.1) {
-            utils.Sethand(0);
-        } else {utils.Sethand(0);}
+        if(gamepad1.left_trigger > 0.1) {
+            utils.Sethand(0.2);
 
-        if (gamepad1.right_trigger > 0.1) {
-            utils.Setarm(0.3);
-        } else {utils.Setarm(0.5);}
+        } else{utils.Sethand(0);}
+
+        if (gamepad1.right_trigger>0.1) {
+            utils.Setarm(0.5);
+        } else{utils.Setarm(0);}
+
+
     }
 
     @Override

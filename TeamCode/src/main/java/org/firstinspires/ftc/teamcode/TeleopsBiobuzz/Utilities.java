@@ -40,8 +40,8 @@ public class Utilities {
     public void drive(double forward, double strafe, double rotate, double speed) {
         double FrontLeftPower = forward - strafe - rotate;
         double FrontRightPower = forward + strafe + rotate;
-        double BackLeftPower = - forward - strafe + rotate;
-        double BackRightPower = forward - strafe + rotate;
+        double BackLeftPower =  forward + strafe - rotate;
+        double BackRightPower = forward -strafe + rotate;
 
         double maxPower = speed;
         double maxSpeed = speed;

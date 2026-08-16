@@ -22,6 +22,7 @@ public class Teleop extends OpMode {
         forward = Math.pow(gamepad1.left_stick_y, 3);
         strafe = Math.pow(gamepad1.left_stick_x,3);
         rotate = Math.pow(gamepad1.right_stick_x,3);
+
         speed = 1.0; //full
 
         utils.drive(forward,strafe,rotate,speed);
