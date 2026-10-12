@@ -123,9 +123,11 @@ public class Teleop extends OpMode {
 
         if(utils.getTurretVelocity() < Velocity) {
             Undertempo = true;
+            
         } else {Undertempo = false;}
 
         utils.drive(forward, strafe, rotate, speed);
+
 
         //Telemetry updates
 

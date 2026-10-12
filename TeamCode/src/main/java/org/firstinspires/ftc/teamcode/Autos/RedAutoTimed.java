@@ -43,10 +43,11 @@ public class RedAutoTimed extends LinearOpMode {
             utils.drive(0.4,0,0,0.4);
             sleep(600);
             utils.drive(0,0,0.3,0.3);
-            sleep(1030);
-            utils.drive(1,0,0,1);
+            sleep(1020);
+            utils.drive(-0.2,0,0,2);
             sleep(3000);
-
+            utils.drive(0,0,0.5,0.5);
+            sleep(200);
 
 
         }
