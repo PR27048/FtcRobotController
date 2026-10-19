@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 
 /*
@@ -17,8 +18,8 @@ public class TuneFlywheelPF extends OpMode {
 
     public DcMotorEx FlyWheelMotor;
 
-    double highVelocity = 2220;
-    double lowVelocity = 200;
+    double highVelocity = 1560;
+    double lowVelocity = 800;
 
     double curTargetVelocity = highVelocity;
 
@@ -33,7 +34,7 @@ public class TuneFlywheelPF extends OpMode {
     public void init() {
         FlyWheelMotor = hardwareMap.get(DcMotorEx.class, "Shooter1");
         FlyWheelMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        FlyWheelMotor.setDirection(DcMotor.Direction.REVERSE);
+        FlyWheelMotor.setDirection(DcMotor.Direction.FORWARD);
 
         PIDFCoefficients pidfCoefficients = new PIDFCoefficients(P, 0, 0, F );
         FlyWheelMotor.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, pidfCoefficients);

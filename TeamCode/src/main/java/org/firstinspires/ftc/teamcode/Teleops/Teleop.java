@@ -72,7 +72,7 @@ public class Teleop extends OpMode {
                     860, 1000
             );
 
-            Velocity += 200; //
+            Velocity += 230; // // change equations
 
             utils.SetShooterVelocity(Velocity); //Turret power
 

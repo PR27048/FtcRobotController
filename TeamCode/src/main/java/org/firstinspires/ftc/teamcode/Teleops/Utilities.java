@@ -40,7 +40,7 @@ public class Utilities {
         Intake = hwMap.get(DcMotor.class, "Intake");
         Shooter1 = hwMap.get(DcMotorEx.class, "Shooter1");
         PIDFCoefficients pidfCoefficients =
-                new PIDFCoefficients(2.7, 0, 0, 13.7);  //Might change later with tweaks
+                new PIDFCoefficients(14.1, 0, 0, 12.998);  //F 13.7  P 2.7
         Shooter1.setPIDFCoefficients(DcMotorEx.RunMode.RUN_USING_ENCODER, pidfCoefficients);
         Shooter2 = hwMap.get(DcMotor.class, "Shooter2");
         //-----------------------------------------------------------
