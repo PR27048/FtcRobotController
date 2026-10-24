@@ -52,6 +52,19 @@ public class Teleop extends OpMode {
         telemetry.update();
         utils.updatePipelineMenu(upPressed, downPressed);
     }
+    public void AlignToHive() {
+        if (utils.IsAligned()) {
+            rotate = 0.0;
+        } else {
+            if (utils.TX() == 0) {
+                rotate = gamepad1.right_stick_x * 2.25;
+            } else {
+                rotate = utils.TX() * kP;
+            }
+
+            rotate = Math.max(-0.4, Math.min(0.4, rotate));
+        }
+    }
 
     @Override
     public void loop() {
@@ -61,6 +74,7 @@ public class Teleop extends OpMode {
         strafe  = gamepad1.left_stick_x;
         rotate  = gamepad1.right_stick_x;
         speed   = 1.0; // full speed default
+
 
         if(!Double.isNaN(x) && x>0) {
             Velocity = Range.clip(
@@ -77,11 +91,19 @@ public class Teleop extends OpMode {
             utils.SetShooterVelocity(Velocity); //Turret power
 
 
+
         }
 
         telemetry.addData("Actual Velocity", utils.getTurretVelocity());
 
+        if (gamepad2.right_trigger > 0.1) {
+             AlignToHive();
+             utils.SetGate(0.7);
+        }
 
+        if (gamepad2.left_trigger > 0.1) {
+            utils.Setintake(-0.4); // remove pollen
+        }
 
 
         if (gamepad1.left_trigger > 0.1) { // intake
@@ -104,17 +126,8 @@ public class Teleop extends OpMode {
                 utils.Setintake(0.0);
             }
 
-            if (utils.IsAligned()) {
-                rotate = 0.0;
-            } else {
-                if (utils.TX() == 0) {
-                    rotate = gamepad1.right_stick_x * 2.25;
-                } else {
-                    rotate = utils.TX() * kP;
-                }
+            AlignToHive();
 
-                rotate = Math.max(-0.4, Math.min(0.4, rotate));
-            }
         } else {
             utils.Setintake(0.0);
             utils.SetFeeder(0.0);

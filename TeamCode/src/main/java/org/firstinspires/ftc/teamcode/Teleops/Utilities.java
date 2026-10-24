@@ -21,9 +21,9 @@ import org.firstinspires.ftc.robotcore.external.navigation.Pose3D;
 
 public class Utilities {
 
-    private DcMotor FrontLeft, FrontRight, BackLeft, BackRight, Intake, Shooter2;
+    private DcMotor FrontLeft, FrontRight, BackLeft, BackRight, Intake;
     private CRServo HFeeder1,HFeeder2;
-    private DcMotorEx Shooter1;
+    private DcMotorEx Shooter1, Shooter2;
 
     private Servo Feeder, FrontalSweep;
     private ElapsedTime driveTimer = new ElapsedTime();
@@ -39,10 +39,15 @@ public class Utilities {
         BackRight = hwMap.get(DcMotor.class, "back_right");
         Intake = hwMap.get(DcMotor.class, "Intake");
         Shooter1 = hwMap.get(DcMotorEx.class, "Shooter1");
+        Shooter2 = hwMap.get(DcMotorEx.class, "Shooter2");
+
         PIDFCoefficients pidfCoefficients =
                 new PIDFCoefficients(14.1, 0, 0, 12.998);  //F 13.7  P 2.7
         Shooter1.setPIDFCoefficients(DcMotorEx.RunMode.RUN_USING_ENCODER, pidfCoefficients);
-        Shooter2 = hwMap.get(DcMotor.class, "Shooter2");
+        Shooter2.setPIDFCoefficients(DcMotorEx.RunMode.RUN_USING_ENCODER, pidfCoefficients);
+
+        Shooter1.setDirection(DcMotor.Direction.REVERSE);
+        Shooter2.setDirection(DcMotor.Direction.REVERSE);
         //-----------------------------------------------------------
 
         Feeder = hwMap.get(Servo.class, "Feeder");
@@ -66,6 +71,7 @@ public class Utilities {
         BackLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         BackRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         Shooter1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        Shooter2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
 
         FrontLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -147,14 +153,10 @@ public class Utilities {
         return -1;
     }
 
-    public void SetTurrets(double power) {
-        Shooter1.setPower(power);
-        //Shooter2.setPower(power);
-    }
 
     public double GetDistance() {
         LLResult result = limelight.getLatestResult();
-        double h1 = 6.5; // Camera height in inches
+        double h1 = 12.8; // Camera height in inches
         double h2 = 50.25; // Target AprilTag height in inches
         double a1 = Math.toRadians(63.43); // Camera mounting angle converted to radians
         //63.43
@@ -206,7 +208,9 @@ public class Utilities {
     //public void SetSweep(double pos) {FrontalSweep.setPosition(pos);}
 
     public void SetShooterVelocity(double velocity) {
+
         Shooter1.setVelocity(velocity);
+        Shooter2.setVelocity(velocity);
     }
 
 } //End of class
