@@ -1,10 +1,11 @@
 package org.firstinspires.ftc.teamcode.Autos;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.Teleops.Utilities;
-
+@Disabled
 @Autonomous(name = "Red Auto Timed", group = "Autonomous")
 public class RedAutoTimed extends LinearOpMode {
     Utilities utils = new Utilities();
