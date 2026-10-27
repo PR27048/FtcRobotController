@@ -1,0 +1,33 @@
+  public void trackWithLimelight() {
+
+        LLResult result = limelight.getLatestResult();
+        if (result == null || !result.isValid()) {
+            return;
+        }
+
+        double tx = result.getTx();
+
+        if (Math.abs(tx) < DEAD_ZONE_DEG) {
+            tx = 0;
+        }
+
+        double servoCenter = 0.5;
+
+        double min = 0.4;
+        double max = 0.6;
+        double maxStep = 0.01;
+
+// --- Proportional control ---
+        double targetPosition = servoCenter - (tx * KP);
+
+// Clamp to safe range
+        targetPosition = Math.max(min, Math.min(max, targetPosition));
+
+// --- Smooth movement ---
+        double currentPosition = ServoConTurret.getPosition();
+        double delta = targetPosition - currentPosition;
+        delta = Math.max(-maxStep, Math.min(maxStep, delta));
+
+        ServoConTurret.setPosition(currentPosition + delta);
+
+    }
