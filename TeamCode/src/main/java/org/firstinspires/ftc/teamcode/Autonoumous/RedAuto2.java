@@ -59,15 +59,15 @@ public class RedAuto2 extends OpMode {
         return line(farShootPos, closeShootPos).linear(farShootPos, closeShootPos);
     }
 
-    private Command IntakePollen(){
-        utils.Setintake(0.7);
-        return null;
-    }
-
-    private Command StopIntakePollen(){
-        utils.Setintake(0);
-        return null;
-    }
+//    private Command IntakePollen(){
+//        utils.Setintake(0.7);
+//        return null;
+//    }
+//
+//    private Command StopIntakePollen(){
+//        utils.Setintake(0);
+//        return null;
+//    }
 
 //    private boolean checkShoot1(){
 //        if(utils.IsAligned()) {
@@ -82,11 +82,10 @@ public class RedAuto2 extends OpMode {
         return sequential(
                 follow(follower, GoShootOne()),
                 follow(follower, PrePickUpPollen()),
-                IntakePollen(),
-//                utils.Setintake(1),
+//                IntakePollen(),
                 follow(follower, PickUpPollen()),
-                follow(follower, GoShootAgain()),
-                StopIntakePollen()
+                follow(follower, GoShootAgain())
+//                StopIntakePollen()
         );
     }
 
