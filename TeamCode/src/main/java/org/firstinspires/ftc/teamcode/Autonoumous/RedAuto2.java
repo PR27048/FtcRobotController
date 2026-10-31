@@ -29,8 +29,8 @@ public class RedAuto2 extends OpMode {
 
     private final Pose startPos = p.of(56, 8, 90);
     private final Pose closeShootPos = p.of(56, 24, 90);
-    private final Pose prePickUpBalls = p.of(27.8, 8.4, 180);
-    private final Pose pickUpBalls = p.of(8.6, 8.4, 180);
+    private final Pose prePickUpBalls = p.of(27.8, 8.4, 0);
+    private final Pose pickUpBalls = p.of(8.6, 8.4, 0);
     private final Pose farShootPos = p.of(58, 120, 270);
 
     // all paths
@@ -59,6 +59,16 @@ public class RedAuto2 extends OpMode {
         return line(farShootPos, closeShootPos).linear(farShootPos, closeShootPos);
     }
 
+    private Command IntakePollen(){
+        utils.Setintake(0.7);
+        return null;
+    }
+
+    private Command StopIntakePollen(){
+        utils.Setintake(0);
+        return null;
+    }
+
 //    private boolean checkShoot1(){
 //        if(utils.IsAligned()) {
 //            utils.SetGate(0.7);
@@ -72,8 +82,11 @@ public class RedAuto2 extends OpMode {
         return sequential(
                 follow(follower, GoShootOne()),
                 follow(follower, PrePickUpPollen()),
+                IntakePollen(),
+//                utils.Setintake(1),
                 follow(follower, PickUpPollen()),
-                follow(follower, GoShootAgain())
+                follow(follower, GoShootAgain()),
+                StopIntakePollen()
         );
     }
 
