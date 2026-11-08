@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.pedro;
 
 import com.pedropathing.follower.Follower;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.pedropathing.api.PoseFactory;
 import com.pedropathing.math.Pose;
@@ -16,7 +17,7 @@ import static com.pedropathing.ivy.commands.Commands.*;
 
 
 import com.pedropathing.paths.Path;
-
+@Disabled
 @Autonomous(name="JyothiAutoTest")
 public class JyothiAutoTest extends OpMode {
 
