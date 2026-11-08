@@ -1,17 +1,19 @@
-package org.firstinspires.ftc.teamcode.Teleops;
+package org.firstinspires.ftc.teamcode.TuningPrograms;
 
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
+import org.firstinspires.ftc.teamcode.Teleops.Utilities;
+
 @TeleOp
-@Disabled
+
 public class AFStuner extends OpMode {
     double forward, strafe, rotate, speed;
     double kP = 0.026;  //autotracking tune value
     private boolean prevDpadUp = false;
     private boolean prevDpadDown = false;
-    double Velocity = 1000;
+    double Velocity = 0;
 
 
     double[] stepSizes = {50.0,10.0, 1.0, 0.1, 0.01};
@@ -67,7 +69,7 @@ public class AFStuner extends OpMode {
 
 
         if (gamepad1.left_trigger > 0.1) { // intake
-            utils.Setintake(0.7);
+            utils.Setintake(0.68);
             //utils.SetFeeder(-1.0);
             //utils.SetGate(0.07);
 
@@ -78,16 +80,22 @@ public class AFStuner extends OpMode {
             //if(utils.isTurretAtSpeed(Velocity)) {
 
             utils.SetGate(0.7);
+            if(utils.SlingerUp()) {
+                utils.Setintake(0.5);   //  Push elements up
 
-            utils.SetFeeder(1.0);
+                utils.SetFeeder(1.0);
 
-            // }
-            if (utils.IsAligned()) {
-                rotate = 0.0; // Stay still if aligned
+                if (utils.IsAligned()) {
+                    rotate = 0.0; // Stay still if aligned
 
-                //utils.Setintake(0.7);   //  Push elements up
-            } else {utils.Setintake(0.0);}
 
+                } else {
+                    utils.Setintake(0.0);
+                }
+
+
+
+            }
 
             if(utils.TX() == 0) //Completely off
             {
@@ -131,6 +139,8 @@ public class AFStuner extends OpMode {
         //telemetry.addData("aligned?:", utils.IsAligned());
         telemetry.addData("Distance(X):" ,"%.2f", utils.GetDistance());
         telemetry.addData("Velocity(Y):", Velocity);
+        telemetry.addData("Actual Velocity(Y):", utils.getTurretVelocity());
+
         telemetry.addData("Stepsize:", stepSizes[stepIndex]);
         telemetry.update();
     }

@@ -16,16 +16,19 @@ import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 
 import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.hardware.limelightvision.LLResult;
+import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.navigation.Pose3D;
+import com.qualcomm.robotcore.hardware.TouchSensor;
 
 public class Utilities {
 
-    private DcMotor FrontLeft, FrontRight, BackLeft, BackRight, Intake;
+    private DcMotor FrontLeft, FrontRight, BackLeft, BackRight, Intake, Transfer;
     private CRServo HFeeder1,HFeeder2;
     private DcMotorEx Shooter1, Shooter2;
+    private TouchSensor FireReady;
 
-    private Servo Feeder, FrontalSweep;
+    private Servo Feeder, FrontalSweep, TurretServo;
     private ElapsedTime driveTimer = new ElapsedTime();
 
     private Limelight3A limelight;
@@ -38,11 +41,15 @@ public class Utilities {
         BackLeft = hwMap.get(DcMotor.class, "back_left");
         BackRight = hwMap.get(DcMotor.class, "back_right");
         Intake = hwMap.get(DcMotor.class, "Intake");
+        Transfer = hwMap.get(DcMotor.class, "Transfer");
+
         Shooter1 = hwMap.get(DcMotorEx.class, "Shooter1");
         Shooter2 = hwMap.get(DcMotorEx.class, "Shooter2");
 
+        FireReady = hwMap.get(TouchSensor.class, "FireReady");
+
         PIDFCoefficients pidfCoefficients =
-                new PIDFCoefficients(14.1, 0, 0, 12.998);  //F 13.7  P 2.7
+                new PIDFCoefficients(83, 0, 0, 13.699);  //F 13.699 p: 83
         Shooter1.setPIDFCoefficients(DcMotorEx.RunMode.RUN_USING_ENCODER, pidfCoefficients);
         Shooter2.setPIDFCoefficients(DcMotorEx.RunMode.RUN_USING_ENCODER, pidfCoefficients);
 
@@ -51,7 +58,9 @@ public class Utilities {
         //-----------------------------------------------------------
 
         Feeder = hwMap.get(Servo.class, "Feeder");
-        //FrontalSweep = hwMap.get(Servo.class, "FrontalSweep");
+        FrontalSweep = hwMap.get(Servo.class, "FrontalSweep");
+       // TurretServo = hwMap.get(Servo.class, "TurretServo");
+
 
         //-----------------------------------------------------------
         HFeeder1 = hwMap.get(CRServo.class, "Hfeeder1");
@@ -79,6 +88,10 @@ public class Utilities {
         BackLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         BackRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
+        Shooter1.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+        Shooter2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+
+
         driveTimer.reset();
 
     }
@@ -104,6 +117,23 @@ public class Utilities {
 
     public void Setintake(double speed) {
         Intake.setPower(speed);
+        Transfer.setPower(-speed);
+    }
+
+    public boolean SlingerUp() {
+        if(FireReady.isPressed()) {
+            return true;
+        } else {return false;}
+    }
+
+    public boolean HiveUp() {
+        LLResult result = limelight.getLatestResult();
+
+        if(result != null && result.isValid()) {
+            return false; // The hive is down on your side, u need to go to other side
+        } else {
+            return true; //The hive is up on your side
+        }
     }
 
     public boolean IsAligned() {
@@ -117,7 +147,32 @@ public class Utilities {
             return false;
         }
     }
+   /* public double TrackHiveTagPos() {
+        // 1. Check if the Limelight currently sees the AprilTag
+        LLResult result = limelight.getLatestResult();
 
+        if (result == null || !result.isValid()) {
+            return TurretServo.getPosition();
+        }
+
+        // 2. Calculate the turret's current angle from its servo position (1:4 ratio -> 450° range)
+        double currentServoPos = TurretServo.getPosition();
+        double currentTurretAngleDeg = (currentServoPos - 0.5) * 450.0;
+
+        // 3. Get the horizontal error (TX) from the Limelight in degrees.
+        // (Positive TX means the target is to the right of the crosshair)
+        double tx = result.getTx();
+
+        // 4. Calculate the desired new turret angle to eliminate the error
+        double targetTurretAngleDeg = currentTurretAngleDeg + tx;
+
+        // 5. Convert that target angle back into a 0.0 to 1.0 servo position
+        double targetServoPos = 0.5 + (targetTurretAngleDeg / 450.0);
+
+        // 6. Clamp the position to safe 1:4 boundaries (keeping it between 0.1 and 0.9
+        // to leave a physical safety buffer on both ends)
+        return Range.clip(targetServoPos, 0.1, 0.9);
+    }*/
     public double TX() {
         LLResult result = limelight.getLatestResult();
 
@@ -156,7 +211,7 @@ public class Utilities {
 
     public double GetDistance() {
         LLResult result = limelight.getLatestResult();
-        double h1 = 12.8; // Camera height in inches
+        double h1 = 6.5; // Camera height in inches
         double h2 = 50.25; // Target AprilTag height in inches
         double a1 = Math.toRadians(63.43); // Camera mounting angle converted to radians
         //63.43
@@ -185,6 +240,13 @@ public class Utilities {
             return yawDegrees;
         }
         return 0;
+    }
+
+    public void SetTurretPos(double pos) {
+        TurretServo.setPosition(pos);
+    }
+    public double GetTurretPos() {
+        return TurretServo.getPosition();
     }
     public boolean isTurretAtSpeed(double velocity) {
 
