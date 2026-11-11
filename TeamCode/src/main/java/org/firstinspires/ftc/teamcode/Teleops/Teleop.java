@@ -102,19 +102,19 @@ public class Teleop extends OpMode {
         }
 
         if (gamepad2.left_bumper) {
-            utils.Setintake(-0.4); // remove pollen
+            utils.Setintake(-0.4,-0.4); // remove pollen
         }
 
 
 
         if (gamepad1.left_trigger > 0.1 || gamepad2.left_trigger > 0.1) { // intake
-            utils.Setintake(0.7);
+            utils.Setintake(0.7,0.5);
             //utils.SetFeeder(-1.0);
             //utils.SetGate(0.07);
 
         } else if(gamepad1.left_bumper) {
 
-            utils.Setintake(-0.4); //remove pollen
+            utils.Setintake(-0.4,-0.4); //remove pollen
 
         } else if (gamepad1.right_trigger > 0.1) {
 
@@ -122,15 +122,15 @@ public class Teleop extends OpMode {
             utils.SetFeeder(1.0);
 
             if (gamepad1.left_trigger > 0.1 && utils.isTurretAtSpeed(Velocity)) {
-                utils.Setintake(0.7);
+                utils.Setintake(0.7,0.7);
             } else {
-                utils.Setintake(0.0);
+                utils.Setintake(0.0,0.0);
             }
 
             AlignToHive();
 
         } else {
-            utils.Setintake(0.0);
+            utils.Setintake(0.0,0.0);
             utils.SetFeeder(0.0);
             utils.SetGate(0.07);
         }
@@ -157,6 +157,6 @@ public class Teleop extends OpMode {
 
     @Override
     public void stop() {
-        utils.Setintake(0);
+        utils.Setintake(0,0);
     }
 } //End of class

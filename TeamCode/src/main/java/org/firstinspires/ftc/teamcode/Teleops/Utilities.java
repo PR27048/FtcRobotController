@@ -115,9 +115,9 @@ public class Utilities {
         BackRight.setPower(maxSpeed * BackRightPower / maxPower);
     }
 
-    public void Setintake(double speed) {
-        Intake.setPower(speed);
-        Transfer.setPower(-speed);
+    public void Setintake(double Intakespeed,double Transferspeed) {
+        Intake.setPower(Intakespeed);
+        Transfer.setPower(-Transferspeed);
     }
 
     public boolean SlingerUp() {
@@ -130,9 +130,9 @@ public class Utilities {
         LLResult result = limelight.getLatestResult();
 
         if(result != null && result.isValid()) {
-            return false; // The hive is down on your side, u need to go to other side
+            return true; // The hive is up, you can shoot
         } else {
-            return true; //The hive is up on your side
+            return false; //the hive is not up, go to the other side
         }
     }
 
@@ -267,7 +267,7 @@ public class Utilities {
         Feeder.setPosition(pos);
     }
 
-    //public void SetSweep(double pos) {FrontalSweep.setPosition(pos);}
+    public void SetSweep(double pos) {FrontalSweep.setPosition(pos);}
 
     public void SetShooterVelocity(double velocity) {
 

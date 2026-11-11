@@ -99,6 +99,6 @@ public class SoftwareBreakTest extends OpMode {
 
     @Override
     public void stop() {
-        utils.Setintake(0);
+        utils.Setintake(0,0);
     }
 } //End of class

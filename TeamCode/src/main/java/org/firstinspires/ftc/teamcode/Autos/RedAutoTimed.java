@@ -29,7 +29,7 @@ public class RedAutoTimed extends LinearOpMode {
             utils.SetGate(0.7);
             sleep(7000);
 
-            utils.Setintake(0.5);
+            utils.Setintake(0.5,0.5);
             sleep(3000);
             utils.SetGate(0.07);
             utils.drive(0, 0, 0.8, 0.8);
@@ -40,7 +40,7 @@ public class RedAutoTimed extends LinearOpMode {
             sleep(1760);
             utils.drive(0,0,0,0);
             sleep(600);
-            utils.Setintake(0.0);
+            utils.Setintake(0.0,0.0);
             utils.drive(0.4,0,0,0.4);
             sleep(600);
             utils.drive(0,0,0.3,0.3);

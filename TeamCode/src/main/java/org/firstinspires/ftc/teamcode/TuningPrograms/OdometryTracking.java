@@ -182,7 +182,7 @@ public class OdometryTracking extends OpMode {
     @Override
     public void stop() {
         utils.drive(0.0, 0.0, 0.0, 0.0);
-        utils.Setintake(0);
+        utils.Setintake(0,0);
         utils.SetGate(NORMAL_GATE_POSITION);
     }
 }

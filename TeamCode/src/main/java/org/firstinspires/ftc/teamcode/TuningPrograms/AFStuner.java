@@ -13,7 +13,12 @@ public class AFStuner extends OpMode {
     double kP = 0.026;  //autotracking tune value
     private boolean prevDpadUp = false;
     private boolean prevDpadDown = false;
+
+    private boolean prevDpadLeft = false;
+    private boolean prevDpadRight = false;
     double Velocity = 0;
+
+    double TransferSpeed = 0.36;
 
 
     double[] stepSizes = {50.0,10.0, 1.0, 0.1, 0.01};
@@ -22,14 +27,19 @@ public class AFStuner extends OpMode {
     private boolean initprevup = false;
     private boolean initprevdown = false;
 
+
+
+    private double lastDisplayedDistance = 0.0;
+    private final double DEADBAND_THRESHOLD = 0.4;
+
     Utilities utils = new Utilities();
 
     @Override
     public void init() {
         utils.init(hardwareMap, "FALSE");
 
-        utils.SetGate(0.07);
-
+        utils.SetGate(0.035);
+        utils.SetSweep(0.0);
 
     }
 
@@ -66,22 +76,24 @@ public class AFStuner extends OpMode {
         speed   = 1.0; // full speed default
         utils.SetShooterVelocity(Velocity); //Turret ON
 
-
+        if(gamepad1.left_bumper) {
+            utils.SetSweep(0.7);
+        } else {utils.SetSweep(0.0);}
 
         if (gamepad1.left_trigger > 0.1) { // intake
-            utils.Setintake(0.68);
-            //utils.SetFeeder(-1.0);
-            //utils.SetGate(0.07);
+            utils.Setintake(0.7,0.36);
+           // utils.SetFeeder(-.4);
+            //utils.SetGate(0.04);
 
         } else if(gamepad1.right_bumper) {
-            utils.Setintake(-0.7);
+            utils.Setintake(-0.7,-0.7);
         } else if (gamepad1.right_trigger > 0.1) { // outtake / auto-align
 
             //if(utils.isTurretAtSpeed(Velocity)) {
 
-            utils.SetGate(0.7);
+            utils.SetGate(0.69);
             if(utils.SlingerUp()) {
-                utils.Setintake(0.5);   //  Push elements up
+                utils.Setintake(0.7,TransferSpeed);   //  Push elements up
 
                 utils.SetFeeder(1.0);
 
@@ -90,7 +102,7 @@ public class AFStuner extends OpMode {
 
 
                 } else {
-                    utils.Setintake(0.0);
+                    utils.Setintake(0.0,0.0);
                 }
 
 
@@ -107,9 +119,9 @@ public class AFStuner extends OpMode {
             rotate = Math.max(-0.4, Math.min(0.4, rotate)); //turn
 
         } else {
-            utils.Setintake(0.0);
+            utils.Setintake(0.0,0.0);
             utils.SetFeeder(0.0);
-            utils.SetGate(0.07);
+            utils.SetGate(0.035);
         }
 
         utils.drive(forward, strafe, rotate, speed);
@@ -127,26 +139,39 @@ public class AFStuner extends OpMode {
             utils.SetShooterVelocity(Velocity);
 
         }
+        if (gamepad1.dpad_right && !prevDpadRight) {
+            TransferSpeed +=stepSizes[stepIndex];
+        }
+        if (gamepad1.dpad_left && !prevDpadLeft) {
+            TransferSpeed -=stepSizes[stepIndex];
+        }
 
 
         prevDpadUp = gamepad1.dpad_up;
         prevDpadDown = gamepad1.dpad_down;
+        prevDpadLeft = gamepad1.dpad_left;
+        prevDpadRight = gamepad1.dpad_right;
 
 
         //Telemetry updates
 
         //telemetry.addData("tx:", utils.TX());
         //telemetry.addData("aligned?:", utils.IsAligned());
-        telemetry.addData("Distance(X):" ,"%.2f", utils.GetDistance());
-        telemetry.addData("Velocity(Y):", Velocity);
-        telemetry.addData("Actual Velocity(Y):", utils.getTurretVelocity());
+        double currentDistance = utils.GetDistance();
 
+        if (Math.abs(currentDistance - lastDisplayedDistance) >= DEADBAND_THRESHOLD) {
+            lastDisplayedDistance = currentDistance;
+        }
+
+        telemetry.addData("Distance(X):", "%.2f", lastDisplayedDistance);        telemetry.addData("Velocity(Y):", Velocity);
+        telemetry.addData("Actual Velocity(Y):", utils.getTurretVelocity());
+        telemetry.addData("Transfer Speed: ", TransferSpeed);
         telemetry.addData("Stepsize:", stepSizes[stepIndex]);
         telemetry.update();
     }
 
     @Override
     public void stop() {
-        utils.Setintake(0);
+        utils.Setintake(0,0);
     }
 } //End of class
