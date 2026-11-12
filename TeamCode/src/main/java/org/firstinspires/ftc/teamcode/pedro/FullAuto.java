@@ -25,8 +25,8 @@ public class FullAuto extends OpMode {
     private final Pose start = poseFactory.of(56, 9.5, 90);
     private final Pose point1 = poseFactory.of(56, 15, 90);
     private final Pose point2Start = poseFactory.of(56, 15, 90);
-    private final Pose point2 = poseFactory.of(9.5, 15, 270);
-    private final Pose point3Start = poseFactory.of(9.5, 15, 270);
+    private final Pose point2 = poseFactory.of(9.5, 20, 270);
+    private final Pose point3Start = poseFactory.of(9.5, 20, 270);
     private final Pose point3 = poseFactory.of(9, 9, 270);
     private final Pose point4Start = poseFactory.of(9, 9, 270);
     private final Pose point4 = poseFactory.of(58, 26.5436, 90);
