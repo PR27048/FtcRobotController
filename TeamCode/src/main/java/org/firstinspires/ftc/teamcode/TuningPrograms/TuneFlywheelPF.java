@@ -13,7 +13,7 @@ https://www.youtube.com/watch?v=aPNCpZzCTKg
  */
 
 @TeleOp
-
+@Disabled
 public class TuneFlywheelPF extends OpMode {
 
     public DcMotorEx FlyWheelMotor;

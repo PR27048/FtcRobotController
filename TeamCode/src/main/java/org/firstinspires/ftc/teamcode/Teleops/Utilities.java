@@ -33,7 +33,7 @@ public class Utilities {
 
     private Limelight3A limelight;
     int currentPipeline = 2; // 2 = red
-    private final double DEAD_ZONE_DEG = 2.0;
+    private final double DEAD_ZONE_DEG = 4.0;
 
     public void init(HardwareMap hwMap, String autoState ) {
         FrontLeft = hwMap.get(DcMotor.class, "front_left");

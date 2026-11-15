@@ -26,7 +26,7 @@ public class Teleop extends OpMode {
         utils.init(hardwareMap, "FALSE");
 
         utils.SetGate(0.07);
-       // utils.SetSweep(0.0);
+        utils.SetSweep(0.1);
 
 
     }
@@ -78,15 +78,15 @@ public class Teleop extends OpMode {
 
         if(!Double.isNaN(x) && x>0) {
             Velocity = Range.clip(
-                    (-0.00815847) * x * x * x * x
-                            + 1.22423 * x * x * x
-                            - 68.62971 * x * x
-                            + 1707.13647 * x
-                            - 15008.5014,   //15008.5014
-                    860, 1000
+                    (0.0255264) * x * x * x * x
+                            - 3.66515 * x * x * x
+                            + 196.41257 * x * x
+                            - 4653.25326 * x
+                            + 42541.8995,
+                    1430, 1500
             );
 
-            Velocity += 230; // // change equations
+           // Velocity += 230; // // change equations
 
             utils.SetShooterVelocity(Velocity); //Turret power
 
@@ -94,46 +94,44 @@ public class Teleop extends OpMode {
 
         }
 
-        telemetry.addData("Actual Velocity", utils.getTurretVelocity());
 
-        if (gamepad2.right_trigger > 0.1) {  //gamepad 2
-             AlignToHive();
-             utils.SetGate(0.7);
+
+        if (gamepad1.right_bumper || gamepad2.right_bumper) {
+            utils.SetSweep(0.81);
+            utils.Setintake(0.7, 0.36);
+        } else {
+            utils.SetSweep(0.07);
         }
-
-        if (gamepad2.left_bumper) {
-            utils.Setintake(-0.4,-0.4); // remove pollen
-        }
-
-
 
         if (gamepad1.left_trigger > 0.1 || gamepad2.left_trigger > 0.1) { // intake
-            utils.Setintake(0.7,0.5);
-            //utils.SetFeeder(-1.0);
-            //utils.SetGate(0.07);
+            utils.Setintake(0.7, 0.36);
+        } else if (gamepad1.left_bumper || gamepad2.left_bumper) {
+            utils.Setintake(-0.7, -0.7);
+        } else if (gamepad1.right_trigger > 0.1 || gamepad2.right_trigger > 0.1) { // outtake / auto-align
+            AlignToHive();
+            utils.SetGate(0.69);
 
-        } else if(gamepad1.left_bumper) {
-
-            utils.Setintake(-0.4,-0.4); //remove pollen
-
-        } else if (gamepad1.right_trigger > 0.1) {
-
-            utils.SetGate(0.7);
-            utils.SetFeeder(1.0);
-
-            if (gamepad1.left_trigger > 0.1 && utils.isTurretAtSpeed(Velocity)) {
-                utils.Setintake(0.7,0.7);
+            if (utils.SlingerUp() && utils.IsAligned()) {
+                utils.Setintake(0.7, 0.6); //shooting speeed adjust
+                utils.SetFeeder(1.0);
             } else {
-                utils.Setintake(0.0,0.0);
+                utils.Setintake(0.0, 0.0);
+                utils.SetFeeder(0.0);
             }
 
-            AlignToHive();
+
 
         } else {
-            utils.Setintake(0.0,0.0);
+            utils.Setintake(0.0, 0.0);
             utils.SetFeeder(0.0);
-            utils.SetGate(0.07);
+            utils.SetGate(0.035);
         }
+
+        utils.drive(forward, strafe, rotate, speed);
+
+        telemetry.addData("Actual Velocity", utils.getTurretVelocity());
+
+
 
         if(utils.getTurretVelocity() < Velocity) {
             Undertempo = true;

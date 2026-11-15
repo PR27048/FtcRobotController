@@ -67,7 +67,7 @@ public class AutoThreeClose extends OpMode {
             case 1:
                 follower.follow(shootFirst());
                 utils.SetShooterVelocity(.7);
-                utils.Setintake(.7);
+               // utils.Setintake(.7);
                 pathState=2;
                 break;
             case 2:

@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.TuningPrograms;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -12,6 +13,7 @@ https://www.youtube.com/watch?v=aPNCpZzCTKg
  */
 
 @TeleOp
+@Disabled
 public class DoubleMotorPFTuner extends OpMode {
 
     public DcMotorEx FlyWheelMotor;
