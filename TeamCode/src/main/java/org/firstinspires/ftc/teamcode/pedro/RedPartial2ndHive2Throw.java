@@ -8,10 +8,15 @@ import com.pedropathing.api.PoseFactory;
 import com.pedropathing.follower.Follower;
 import com.pedropathing.math.Pose;
 import com.pedropathing.paths.Path;
+import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
+
+import java.util.List;
 
 /*
  * Red alliance, start position at the top wall (2nd hive side), two throws.
@@ -26,6 +31,7 @@ import com.qualcomm.robotcore.util.Range;
  *  6. path5 - drive to the throw spot and throw
  *  7. path6 - park
  */
+@Disabled
 @Autonomous(name = "RedPartial2ndHive2Throw")
 public class RedPartial2ndHive2Throw extends OpMode {
 
@@ -38,8 +44,8 @@ public class RedPartial2ndHive2Throw extends OpMode {
     private final Pose point2Start = poseFactory.of(59.8691, 124.2533, 90);
     private final Pose point2 = poseFactory.of(47.9312, 114.0549, 90);
     private final Pose point3Start = poseFactory.of(47.9312, 114.0549, 90);
-    private final Pose point3 = poseFactory.of(47.5605, 130.5399, 90);
-    private final Pose point4Start = poseFactory.of(47.5605, 130.5399, 90);
+    private final Pose point3 = poseFactory.of(47.1921, 128.329, 90);
+    private final Pose point4Start = poseFactory.of(47.1921, 128.329, 90);
     private final Pose point4 = poseFactory.of(47.281, 125.8177, 90);
     private final Pose point5Start = poseFactory.of(47.281, 125.8177, 90);
     private final Pose point5 = poseFactory.of(57.756, 125.5319, 90);
@@ -48,9 +54,9 @@ public class RedPartial2ndHive2Throw extends OpMode {
 
     // Tune values
     private static final int RED_PIPELINE = 2;
-    private static final double FALLBACK_VELOCITY = 1185;  // used when the Limelight can't see the hive (RedAutoTimed value)
+    private static final double FALLBACK_VELOCITY = 1450; //1185;  // used when the Limelight can't see the hive (RedAutoTimed value)
     private static final double SPINUP_TIMEOUT = 1.5;      // seconds to wait for shooter to reach speed
-    private static final double FEED_TIME = 2.5;           // seconds to feed pollen into the shooter
+    private static final double FEED_TIME = 3; //2.5;           // seconds to feed pollen into the shooter
     private static final double INTAKE_DWELL = 1.0;        // seconds to sit at the wall with intake running
 
     private Follower follower;
@@ -67,6 +73,8 @@ public class RedPartial2ndHive2Throw extends OpMode {
     private int pathState = 0;
     private double velocity = FALLBACK_VELOCITY;
     private boolean feeding = false;
+
+    private List<LynxModule> allHubs;
 
     public Path path1() {
         return Paths.line(start, point1).linear(start, point1);
@@ -94,20 +102,21 @@ public class RedPartial2ndHive2Throw extends OpMode {
 
     // Same distance -> velocity curve as Teleop
     private double velocityFromDistance(double x) {
+
         return Range.clip(
-                (-0.00815847) * x * x * x * x
-                        + 1.22423 * x * x * x
-                        - 68.62971 * x * x
-                        + 1707.13647 * x
-                        - 15008.5014,
-                860, 1000
-        ) + 230;
+                (0.0255264) * x * x * x * x
+                        - 3.66515 * x * x * x
+                        + 196.41257 * x * x
+                        - 4653.25326 * x
+                        + 42541.8995,
+                1430, 1500);
     }
 
     private void updateShooterVelocity() {
         // HiveUp() null-checks the Limelight result, GetDistance() does not
         if (utilities.HiveUp()) {
             double x = utilities.GetDistance();
+
             if (!Double.isNaN(x) && x > 0) {
                 velocity = velocityFromDistance(x);
             }
@@ -119,11 +128,12 @@ public class RedPartial2ndHive2Throw extends OpMode {
         velocity = FALLBACK_VELOCITY;
         feeding = false;
         shotTimer.reset();
-    }
+      }
 
     // Call every loop while shooting, returns true once all pollen has been thrown
     private boolean updateShot() {
         updateShooterVelocity();
+        utilities.SetGate(0.69);
 
         if (!feeding) {
             if (utilities.isTurretAtSpeed(velocity) || shotTimer.seconds() >= SPINUP_TIMEOUT) {
@@ -133,11 +143,9 @@ public class RedPartial2ndHive2Throw extends OpMode {
             return false;
         }
 
-        utilities.SetGate(0.7);
-        utilities.SetFeeder(1.0);
-
-        if (utilities.isTurretAtSpeed(velocity)) {
-            utilities.Setintake(0.7, 0.7);
+        if (utilities.SlingerUp() && utilities.isTurretAtSpeed(velocity)) {
+            utilities.Setintake(0.7, 0.7); //shooting speeed adjust
+            utilities.SetFeeder(1.0);
         } else {
             utilities.Setintake(0.0, 0.0);
         }
@@ -167,6 +175,20 @@ public class RedPartial2ndHive2Throw extends OpMode {
         follower = Constants.create(hardwareMap);
         follower.setPose(start);
 
+        // Utilities puts the drive motors in RUN_USING_ENCODER and BRAKE. Put them back the way they
+        // were during Pedro tuning: velocity PID fights Pedro (shaking), and BRAKE stops much harder
+        // than the coasting deceleration Pedro was tuned with (sudden stops).
+        for (String name : new String[]{"front_left", "front_right", "back_left", "back_right"}) {
+            DcMotor motor = hardwareMap.get(DcMotor.class, name);
+            motor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+        }
+        // Faster loop for the follower
+        allHubs = hardwareMap.getAll(LynxModule.class);
+        for (LynxModule hub : allHubs) {
+            hub.setBulkCachingMode(LynxModule.BulkCachingMode.MANUAL); //AUTO
+        }
+
         firstPath = path1();
         secondPath = path2();
         thirdPath = path3();
@@ -184,6 +206,11 @@ public class RedPartial2ndHive2Throw extends OpMode {
 
     @Override
     public void loop() {
+        // 1. Refresh all hub sensor/encoder data ONCE at the start of the loop
+        for (LynxModule hub : allHubs) {
+            hub.clearBulkCache();
+        }
+
         follower.update();
 
         switch (pathState) {
@@ -195,7 +222,7 @@ public class RedPartial2ndHive2Throw extends OpMode {
                 break;
 
             case 2: // throw preloaded pollen
-                if (updateShot()) {
+               if (updateShot()) {
                     follower.follow(secondPath);
                     pathState = 3;
                 }
@@ -203,7 +230,7 @@ public class RedPartial2ndHive2Throw extends OpMode {
 
             case 3: // lined up under the pollen, drive into the wall with intake on
                 if (!follower.isBusy()) {
-                    utilities.Setintake(0.7, 0.5);
+                    utilities.Setintake(0.7, 0.7);
                     follower.follow(thirdPath);
                     pathState = 4;
                 }
@@ -225,7 +252,7 @@ public class RedPartial2ndHive2Throw extends OpMode {
 
             case 6:
                 if (!follower.isBusy()) {
-                    utilities.Setintake(0.0, 0.0);
+                    utilities.Setintake(0.0, 0.0); //uncomment both line
                     utilities.SetShooterVelocity(FALLBACK_VELOCITY); // spin up early to save time
                     follower.follow(fifthPath);
                     pathState = 7;
@@ -240,7 +267,7 @@ public class RedPartial2ndHive2Throw extends OpMode {
                 break;
 
             case 8: // throw grabbed pollen
-                if (updateShot()) {
+                if (updateShot()) { //uncomment
                     follower.follow(sixthPath);
                     pathState = 9;
                 }

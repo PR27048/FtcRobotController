@@ -111,8 +111,8 @@ public class Teleop extends OpMode {
             AlignToHive();
             utils.SetGate(0.69);
 
-            if (utils.SlingerUp() && utils.IsAligned()) {
-                utils.Setintake(0.7, 0.6); //shooting speeed adjust
+            if (utils.SlingerUp() && (utils.IsAligned() || gamepad1.left_trigger > 0.1)) {
+                utils.Setintake(0.7, 0.52); //shooting speeed adjust
                 utils.SetFeeder(1.0);
             } else {
                 utils.Setintake(0.0, 0.0);

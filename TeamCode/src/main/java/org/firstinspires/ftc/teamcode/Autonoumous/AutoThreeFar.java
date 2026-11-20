@@ -9,7 +9,6 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
 import org.firstinspires.ftc.teamcode.pedro.Constants;
-import org.firstinspires.ftc.teamcode.Teleops.Utilities;
 
 @Autonomous
 public class AutoThreeFar extends OpMode{
@@ -48,24 +47,37 @@ public class AutoThreeFar extends OpMode{
         switch(pathState){
             case 1:
                 follower.follow(start_shoot());
+                pathState=2;
                 break;
             case 2:
                 // shoot
+                pathState=3;
                 break;
             case 3:
                 follower.follow(shoot_preFlower());
+                pathState=4;
+                break;
             case 4:
                 // flower intake ready
+                pathState=5;
                 break;
             case 5:
                 follower.follow(preFlower_flower());
+                pathState=6;
+                break;
             case 6:
                 follower.follow(flower_shoot());
+                pathState=7;
+                break;
             case 7:
                 // shoot
+                pathState=8;
                 break;
             case 8:
                 follower.follow(shoot_park());
+                break;
+            default:
+                break;
         }
     }
 

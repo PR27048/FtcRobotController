@@ -8,6 +8,7 @@ import com.pedropathing.follower.Follower;
 import com.pedropathing.math.Pose;
 import com.pedropathing.paths.Path;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
@@ -24,6 +25,7 @@ import com.qualcomm.robotcore.util.Range;
  *             not seen -> path5 to the other side of the hive and throw there
  *  6. path6 - park
  */
+@Disabled
 @Autonomous(name = "RedAutoTest")
 public class RedAutoTest extends OpMode {
 
@@ -35,21 +37,20 @@ public class RedAutoTest extends OpMode {
     // Heading is the intake (front) direction. Robot starts with the shooter (back) facing the hive,
     // so the intake faces the wall at 270. Visualizer had 90 which flips the whole field.
     private final Pose start = poseFactory.of(57.2822, 7.8168, 270);
-    private final Pose point1 = poseFactory.of(57.6486, 7.7916, 180);
-    private final Pose point2Start = poseFactory.of(57.6486, 7.7916, 180);
-    private final Pose point2 = poseFactory.of(7.0892, 6.6102, 180);
-    private final Pose point3Start = poseFactory.of(7.0892, 6.6102, 180);
-    private final Pose point3 = poseFactory.of(38.3833, 111.3798, 180);
-    private final Pose point4Start = poseFactory.of(38.3833, 111.3798, 180);
-    private final Pose point4 = poseFactory.of(63.6437, 122.7641, 83);
-    private final Pose point5Start = poseFactory.of(63.6437, 122.7641, 90);
-    private final Pose point5 = poseFactory.of(47.4478, 129.0474, 90);
-    private final Pose point6Start = poseFactory.of(47.4478, 129.0474, 90);
-    private final Pose point6 = poseFactory.of(12.1807, 114.392, 90);
-
+    private final Pose point1 = poseFactory.of(57.2801, 14.9771, 270);
+    private final Pose point2Start = poseFactory.of(57.2801, 14.9771, 270);
+    private final Pose point2 = poseFactory.of(11.5111, 14.5328, 270);
+    private final Pose point3Start = poseFactory.of(11.5111, 14.5328, 270);
+    private final Pose point3 = poseFactory.of(9.4568, 9.765, 270);
+    private final Pose point4Start = poseFactory.of(9.4568, 9.765, 270);
+    private final Pose point4 = poseFactory.of(34.6385, 105.0258, 270);
+    private final Pose point5Start = poseFactory.of(34.6385, 105.0258, 135);
+    private final Pose point5 = poseFactory.of(57.02128, 121.177, 90);
+    private final Pose point6Start = poseFactory.of(57.02128, 121.177, 90);
+    private final Pose point6 = poseFactory.of(14.0232, 114.2078, 100);
     // Tune values
     private static final int RED_PIPELINE = 2;
-    private static final double FALLBACK_VELOCITY = 1185;  // used when the Limelight can't see the hive (RedAutoTimed value)
+    private static final double FALLBACK_VELOCITY = 1450;// 1185;  // used when the Limelight can't see the hive (RedAutoTimed value)
     private static final double SPINUP_TIMEOUT = 1.5;      // seconds to wait for shooter to reach speed
     private static final double FEED_TIME = 2.5;           // seconds to feed pollen into the shooter
     private static final double INTAKE_DWELL = 1.0;        // seconds to sit at the corner with intake running
@@ -128,6 +129,7 @@ public class RedAutoTest extends OpMode {
     // Call every loop while shooting, returns true once all pollen has been thrown
     private boolean updateShot() {
         updateShooterVelocity();
+        utils.SetGate(0.69);
 
         if (!feeding) {
             if (utils.isTurretAtSpeed(velocity) || shotTimer.seconds() >= SPINUP_TIMEOUT) {
@@ -137,14 +139,11 @@ public class RedAutoTest extends OpMode {
             return false;
         }
 
-        utils.SetGate(0.69);
-
-        if (utils.SlingerUp() && utils.IsAligned()) {
-            utils.Setintake(0.7, 0.7);
+        if (utils.SlingerUp() && utils.isTurretAtSpeed(velocity)) {
+            utils.Setintake(0.7, 0.7); //shooting speeed adjust
             utils.SetFeeder(1.0);
         } else {
             utils.Setintake(0.0, 0.0);
-            utils.SetFeeder(0.0);
         }
 
         if (shotTimer.seconds() >= FEED_TIME) {
@@ -167,7 +166,7 @@ public class RedAutoTest extends OpMode {
         // Utilities must init before the follower so Pedro's motor directions win
         utils.init(hardwareMap, "auto");
         utils.SetPipeline(RED_PIPELINE);
-        utils.SetGate(0.035);
+        utils.SetGate(0.07);
 
         follower = Constants.create(hardwareMap);
         follower.setPose(start);
@@ -182,6 +181,7 @@ public class RedAutoTest extends OpMode {
 
     @Override
     public void start() {
+        utils.SetShooterVelocity(FALLBACK_VELOCITY); // spin up while backing off the wall
         timer.reset();
         beginShot();
         pathState = 1;
@@ -201,7 +201,7 @@ public class RedAutoTest extends OpMode {
 
             case 2: // turn done, drive to the corner with intake on
                 if (!follower.isBusy()) {
-                    utils.Setintake(0.7, 0.5);
+                    utils.Setintake(0.7, 0.7); //uncomment after path tested
                     follower.follow(secondPath);
                     pathState = 3;
                 }
@@ -216,8 +216,8 @@ public class RedAutoTest extends OpMode {
 
             case 4: // let the intake finish grabbing pollen, then drive up the field
                 if (timer.seconds() >= INTAKE_DWELL) {
-                    utils.Setintake(0.0, 0.0);
-                    utils.SetShooterVelocity(FALLBACK_VELOCITY); // spin up early to save time
+                    utils.Setintake(0.0, 0.0); //uncomment after path tested
+                   utils.SetShooterVelocity(FALLBACK_VELOCITY); // spin up early to save time //uncomment after path tested
                     follower.follow(thirdPath);
                     pathState = 5;
                 }
@@ -238,28 +238,31 @@ public class RedAutoTest extends OpMode {
                 break;
 
             case 7: // check the hive QR code: throw here if seen, otherwise go to the other side of the hive
-                if (utils.HiveUp()) {
+                /*if (utils.HiveUp()) {
                     hiveSeen = true;
                     beginShot();
                     pathState = 12;
                 } else if (timer.seconds() >= QR_SCAN_TIME) {
                     follower.follow(fifthPath);
                     pathState = 8;
-                }
+                 }*/ //uncomment after path tested
+                follower.follow(fifthPath); //delete
+                pathState = 8; //delete
                 break;
 
             case 8:
                 if (!follower.isBusy()) {
-                    beginShot();
-                    pathState = 9;
+                   // beginShot(); //uncomment
+                    pathState = 9; //9 uncomment and replace
                 }
+               // pathState = 10;
                 break;
 
             case 9: // throw collected pollen
-                if (updateShot()) {
+               // if (updateShot()) { uncomment
                     follower.follow(sixthPath);
                     pathState = 10;
-                }
+                //}
                 break;
 
             case 10: // park
@@ -273,10 +276,10 @@ public class RedAutoTest extends OpMode {
                 break;
 
             case 12: // hive seen at point4, throw collected pollen here
-                if (updateShot()) {
+                //if (updateShot()) { uncomment
                     follower.follow(fifthPath);
                     pathState = 13;
-                }
+                //}
                 break;
 
             case 13: // already thrown, follow the visualizer path to park
