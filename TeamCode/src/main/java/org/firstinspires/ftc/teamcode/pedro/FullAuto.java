@@ -22,13 +22,13 @@ public class FullAuto extends OpMode {
 
     private final PoseFactory poseFactory = PoseFactory.degrees();
 
-    private final Pose start = poseFactory.of(56, 9.5, 90);
-    private final Pose point1 = poseFactory.of(56, 15, 90);//Path 1
+    private final Pose start = poseFactory.of(56, 9.5, 270);
+    private final Pose point1 = poseFactory.of(56, 15, 270);//Path 1
     private final Pose point2Start = poseFactory.of(56, 15, 90);
     private final Pose point2 = poseFactory.of(9.5, 30, 270);//Path 2
     private final Pose point3Start = poseFactory.of(9.5, 30, 270);
-    private final Pose point3 = poseFactory.of(9.5, 11.5, 270);//Path 3
-    private final Pose point4Start = poseFactory.of(9.5, 11.5, 270);
+    private final Pose point3 = poseFactory.of(9.5, 9.5, 270);//Path 3
+    private final Pose point4Start = poseFactory.of(9.5, .5, 270);
     private final Pose point4 = poseFactory.of(58, 26.5436, 90);//Path 4
     private final Pose point5Start = poseFactory.of(58, 26.5436, 90);
     private final Pose point5 = poseFactory.of(58, 119.1994, 90);//MakeMake/MakeMiss path 5
