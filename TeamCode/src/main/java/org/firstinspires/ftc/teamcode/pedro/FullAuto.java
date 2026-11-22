@@ -23,69 +23,69 @@ public class FullAuto extends OpMode {
     private final PoseFactory poseFactory = PoseFactory.degrees();
 
     private final Pose start = poseFactory.of(56, 9.5, 90);
-    private final Pose point1 = poseFactory.of(56, 15, 90);
+    private final Pose point1 = poseFactory.of(56, 15, 90);//Path 1
     private final Pose point2Start = poseFactory.of(56, 15, 90);
-    private final Pose point2 = poseFactory.of(9.5, 30, 270);
+    private final Pose point2 = poseFactory.of(9.5, 30, 270);//Path 2
     private final Pose point3Start = poseFactory.of(9.5, 30, 270);
-    private final Pose point3 = poseFactory.of(9.5, 10.5, 270);
-    private final Pose point4Start = poseFactory.of(9.5, 10.5, 270);
-    private final Pose point4 = poseFactory.of(58, 26.5436, 90);
+    private final Pose point3 = poseFactory.of(9.5, 11.5, 270);//Path 3
+    private final Pose point4Start = poseFactory.of(9.5, 11.5, 270);
+    private final Pose point4 = poseFactory.of(58, 26.5436, 90);//Path 4
     private final Pose point5Start = poseFactory.of(58, 26.5436, 90);
-    private final Pose point5 = poseFactory.of(58, 119.1994, 90);
+    private final Pose point5 = poseFactory.of(58, 119.1994, 90);//MakeMake/MakeMiss path 5
     private final Pose point6Start = poseFactory.of(58, 119.1994, 90);
-    private final Pose point6 = poseFactory.of(51.0928, 119.0427, 180);
+    private final Pose point6 = poseFactory.of(51.0928, 119.0427, 180);//MakeMake/MakeMiss path 6
     private final Pose point7Start = poseFactory.of(51.0928, 119.0427, 180);
-    private final Pose point7 = poseFactory.of(58, 119.2, 270);
+    private final Pose point7 = poseFactory.of(58, 119.2, 270);//MakeMake/MakeMiss path 7
     private final Pose point8Start = poseFactory.of(58, 119.2, 270);
-    private final Pose point8 = poseFactory.of(45.4399, 119.2, 90);
+    private final Pose point8 = poseFactory.of(45.4399, 119.2, 90);//MakeMake/MakeMiss path 8
     private final Pose point9Start = poseFactory.of(45.4399, 119.2, 90);
-    private final Pose point9 = poseFactory.of(45.44, 127, 90);
+    private final Pose point9 = poseFactory.of(45.44, 127, 90);//MakeMake/MakeMiss path 9
     private final Pose point10Start = poseFactory.of(45.44, 127, 90);
-    private final Pose point10 = poseFactory.of(58, 119.2, 270);
+    private final Pose point10 = poseFactory.of(58, 119.2, 270);//MakeMake/MakeMiss path 10
     private final Pose point11Start = poseFactory.of(58, 119.2, 270);
-    private final Pose point11 = poseFactory.of(22.3499, 119.2, 270);
+    private final Pose point11 = poseFactory.of(22.3499, 119.2, 270);//MakeMake/MakeMiss path 11
     private final Pose point12Start = poseFactory.of(22.3499, 119.2, 270);
-    private final Pose point12 = poseFactory.of(22.35, 46.6733, 180);
+    private final Pose point12 = poseFactory.of(22.35, 46.6733, 180);//MakeMake/MakeMiss path 12
     private final Pose point13Start = poseFactory.of(22.35, 46.6733, 180);
-    private final Pose point13 = poseFactory.of(14.5, 46.9693, 180);
+    private final Pose point13 = poseFactory.of(14.5, 46.9693, 180);//MakeMake/MakeMiss path 13
     private final Pose point14Start = poseFactory.of(14.5, 46.9693, 180);
-    private final Pose point14 = poseFactory.of(45.44, 119.2, 270);
+    private final Pose point14 = poseFactory.of(45.44, 119.2, 270);//MakeMake/MakeMiss path 14
     private final Pose point15Start = poseFactory.of(45.44, 119.2, 270);
-    private final Pose point15 = poseFactory.of(58, 119.2, 270);
+    private final Pose point15 = poseFactory.of(58, 119.2, 270);//MakeMake/MakeMiss path 15
     private final Pose point16Start = poseFactory.of(58, 119.2, 270);
-    private final Pose point16 = poseFactory.of(56, 15, 270);
+    private final Pose point16 = poseFactory.of(58, 15, 270);//MakeMake path 16
     private final Pose point17Start = poseFactory.of(56, 15, 270);
-    private final Pose point17 = poseFactory.of(50, 15, 180);
+    private final Pose point17 = poseFactory.of(50, 15, 180);//MakeMake path 17
     private final Pose point18Start = poseFactory.of(50, 15, 180);
-    private final Pose point18 = poseFactory.of(56, 15, 90);
+    private final Pose point18 = poseFactory.of(56, 15, 90);//MakeMake path 18
     private final Pose point19Start = poseFactory.of(56, 15, 90);
-    private final Pose point19 = poseFactory.of(10, 70, 90);
+    private final Pose point19 = poseFactory.of(10, 70, 90);//MakeMake path 19
     private final Pose point20Start = poseFactory.of(10, 70, 90);
-    private final Pose point20 = poseFactory.of(10, 110, 90);
+    private final Pose point20 = poseFactory.of(10, 110, 90);//MakeMake path 20
     private final Pose point21Start = poseFactory.of(58, 119.29, 270);
-    private final Pose point21 = poseFactory.of(12, 119.29, 270);
+    private final Pose point21 = poseFactory.of(12, 119.29, 270);//MakeMiss path 16
     private final Pose point22Start = poseFactory.of(58.465, 26.5436, 90);
-    private final Pose point22 = poseFactory.of(21.7578, 46.6733, 180);
+    private final Pose point22 = poseFactory.of(21.7578, 46.6733, 180);//Miss path 5
     private final Pose point23Start = poseFactory.of(21.7578, 46.6733, 0);
-    private final Pose point23 = poseFactory.of(14.5, 46.67, 0);
+    private final Pose point23 = poseFactory.of(14.5, 46.67, 0);//Miss path 6
     private final Pose point24Start = poseFactory.of(14.5, 46.67, 180);
-    private final Pose point24 = poseFactory.of(56, 15, 90);
+    private final Pose point24 = poseFactory.of(56, 15, 90);//Miss path 7
     private final Pose point25Start = poseFactory.of(56, 15, 90);
-    private final Pose point25 = poseFactory.of(59, 15, 90);
+    private final Pose point25 = poseFactory.of(59, 15, 90);//Miss path 8
     private final Pose point26Start = poseFactory.of(59, 15, 90);
-    private final Pose point26 = poseFactory.of(59, 119.2, 90);
+    private final Pose point26 = poseFactory.of(59, 119.2, 90);//Miss path 9
     private final Pose point27Start = poseFactory.of(59, 119.2, 90);
-    private final Pose point27 = poseFactory.of(56, 119.2, 270);
+    private final Pose point27 = poseFactory.of(56, 119.2, 270);//Miss path 10
     private final Pose point28Start = poseFactory.of(56, 119.2, 270);
-    private final Pose point28 = poseFactory.of(47, 119.2, 90);
+    private final Pose point28 = poseFactory.of(47, 119.2, 90);//Miss path 11
     private final Pose point29Start = poseFactory.of(47, 119.2, 90);
-    private final Pose point29 = poseFactory.of(47.068, 127, 90);
+    private final Pose point29 = poseFactory.of(47.068, 127, 90);//Miss path 12
     private final Pose point30Start = poseFactory.of(47.068, 127, 90);
-    private final Pose point30 = poseFactory.of(47, 119.2, 90);
+    private final Pose point30 = poseFactory.of(47, 119.2, 90);//Miss path 13
     private final Pose point31Start = poseFactory.of(47, 119.2, 90);
-    private final Pose point31 = poseFactory.of(56, 119.2, 270);
+    private final Pose point31 = poseFactory.of(56, 119.2, 270);//Miss path 14
     private final Pose point32Start = poseFactory.of(56, 119.2, 270);
-    private final Pose point32 = poseFactory.of(11.5, 120.0875, 270);
+    private final Pose point32 = poseFactory.of(11.5, 120.0875, 270);//Miss path 15
 
     private Follower follower;
     private final ElapsedTime timer = new ElapsedTime();
@@ -508,9 +508,9 @@ public class FullAuto extends OpMode {
 
             case 26:
                 if (utilities.IsAligned()) {
-                    pathState = 27;
-                } else {
                     pathState = 33;
+                } else {
+                    pathState = 27;
                 }
                 break;
 
