@@ -31,7 +31,6 @@ import java.util.List;
  *  6. path5 - drive to the throw spot and throw
  *  7. path6 - park
  */
-@Disabled
 @Autonomous(name = "RedPartial2ndHive2Throw")
 public class RedPartial2ndHive2Throw extends OpMode {
 
@@ -144,7 +143,7 @@ public class RedPartial2ndHive2Throw extends OpMode {
         }
 
         if (utilities.SlingerUp() && utilities.isTurretAtSpeed(velocity)) {
-            utilities.Setintake(0.7, 0.7); //shooting speeed adjust
+            utilities.Setintake(0.7, 0.4); //shooting speeed adjust
             utilities.SetFeeder(1.0);
         } else {
             utilities.Setintake(0.0, 0.0);
@@ -200,7 +199,7 @@ public class RedPartial2ndHive2Throw extends OpMode {
     @Override
     public void start() {
         utilities.SetShooterVelocity(FALLBACK_VELOCITY); // spin up while backing off the wall
-        follower.follow(firstPath);
+        beginShot();
         pathState = 1;
     }
 
@@ -214,15 +213,19 @@ public class RedPartial2ndHive2Throw extends OpMode {
         follower.update();
 
         switch (pathState) {
-            case 1:
-                if (!follower.isBusy()) {
-                    beginShot();
+            case 1:// throw preloaded pollen
+                if (updateShot()) {
+                    follower.follow(firstPath);
                     pathState = 2;
                 }
+              /*  if (!follower.isBusy()) {
+                    beginShot();
+                    pathState = 2;
+                }*/
                 break;
 
-            case 2: // throw preloaded pollen
-               if (updateShot()) {
+            case 2:
+                if (!follower.isBusy()) {// if (updateShot()) {
                     follower.follow(secondPath);
                     pathState = 3;
                 }
@@ -230,7 +233,7 @@ public class RedPartial2ndHive2Throw extends OpMode {
 
             case 3: // lined up under the pollen, drive into the wall with intake on
                 if (!follower.isBusy()) {
-                    utilities.Setintake(0.7, 0.7);
+                    utilities.Setintake(0.7, 0.4);
                     follower.follow(thirdPath);
                     pathState = 4;
                 }
