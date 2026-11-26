@@ -35,8 +35,8 @@ public class newFullAuto extends OpMode {
     private final Pose point5 = poseFactory.of(56, 120, 90);
     private final Pose point5Control1 = poseFactory.of(26.7903, 114.5617, 0);
     private final Pose point6Start = poseFactory.of(56, 120, 90);
-    private final Pose point6 = poseFactory.of(46.5, 120, 90);
-    private final Pose point7Start = poseFactory.of(46.5, 120, 90);
+    private final Pose point6 = poseFactory.of(46.5, 115, 90);
+    private final Pose point7Start = poseFactory.of(46.5, 115, 90);
     private final Pose point7 = poseFactory.of(46.624, 120, 90);
     private final Pose point8Start = poseFactory.of(46.624, 120, 90);
     private final Pose point8 = poseFactory.of(56, 120, 90);
@@ -166,7 +166,7 @@ public class newFullAuto extends OpMode {
                 break;
 
             case 3:
-                if (timer.seconds() >= 1) {
+                if (timer.seconds() >= 1.5) {
                     follower.follow(secondPath);
                     pathState = 4;
                 }
@@ -187,49 +187,49 @@ public class newFullAuto extends OpMode {
 
             case 6:
                 if (!follower.isBusy()) {
-                    follower.follow(fourthPath);
+                    timer.reset();
                     pathState = 7;
                 }
                 break;
 
             case 7:
-                if (!follower.isBusy()) {
-                    follower.follow(fifthPath);
+                if (timer.seconds() >= 0.5) {
+                    follower.follow(fourthPath);
                     pathState = 8;
                 }
                 break;
 
             case 8:
                 if (!follower.isBusy()) {
-                    timer.reset();
+                    follower.follow(fifthPath);
                     pathState = 9;
                 }
                 break;
 
             case 9:
-                if (timer.seconds() >= 1) {
-                    follower.follow(sixthPath);
+                if (!follower.isBusy()) {
+                    timer.reset();
                     pathState = 10;
                 }
                 break;
 
             case 10:
-                if (!follower.isBusy()) {
-                    timer.reset();
+                if (timer.seconds() >= 1.5) {
+                    follower.follow(sixthPath);
                     pathState = 11;
                 }
                 break;
 
             case 11:
-                if (timer.seconds() >= 1) {
-                    follower.follow(seventhPath);
+                if (!follower.isBusy()) {
+                    timer.reset();
                     pathState = 12;
                 }
                 break;
 
             case 12:
-                if (!follower.isBusy()) {
-                    follower.follow(eighthPath);
+                if (timer.seconds() >= 0.5) {
+                    follower.follow(seventhPath);
                     pathState = 13;
                 }
                 break;
@@ -242,35 +242,49 @@ public class newFullAuto extends OpMode {
                 break;
 
             case 14:
-                if (timer.seconds() >= 1) {
-                    follower.follow(ninthPath);
+                if (!follower.isBusy()) {
+                    follower.follow(eighthPath);
                     pathState = 15;
                 }
                 break;
 
             case 15:
-                if (!follower.isBusy() ) {
-                    follower.follow(tenthPath);
+                if (!follower.isBusy()) {
+                    timer.reset();
                     pathState = 16;
                 }
                 break;
 
             case 16:
-                if (!follower.isBusy()) {
-                    follower.follow(eleventhPath);
+                if (timer.seconds() >= 1.5) {
+                    follower.follow(ninthPath);
                     pathState = 17;
                 }
                 break;
 
             case 17:
-                if (!follower.isBusy()) {
-                    timer.reset();
+                if (!follower.isBusy() ) {
+                    follower.follow(tenthPath);
                     pathState = 18;
                 }
                 break;
 
             case 18:
-                if (timer.seconds() >= 1) {
+                if (!follower.isBusy()) {
+                    follower.follow(eleventhPath);
+                    pathState = 19;
+                }
+                break;
+
+            case 19:
+                if (!follower.isBusy()) {
+                    timer.reset();
+                    pathState = 20;
+                }
+                break;
+
+            case 20:
+                if (timer.seconds() >= 1.5) {
                     follower.follow(twelfthPath);
                 }
                 break;
