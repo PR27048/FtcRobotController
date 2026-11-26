@@ -161,6 +161,13 @@ public class newFullAuto extends OpMode {
             case 2:
                 if (!follower.isBusy()) {
                     timer.reset();
+                    utilities.SetGate(0.69);
+                    if(utilities.SlingerUp()) {
+                        utilities.Setintake(0.7, 0.52);
+                        utilities.SetFeeder(1.0);
+                        }else {
+                            utilities.Setintake(0.0, 0.0);
+                        }
                     pathState = 3;
                 }
                 break;
@@ -209,6 +216,13 @@ public class newFullAuto extends OpMode {
             case 9:
                 if (!follower.isBusy()) {
                     timer.reset();
+                    utilities.SetGate(0.69);
+                    if(utilities.SlingerUp()) {
+                        utilities.Setintake(0.7, 0.52);
+                        utilities.SetFeeder(1.0);
+                    }else {
+                        utilities.Setintake(0.0, 0.0);
+                    }
                     pathState = 10;
                 }
                 break;
@@ -251,6 +265,13 @@ public class newFullAuto extends OpMode {
             case 15:
                 if (!follower.isBusy()) {
                     timer.reset();
+                    utilities.SetGate(0.69);
+                    if(utilities.SlingerUp()) {
+                        utilities.Setintake(0.7, 0.52);
+                        utilities.SetFeeder(1.0);
+                    }else {
+                        utilities.Setintake(0.0, 0.0);
+                    }
                     pathState = 16;
                 }
                 break;
@@ -279,6 +300,13 @@ public class newFullAuto extends OpMode {
             case 19:
                 if (!follower.isBusy()) {
                     timer.reset();
+                    utilities.SetGate(0.69);
+                    if(utilities.SlingerUp()) {
+                        utilities.Setintake(0.7, 0.52);
+                        utilities.SetFeeder(1.0);
+                    }else {
+                        utilities.Setintake(0.0, 0.0);
+                    }
                     pathState = 20;
                 }
                 break;
