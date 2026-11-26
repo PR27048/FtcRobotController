@@ -9,6 +9,7 @@ import com.qualcomm.robotcore.util.Range;
 import org.firstinspires.ftc.robotcore.external.navigation.Velocity;
 
 @TeleOp
+@Disabled
 public class Teleop extends OpMode {
     double forward, strafe, rotate, speed;
     double kP = 0.026;  //autotracking tune value

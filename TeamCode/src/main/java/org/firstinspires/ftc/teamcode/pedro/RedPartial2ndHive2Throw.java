@@ -45,11 +45,15 @@ public class RedPartial2ndHive2Throw extends OpMode {
     private final Pose point3Start = poseFactory.of(47.9312, 114.0549, 90);
     private final Pose point3 = poseFactory.of(47.1921, 128.329, 90);
     private final Pose point4Start = poseFactory.of(47.1921, 128.329, 90);
-    private final Pose point4 = poseFactory.of(47.281, 125.8177, 90);
-    private final Pose point5Start = poseFactory.of(47.281, 125.8177, 90);
-    private final Pose point5 = poseFactory.of(57.756, 125.5319, 90);
-    private final Pose point6Start = poseFactory.of(57.756, 125.5319, 90);
-    private final Pose point6 = poseFactory.of(12.4417, 117.2284, 90);
+    private final Pose point4 = poseFactory.of(47.4653, 119.9219, 90);
+    private final Pose point5Start = poseFactory.of(47.4653, 119.9219, 90);
+    private final Pose point5 = poseFactory.of(59.4142, 125.7162, 90);
+    private final Pose point6Start = poseFactory.of(59.4142, 125.7162, 90);
+    private final Pose point6 = poseFactory.of(59.4241, 131.968, 90);
+    private final Pose point7Start = poseFactory.of(59.4241, 131.968, 90);
+    private final Pose point7 = poseFactory.of(59.0436, 125.6053, 90);
+    private final Pose point8Start = poseFactory.of(59.0436, 125.6053, 90);
+    private final Pose point8 = poseFactory.of(12.5462, 118.3882, 90);
 
     // Tune values
     private static final int RED_PIPELINE = 2;
@@ -67,7 +71,7 @@ public class RedPartial2ndHive2Throw extends OpMode {
     private Path thirdPath;
     private Path fourthPath;
     private Path fifthPath;
-    private Path sixthPath;
+    private Path sixthPath,seventhPath,eighthPath;
 
     private int pathState = 0;
     private double velocity = FALLBACK_VELOCITY;
@@ -99,27 +103,17 @@ public class RedPartial2ndHive2Throw extends OpMode {
         return Paths.line(point6Start, point6).linear(point6Start, point6);
     }
 
-    // Same distance -> velocity curve as Teleop
-    private double velocityFromDistance(double x) {
-
-        return Range.clip(
-                (0.0255264) * x * x * x * x
-                        - 3.66515 * x * x * x
-                        + 196.41257 * x * x
-                        - 4653.25326 * x
-                        + 42541.8995,
-                1430, 1500);
+    public Path path7() {
+        return Paths.line(point7Start, point7).linear(point7Start, point7);
     }
 
-    private void updateShooterVelocity() {
-        // HiveUp() null-checks the Limelight result, GetDistance() does not
-        if (utilities.HiveUp()) {
-            double x = utilities.GetDistance();
+    public Path path8() {
+        return Paths.line(point8Start, point8).linear(point8Start, point8);
+    }
 
-            if (!Double.isNaN(x) && x > 0) {
-                velocity = velocityFromDistance(x);
-            }
-        }
+
+    private void updateShooterVelocity() {
+        velocity = 1450;
         utilities.SetShooterVelocity(velocity);
     }
 
@@ -194,6 +188,8 @@ public class RedPartial2ndHive2Throw extends OpMode {
         fourthPath = path4();
         fifthPath = path5();
         sixthPath = path6();
+        seventhPath = path7();
+        eighthPath = path8();
     }
 
     @Override
@@ -213,15 +209,11 @@ public class RedPartial2ndHive2Throw extends OpMode {
         follower.update();
 
         switch (pathState) {
-            case 1:// throw preloaded pollen
+            case 1:
                 if (updateShot()) {
                     follower.follow(firstPath);
                     pathState = 2;
                 }
-              /*  if (!follower.isBusy()) {
-                    beginShot();
-                    pathState = 2;
-                }*/
                 break;
 
             case 2:
@@ -233,7 +225,7 @@ public class RedPartial2ndHive2Throw extends OpMode {
 
             case 3: // lined up under the pollen, drive into the wall with intake on
                 if (!follower.isBusy()) {
-                    utilities.Setintake(0.7, 0.4);
+                    utilities.Setintake(0.7, 0.6);
                     follower.follow(thirdPath);
                     pathState = 4;
                 }

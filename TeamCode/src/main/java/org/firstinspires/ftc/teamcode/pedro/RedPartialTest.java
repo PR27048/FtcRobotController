@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode.pedro;
 
 import org.firstinspires.ftc.teamcode.Teleops.Utilities;
-import org.firstinspires.ftc.teamcode.pedro.Constants;
 
 import com.pedropathing.api.Paths;
 import com.pedropathing.api.PoseFactory;
@@ -13,7 +12,6 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
-import com.qualcomm.robotcore.util.Range;
 
 import java.util.List;
 
@@ -22,13 +20,16 @@ import java.util.List;
  * Heading is the intake (front) direction. At 90 the intake faces the top wall
  * and the shooter (back) faces the hive.
  *
- *  1. path1 - back off the wall to the throw spot (shooter spins up)
- *  2. Throw preloaded pollen into the hive
+ *  1. Throw preloaded pollen into the hive from the start pose
+ *  2. path1 - back off the wall
  *  3. path2 - line up under the pollen at the top wall
  *  4. path3 - drive up to the wall with intake running, grab pollen
  *  5. path4 - back off the wall
- *  6. path5 - drive to the throw spot and throw
- *  7. path6 - park
+ *  6. path5 - move over to the throw lane (shooter spins up)
+ *  7. path6 - drive up near the wall to the throw spot
+ *  8. Throw grabbed pollen
+ *  9. path7 - back off the wall
+ * 10. path8 - park
  */
 @Autonomous(name = "RedPartialTest")
 public class RedPartialTest extends OpMode {
@@ -44,18 +45,22 @@ public class RedPartialTest extends OpMode {
     private final Pose point3Start = poseFactory.of(47.9312, 114.0549, 90);
     private final Pose point3 = poseFactory.of(47.1921, 128.329, 90);
     private final Pose point4Start = poseFactory.of(47.1921, 128.329, 90);
-    private final Pose point4 = poseFactory.of(47.281, 125.8177, 90);
-    private final Pose point5Start = poseFactory.of(47.281, 125.8177, 90);
-    private final Pose point5 = poseFactory.of(57.756, 125.5319, 90);
-    private final Pose point6Start = poseFactory.of(57.756, 125.5319, 90);
-    private final Pose point6 = poseFactory.of(12.4417, 117.2284, 90);
+    private final Pose point4 = poseFactory.of(47.4653, 119.9219, 90);
+    private final Pose point5Start = poseFactory.of(47.4653, 119.9219, 90);
+    private final Pose point5 = poseFactory.of(59.4142, 125.7162, 90);
+    private final Pose point6Start = poseFactory.of(59.4142, 125.7162, 90);
+    private final Pose point6 = poseFactory.of(59.4241, 131.968, 90);
+    private final Pose point7Start = poseFactory.of(59.4241, 131.968, 90);
+    private final Pose point7 = poseFactory.of(59.0436, 125.6053, 90);
+    private final Pose point8Start = poseFactory.of(59.0436, 125.6053, 90);
+    private final Pose point8 = poseFactory.of(12.5462, 118.3882, 90);
 
     // Tune values
     private static final int RED_PIPELINE = 2;
     private static final double FALLBACK_VELOCITY = 1450;  // used when the Limelight can't see the hive
     private static final double SPINUP_TIMEOUT = 1.5;      // seconds to wait for shooter to reach speed
     private static final double FEED_TIME = 3.0;           // seconds to feed pollen into the shooter
-    private static final double INTAKE_DWELL = 1.0;        // seconds to sit at the wall with intake running
+    private static final double INTAKE_DWELL = 1.5;        // seconds to sit at the wall with intake running
 
     // Max seconds per path. If the robot can't reach the end (wall, pollen in the way)
     // isBusy() never goes false, so move on after this instead of getting stuck.
@@ -64,7 +69,9 @@ public class RedPartialTest extends OpMode {
     private static final double PATH3_TIMEOUT = 2.0;
     private static final double PATH4_TIMEOUT = 1.5;
     private static final double PATH5_TIMEOUT = 1.5;
-    private static final double PATH6_TIMEOUT = 3.0;
+    private static final double PATH6_TIMEOUT = 1.5;
+    private static final double PATH7_TIMEOUT = 1.5;
+    private static final double PATH8_TIMEOUT = 3.0;
 
     private Follower follower;
     private final ElapsedTime timer = new ElapsedTime();
@@ -78,6 +85,8 @@ public class RedPartialTest extends OpMode {
     private Path fourthPath;
     private Path fifthPath;
     private Path sixthPath;
+    private Path seventhPath;
+    private Path eighthPath;
 
     private int pathState = 0;
     private double velocity = FALLBACK_VELOCITY;
@@ -109,6 +118,14 @@ public class RedPartialTest extends OpMode {
         return Paths.line(point6Start, point6).linear(point6Start, point6);
     }
 
+    public Path path7() {
+        return Paths.line(point7Start, point7).linear(point7Start, point7);
+    }
+
+    public Path path8() {
+        return Paths.line(point8Start, point8).linear(point8Start, point8);
+    }
+
     private void followPath(Path path, double timeout) {
         follower.follow(path);
         pathTimeout = timeout;
@@ -125,9 +142,10 @@ public class RedPartialTest extends OpMode {
             double x = utilities.GetDistance();
 
             if (!Double.isNaN(x) && x > 0) {
-                velocity = velocityFromDistance(x);
+                velocity = 1450;
             }
         }
+        velocity = 1450;
         utilities.SetShooterVelocity(velocity);
     }
 
@@ -135,17 +153,6 @@ public class RedPartialTest extends OpMode {
         velocity = FALLBACK_VELOCITY;
         feeding = false;
         shotTimer.reset();
-    }
-
-    private double velocityFromDistance(double x) {
-
-        return Range.clip(
-                (0.0255264) * x * x * x * x
-                        - 3.66515 * x * x * x
-                        + 196.41257 * x * x
-                        - 4653.25326 * x
-                        + 42541.8995,
-                1430, 1500);
     }
 
     // Call every loop while shooting, returns true once all pollen has been thrown
@@ -163,7 +170,7 @@ public class RedPartialTest extends OpMode {
 
         // Only feed when the slinger is up and the shooter is at speed
         if (utilities.SlingerUp() && utilities.isTurretAtSpeed(velocity)) {
-            utilities.Setintake(0.7, 0.7); // shooting speed adjust
+            utilities.Setintake(0.7, 0.4); // slower transfer spaces the pollen out
             utilities.SetFeeder(1.0);
         } else {
             utilities.Setintake(0.0, 0.0);
@@ -216,12 +223,14 @@ public class RedPartialTest extends OpMode {
         fourthPath = path4();
         fifthPath = path5();
         sixthPath = path6();
+        seventhPath = path7();
+        eighthPath = path8();
     }
 
     @Override
     public void start() {
-        utilities.SetShooterVelocity(FALLBACK_VELOCITY); // spin up while backing off the wall
-        followPath(firstPath, PATH1_TIMEOUT);
+        utilities.SetShooterVelocity(FALLBACK_VELOCITY);
+        beginShot();
         pathState = 1;
     }
 
@@ -235,15 +244,15 @@ public class RedPartialTest extends OpMode {
         follower.update();
 
         switch (pathState) {
-            case 1:
-                if (pathDone()) {
-                    beginShot();
+            case 1: // throw preloaded pollen from the start pose
+                if (updateShot()) {
+                    followPath(firstPath, PATH1_TIMEOUT);
                     pathState = 2;
                 }
                 break;
 
-            case 2: // throw preloaded pollen
-                if (updateShot()) {
+            case 2: // backed off the wall, line up under the pollen
+                if (pathDone()) {
                     followPath(secondPath, PATH2_TIMEOUT);
                     pathState = 3;
                 }
@@ -251,7 +260,7 @@ public class RedPartialTest extends OpMode {
 
             case 3: // lined up under the pollen, drive up to the wall with intake on
                 if (pathDone()) {
-                    utilities.Setintake(0.7, 0.7);
+                    utilities.Setintake(0.7, 0.4);
                     followPath(thirdPath, PATH3_TIMEOUT);
                     pathState = 4;
                 }
@@ -271,7 +280,7 @@ public class RedPartialTest extends OpMode {
                 }
                 break;
 
-            case 6:
+            case 6: // move over to the throw lane
                 if (pathDone()) {
                     utilities.Setintake(0.0, 0.0);
                     utilities.SetShooterVelocity(FALLBACK_VELOCITY); // spin up early to save time
@@ -280,28 +289,42 @@ public class RedPartialTest extends OpMode {
                 }
                 break;
 
-            case 7:
+            case 7: // drive up to the throw spot near the wall
                 if (pathDone()) {
-                    beginShot();
+                    followPath(sixthPath, PATH6_TIMEOUT);
                     pathState = 8;
                 }
                 break;
 
-            case 8: // throw grabbed pollen
-                if (updateShot()) {
-                    followPath(sixthPath, PATH6_TIMEOUT);
+            case 8: // only start the throw once the robot has stopped at the throw spot
+                if (pathDone()) {
+                    beginShot();
                     pathState = 9;
                 }
                 break;
 
-            case 9: // park
-                if (pathDone()) {
-                    stopShooting();
+            case 9: // throw grabbed pollen
+                if (updateShot()) {
+                    followPath(seventhPath, PATH7_TIMEOUT);
                     pathState = 10;
                 }
                 break;
 
-            case 10:
+            case 10: // backed off the wall, go park
+                if (pathDone()) {
+                    followPath(eighthPath, PATH8_TIMEOUT);
+                    pathState = 11;
+                }
+                break;
+
+            case 11: // park
+                if (pathDone()) {
+                    stopShooting();
+                    pathState = 12;
+                }
+                break;
+
+            case 12:
                 break;
         }
 
@@ -320,4 +343,3 @@ public class RedPartialTest extends OpMode {
         stopShooting();
     }
 }
-
