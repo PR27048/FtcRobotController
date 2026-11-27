@@ -4,6 +4,7 @@ import org.firstinspires.ftc.teamcode.Teleops.Utilities;
 
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 /*
@@ -25,7 +26,7 @@ public class AutoUtilities extends Utilities {
     private static final double SHOT_TIMEOUT = 4.5;          // s max from first feed to done
     private static final double SHOT_SPIN_DOWN = 0.3;        // s to keep spinning after the last pollen
     private static final int POLLEN_PER_SHOT = 4;
-
+    private Servo Feeder, FrontalSweep, TurretServo;
     private static final int SHOT_IDLE = 0, SHOT_SPINUP = 1, SHOT_FEED = 2, SHOT_RECOVER = 3, SHOT_FINISH = 4;
 
     // Same motor objects Utilities uses, Utilities keeps its own private
@@ -46,6 +47,7 @@ public class AutoUtilities extends Utilities {
         super.init(hwMap, autoState);
         Shooter1 = hwMap.get(DcMotorEx.class, "Shooter1");
         Shooter2 = hwMap.get(DcMotorEx.class, "Shooter2");
+        FrontalSweep = hwMap.get(Servo.class, "FrontalSweep");
     }
 
     public double getShooter2Velocity() {
@@ -58,6 +60,9 @@ public class AutoUtilities extends Utilities {
                 && Math.abs(Shooter2.getVelocity() - velocity) < SHOT_SPEED_TOLERANCE;
     }
 
+    public void SetSweep(double pos) {
+        FrontalSweep.setPosition(pos);
+    }
     public void BeginShot(double fallbackVelocity) {
         shotVelocity = fallbackVelocity;
         shotCount = 0;
@@ -81,7 +86,7 @@ public class AutoUtilities extends Utilities {
             }
         }
         SetShooterVelocity(shotVelocity);
-        SetGate(0.69);
+        SetGate(0.74);
 
         double slowest = Math.min(Shooter1.getVelocity(), Shooter2.getVelocity());
 

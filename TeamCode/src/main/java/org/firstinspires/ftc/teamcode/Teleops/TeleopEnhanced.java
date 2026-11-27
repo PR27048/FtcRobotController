@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.Teleops;
 
+import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.Range;
@@ -96,7 +97,7 @@ public class TeleopEnhanced extends OpMode {
                     1430, 1500
             );
 
-            // Velocity += 230; // change equations
+            Velocity += 20; // change equations
             utils.SetShooterVelocity(Velocity); // Turret power
         }
 
@@ -113,10 +114,10 @@ public class TeleopEnhanced extends OpMode {
             utils.Setintake(-0.5, -0.5);
         } else if (gamepad1.right_trigger > 0.1) { // outtake / auto-align
             AlignToHive();
-            utils.SetGate(0.69);
+            utils.SetGate(0.74);
 
             if (utils.SlingerUp() && (utils.IsAligned() || gamepad1.left_trigger > 0.1)) {
-                utils.Setintake(0.7, 0.52); // shooting speed adjust
+                utils.Setintake(0.7, 0.36); // shooting speed adjust
                 utils.SetFeeder(1.0);
             } else {
                 utils.Setintake(0.0, 0.0);

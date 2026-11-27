@@ -242,7 +242,10 @@ public class RedAutoTestUpd extends OpMode {
             case 4:
                 if (pathDone()) {
                     timer.reset();
-                    pathState = 5;
+                    if(hiveVisible())
+                    {pathState = 20;}
+                    else
+                    {pathState = 5;}
                 }
                 break;
 

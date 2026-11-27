@@ -1,7 +1,5 @@
 package org.firstinspires.ftc.teamcode.pedro;
 
-import org.firstinspires.ftc.teamcode.Teleops.Utilities;
-
 import com.pedropathing.api.Paths;
 import com.pedropathing.api.PoseFactory;
 import com.pedropathing.follower.Follower;
@@ -12,6 +10,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
+import com.qualcomm.robotcore.util.Range;
 
 import java.util.List;
 
@@ -34,8 +33,8 @@ import java.util.List;
 @Autonomous(name = "RedPartialTest")
 public class RedPartialTest extends OpMode {
 
-    private final Utilities utilities = new Utilities();
-
+  //  private final Utilities utilities = new Utilities();
+    private final AutoUtilities utilities = new AutoUtilities();
     private final PoseFactory poseFactory = PoseFactory.degrees();
 
     private final Pose start = poseFactory.of(59.5006, 133.655, 90);
@@ -60,7 +59,7 @@ public class RedPartialTest extends OpMode {
     private static final double FALLBACK_VELOCITY = 1450;  // used when the Limelight can't see the hive
     private static final double SPINUP_TIMEOUT = 1.5;      // seconds to wait for shooter to reach speed
     private static final double FEED_TIME = 3.0;           // seconds to feed pollen into the shooter
-    private static final double INTAKE_DWELL = 1.5;        // seconds to sit at the wall with intake running
+    private static final double INTAKE_DWELL = 2.0;        // seconds to sit at the wall with intake running
 
     // Max seconds per path. If the robot can't reach the end (wall, pollen in the way)
     // isBusy() never goes false, so move on after this instead of getting stuck.
@@ -136,13 +135,24 @@ public class RedPartialTest extends OpMode {
         return !follower.isBusy() || pathTimer.seconds() >= pathTimeout;
     }
 
+    // Same distance -> velocity curve as Teleop
+    private double velocityFromDistance(double x) {
+
+        return Range.clip(
+                (0.0255264) * x * x * x * x
+                        - 3.66515 * x * x * x
+                        + 196.41257 * x * x
+                        - 4653.25326 * x
+                        + 42541.8995,
+                1430, 1500);
+    }
     private void updateShooterVelocity() {
         // HiveUp() null-checks the Limelight result, GetDistance() does not
         if (utilities.HiveUp()) {
             double x = utilities.GetDistance();
 
             if (!Double.isNaN(x) && x > 0) {
-                velocity = 1450;
+                velocity = 1450; //velocityFromDistance(x);
             }
         }
         velocity = 1450;
@@ -158,7 +168,7 @@ public class RedPartialTest extends OpMode {
     // Call every loop while shooting, returns true once all pollen has been thrown
     private boolean updateShot() {
         updateShooterVelocity();
-        utilities.SetGate(0.69);
+        utilities.SetGate(0.74);
 
         if (!feeding) {
             if (utilities.isTurretAtSpeed(velocity) || shotTimer.seconds() >= SPINUP_TIMEOUT) {
@@ -253,6 +263,7 @@ public class RedPartialTest extends OpMode {
 
             case 2: // backed off the wall, line up under the pollen
                 if (pathDone()) {
+                    utilities.SetSweep(0.92);
                     followPath(secondPath, PATH2_TIMEOUT);
                     pathState = 3;
                 }
@@ -276,12 +287,18 @@ public class RedPartialTest extends OpMode {
             case 5: // let the intake finish grabbing pollen, keep it running while backing off
                 if (timer.seconds() >= INTAKE_DWELL) {
                     followPath(fourthPath, PATH4_TIMEOUT);
+
                     pathState = 6;
                 }
                 break;
 
             case 6: // move over to the throw lane
                 if (pathDone()) {
+                    ElapsedTime timeout = new ElapsedTime();
+                    utilities.SetSweep(0.07);
+                    while (timeout.seconds() < 1.5){
+                        follower.update(); // Keeps the robot actively holding its current pose
+                    };
                     utilities.Setintake(0.0, 0.0);
                     utilities.SetShooterVelocity(FALLBACK_VELOCITY); // spin up early to save time
                     followPath(fifthPath, PATH5_TIMEOUT);
