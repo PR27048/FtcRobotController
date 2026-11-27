@@ -3,6 +3,8 @@ package org.firstinspires.ftc.teamcode.pedro;
 import static com.pedropathing.api.Paths.*;
 import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.hardwareMap;
 
+import android.location.SettingInjectorService;
+
 import org.firstinspires.ftc.teamcode.Teleops.Utilities;
 
 import com.pedropathing.api.Paths;
@@ -150,6 +152,9 @@ public class newFullAuto extends OpMode {
     public void loop() {
         follower.update();
 
+        utilities.Setintake(0.7, 0.36);
+        utilities.SetShooterVelocity(1450);
+
         switch (pathState) {
             case 1:
                 if (timer.seconds() >= 0.75) {
@@ -173,7 +178,10 @@ public class newFullAuto extends OpMode {
                 break;
 
             case 3:
-                if (timer.seconds() >= 1.5) {
+                if (timer.seconds() >= 2) {
+                    utilities.Setintake(0.0, 0.0);
+                    utilities.SetFeeder(0.0);
+                    utilities.SetGate(0.035);
                     follower.follow(secondPath);
                     pathState = 4;
                 }
@@ -182,12 +190,13 @@ public class newFullAuto extends OpMode {
             case 4:
                 if (!follower.isBusy()) {
                     timer.reset();
+                    //utilities.SetSweep(0.81);
                     pathState = 5;
                 }
                 break;
 
             case 5:
-                if (timer.seconds() >= 0.5) {
+                if (timer.seconds() >= 1.0) {
                     follower.follow(thirdPath);
                     pathState = 6;
                 }break;
@@ -208,13 +217,20 @@ public class newFullAuto extends OpMode {
 
             case 8:
                 if (!follower.isBusy()) {
-                    follower.follow(fifthPath);
+                    //utilities.SetSweep(0.07);
                     pathState = 9;
                 }
                 break;
 
             case 9:
                 if (!follower.isBusy()) {
+                    follower.follow(fifthPath);
+                    pathState = 10;
+                }
+                break;
+
+            case 10:
+                if (!follower.isBusy()) {
                     timer.reset();
                     utilities.SetGate(0.69);
                     if(utilities.SlingerUp()) {
@@ -223,81 +239,57 @@ public class newFullAuto extends OpMode {
                     }else {
                         utilities.Setintake(0.0, 0.0);
                     }
-                    pathState = 10;
-                }
-                break;
-
-            case 10:
-                if (timer.seconds() >= 1.5) {
-                    follower.follow(sixthPath);
                     pathState = 11;
                 }
                 break;
 
             case 11:
-                if (!follower.isBusy()) {
-                    timer.reset();
+                if (timer.seconds() >= 2) {
+                    utilities.Setintake(0.0, 0.0);
+                    utilities.SetFeeder(0.0);
+                    utilities.SetGate(0.035);
+                    follower.follow(sixthPath);
                     pathState = 12;
                 }
                 break;
 
             case 12:
-                if (timer.seconds() >= 0.5) {
-                    follower.follow(seventhPath);
+                if (!follower.isBusy()) {
+                    timer.reset();
+                    //utilities.SetSweep(0.81);
                     pathState = 13;
                 }
                 break;
 
             case 13:
-                if (!follower.isBusy()) {
-                    timer.reset();
+                if (timer.seconds() >= 1.0) {
+                    follower.follow(seventhPath);
                     pathState = 14;
                 }
                 break;
 
             case 14:
                 if (!follower.isBusy()) {
-                    follower.follow(eighthPath);
+                    timer.reset();
                     pathState = 15;
                 }
                 break;
 
             case 15:
-                if (!follower.isBusy()) {
-                    timer.reset();
-                    utilities.SetGate(0.69);
-                    if(utilities.SlingerUp()) {
-                        utilities.Setintake(0.7, 0.52);
-                        utilities.SetFeeder(1.0);
-                    }else {
-                        utilities.Setintake(0.0, 0.0);
-                    }
+                if (timer.seconds() >= 0.5) {
+                    follower.follow(eighthPath);
                     pathState = 16;
                 }
                 break;
 
             case 16:
-                if (timer.seconds() >= 1.5) {
-                    follower.follow(ninthPath);
+                if (!follower.isBusy()) {
+                    utilities.SetSweep(0.07);
                     pathState = 17;
                 }
                 break;
 
             case 17:
-                if (!follower.isBusy() ) {
-                    follower.follow(tenthPath);
-                    pathState = 18;
-                }
-                break;
-
-            case 18:
-                if (!follower.isBusy()) {
-                    follower.follow(eleventhPath);
-                    pathState = 19;
-                }
-                break;
-
-            case 19:
                 if (!follower.isBusy()) {
                     timer.reset();
                     utilities.SetGate(0.69);
@@ -307,12 +299,55 @@ public class newFullAuto extends OpMode {
                     }else {
                         utilities.Setintake(0.0, 0.0);
                     }
+                    pathState = 18;
+                }
+                break;
+
+            case 18:
+                if (timer.seconds() >= 2) {
+                    utilities.Setintake(0.0, 0.0);
+                    utilities.SetFeeder(0.0);
+                    utilities.SetGate(0.035);
+                    follower.follow(ninthPath);
+                    utilities.Setintake(0.7, 0.36);
+                    pathState = 19;
+                }
+                break;
+
+            case 19:
+                if (!follower.isBusy() ) {
+                    follower.follow(tenthPath);
                     pathState = 20;
                 }
                 break;
 
             case 20:
-                if (timer.seconds() >= 1.5) {
+                if (!follower.isBusy()) {
+                    follower.follow(eleventhPath);
+                    pathState = 21;
+                }
+                break;
+
+            case 21:
+                if (!follower.isBusy()) {
+                    timer.reset();
+                    utilities.SetGate(0.69);
+                    if(utilities.SlingerUp()) {
+                        utilities.Setintake(0.7, 0.52);
+                        utilities.SetFeeder(1.0);
+                    }else {
+                        utilities.Setintake(0.0, 0.0);
+                        utilities.SetFeeder(0.0);
+                    }
+                    pathState = 22;
+                }
+                break;
+
+            case 22:
+                if (timer.seconds() >= 2) {
+                    utilities.Setintake(0.0, 0.0);
+                    utilities.SetFeeder(0.0);
+                    utilities.SetGate(0.035);
                     follower.follow(twelfthPath);
                 }
                 break;
