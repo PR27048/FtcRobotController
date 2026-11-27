@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.pedro;
+package org.firstinspires.ftc.teamcode.Autos;
 
 import com.pedropathing.api.Paths;
 import com.pedropathing.api.PoseFactory;
@@ -10,6 +10,8 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
+
+import org.firstinspires.ftc.teamcode.pedro.Constants;
 
 import java.util.List;
 

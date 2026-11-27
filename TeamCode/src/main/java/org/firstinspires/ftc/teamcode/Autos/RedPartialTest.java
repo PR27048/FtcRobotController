@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.pedro;
+package org.firstinspires.ftc.teamcode.Autos;
 
 import com.pedropathing.api.Paths;
 import com.pedropathing.api.PoseFactory;
@@ -11,7 +11,7 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
-
+import org.firstinspires.ftc.teamcode.pedro.Constants;
 import java.util.List;
 
 /*
@@ -33,7 +33,7 @@ import java.util.List;
 @Autonomous(name = "RedPartialTest")
 public class RedPartialTest extends OpMode {
 
-  //  private final Utilities utilities = new Utilities();
+    //  private final Utilities utilities = new Utilities();
     private final AutoUtilities utilities = new AutoUtilities();
     private final PoseFactory poseFactory = PoseFactory.degrees();
 
@@ -60,6 +60,7 @@ public class RedPartialTest extends OpMode {
     private static final double SPINUP_TIMEOUT = 1.5;      // seconds to wait for shooter to reach speed
     private static final double FEED_TIME = 3.0;           // seconds to feed pollen into the shooter
     private static final double INTAKE_DWELL = 2.0;        // seconds to sit at the wall with intake running
+    private static final double SWEEP_WAIT = 1.5;          // seconds to hold while the sweep moves in
 
     // Max seconds per path. If the robot can't reach the end (wall, pollen in the way)
     // isBusy() never goes false, so move on after this instead of getting stuck.
@@ -292,56 +293,59 @@ public class RedPartialTest extends OpMode {
                 }
                 break;
 
-            case 6: // move over to the throw lane
+            case 6: // backed off the wall, bring the sweep in
                 if (pathDone()) {
-                    ElapsedTime timeout = new ElapsedTime();
                     utilities.SetSweep(0.07);
-                    while (timeout.seconds() < 1.5){
-                        follower.update(); // Keeps the robot actively holding its current pose
-                    };
-                    utilities.Setintake(0.0, 0.0);
-                    utilities.SetShooterVelocity(FALLBACK_VELOCITY); // spin up early to save time
-                    followPath(fifthPath, PATH5_TIMEOUT);
+                    timer.reset();
                     pathState = 7;
                 }
                 break;
 
-            case 7: // drive up to the throw spot near the wall
-                if (pathDone()) {
-                    followPath(sixthPath, PATH6_TIMEOUT);
+            case 7: // hold for 1.5 s while the sweep moves (follower.update() keeps holding the pose)
+                if (timer.seconds() >= SWEEP_WAIT) {
+                    utilities.Setintake(0.0, 0.0);
+                    utilities.SetShooterVelocity(FALLBACK_VELOCITY); // spin up early to save time
+                    followPath(fifthPath, PATH5_TIMEOUT);
                     pathState = 8;
                 }
                 break;
 
-            case 8: // only start the throw once the robot has stopped at the throw spot
+            case 8: // drive up to the throw spot near the wall
                 if (pathDone()) {
-                    beginShot();
+                    followPath(sixthPath, PATH6_TIMEOUT);
                     pathState = 9;
                 }
                 break;
 
-            case 9: // throw grabbed pollen
-                if (updateShot()) {
-                    followPath(seventhPath, PATH7_TIMEOUT);
+            case 9: // only start the throw once the robot has stopped at the throw spot
+                if (pathDone()) {
+                    beginShot();
                     pathState = 10;
                 }
                 break;
 
-            case 10: // backed off the wall, go park
-                if (pathDone()) {
-                    followPath(eighthPath, PATH8_TIMEOUT);
+            case 10: // throw grabbed pollen
+                if (updateShot()) {
+                    followPath(seventhPath, PATH7_TIMEOUT);
                     pathState = 11;
                 }
                 break;
 
-            case 11: // park
+            case 11: // backed off the wall, go park
                 if (pathDone()) {
-                    stopShooting();
+                    followPath(eighthPath, PATH8_TIMEOUT);
                     pathState = 12;
                 }
                 break;
 
-            case 12:
+            case 12: // park
+                if (pathDone()) {
+                    stopShooting();
+                    pathState = 13;
+                }
+                break;
+
+            case 13:
                 break;
         }
 
