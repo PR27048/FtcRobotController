@@ -152,7 +152,6 @@ public class newFullAuto extends OpMode {
     public void loop() {
         follower.update();
 
-        utilities.Setintake(0.7, 0.36);
         utilities.SetShooterVelocity(1450);
 
         switch (pathState) {
@@ -166,7 +165,7 @@ public class newFullAuto extends OpMode {
             case 2:
                 if (!follower.isBusy()) {
                     timer.reset();
-                    utilities.SetGate(0.69);
+                    utilities.SetGate(0.74);
                     if(utilities.SlingerUp()) {
                         utilities.Setintake(0.7, 0.52);
                         utilities.SetFeeder(1.0);
@@ -190,7 +189,7 @@ public class newFullAuto extends OpMode {
             case 4:
                 if (!follower.isBusy()) {
                     timer.reset();
-                    //utilities.SetSweep(0.81);
+                    utilities.SetSweep(0.81);
                     pathState = 5;
                 }
                 break;
@@ -217,13 +216,14 @@ public class newFullAuto extends OpMode {
 
             case 8:
                 if (!follower.isBusy()) {
-                    //utilities.SetSweep(0.07);
+                    timer.reset();
+                    utilities.SetSweep(0.07);
                     pathState = 9;
                 }
                 break;
 
             case 9:
-                if (!follower.isBusy()) {
+                if (timer.seconds() >= 1) {
                     follower.follow(fifthPath);
                     pathState = 10;
                 }
@@ -232,7 +232,7 @@ public class newFullAuto extends OpMode {
             case 10:
                 if (!follower.isBusy()) {
                     timer.reset();
-                    utilities.SetGate(0.69);
+                    utilities.SetGate(0.74);
                     if(utilities.SlingerUp()) {
                         utilities.Setintake(0.7, 0.52);
                         utilities.SetFeeder(1.0);
@@ -256,7 +256,8 @@ public class newFullAuto extends OpMode {
             case 12:
                 if (!follower.isBusy()) {
                     timer.reset();
-                    //utilities.SetSweep(0.81);
+                    utilities.Setintake(0.7, 0.36);
+                    utilities.SetSweep(0.81);
                     pathState = 13;
                 }
                 break;
@@ -271,6 +272,7 @@ public class newFullAuto extends OpMode {
             case 14:
                 if (!follower.isBusy()) {
                     timer.reset();
+                    utilities.Setintake(0.0, 0.0);
                     pathState = 15;
                 }
                 break;
@@ -284,15 +286,16 @@ public class newFullAuto extends OpMode {
 
             case 16:
                 if (!follower.isBusy()) {
+                    timer.reset();
                     utilities.SetSweep(0.07);
                     pathState = 17;
                 }
                 break;
 
             case 17:
-                if (!follower.isBusy()) {
+                if (timer.seconds() >= 1) {
                     timer.reset();
-                    utilities.SetGate(0.69);
+                    utilities.SetGate(0.74);
                     if(utilities.SlingerUp()) {
                         utilities.Setintake(0.7, 0.52);
                         utilities.SetFeeder(1.0);
@@ -309,29 +312,42 @@ public class newFullAuto extends OpMode {
                     utilities.SetFeeder(0.0);
                     utilities.SetGate(0.035);
                     follower.follow(ninthPath);
-                    utilities.Setintake(0.7, 0.36);
                     pathState = 19;
                 }
                 break;
 
             case 19:
-                if (!follower.isBusy() ) {
-                    follower.follow(tenthPath);
+                if (!follower.isBusy()) {
+                    utilities.Setintake(0.7, 0.36);
                     pathState = 20;
                 }
                 break;
 
             case 20:
-                if (!follower.isBusy()) {
-                    follower.follow(eleventhPath);
+                if (!follower.isBusy() ) {
+                    follower.follow(tenthPath);
                     pathState = 21;
                 }
                 break;
 
             case 21:
                 if (!follower.isBusy()) {
+                    utilities.Setintake(0.0, 0.0);
+                    pathState = 22;
+                }
+                break;
+
+            case 22:
+                if (!follower.isBusy()) {
+                    follower.follow(eleventhPath);
+                    pathState = 23;
+                }
+                break;
+
+            case 23:
+                if (!follower.isBusy()) {
                     timer.reset();
-                    utilities.SetGate(0.69);
+                    utilities.SetGate(0.74);
                     if(utilities.SlingerUp()) {
                         utilities.Setintake(0.7, 0.52);
                         utilities.SetFeeder(1.0);
@@ -339,11 +355,11 @@ public class newFullAuto extends OpMode {
                         utilities.Setintake(0.0, 0.0);
                         utilities.SetFeeder(0.0);
                     }
-                    pathState = 22;
+                    pathState = 24;
                 }
                 break;
 
-            case 22:
+            case 24:
                 if (timer.seconds() >= 2) {
                     utilities.Setintake(0.0, 0.0);
                     utilities.SetFeeder(0.0);
